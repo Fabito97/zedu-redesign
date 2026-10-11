@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zedu Channel Details & Files Tab Redesign</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #5F5FE1;
+      --primary-hover: #4E4EC8;
+      --primary-subtle: #F1F1FE;
+      --primary-text: #4848BD;
+      --bg-surface: #FFFFFF;
+      --bg-subdued: #F8F9FB;
+      --border-subtle: #EAEBF0;
+      --border-active: #D0D3DE;
+      --text-dominant: #1D2939;
+      --text-muted: #667085;
+      --text-subtle: #98A2B3;
+      --shadow-modal: 0 20px 40px -15px rgba(16, 24, 40, 0.25), 0 0 0 1px rgba(16, 24, 40, 0.06);
+      --shadow-card: 0 1px 3px rgba(16, 24, 40, 0.04);
+      --shadow-card-hover: 0 4px 12px -2px rgba(16, 24, 40, 0.08);
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: #1A1836;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(95, 95, 225, 0.25) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(113, 65, 248, 0.2) 0px, transparent 50%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 24px 24px;
+      color: var(--text-dominant);
+    }
+
+    /* Floating State Controller Bar */
+    .state-controller {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(234, 235, 240, 0.9);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-radius: 999px;
+      padding: 5px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      max-width: 95vw;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .state-controller::-webkit-scrollbar {
+      display: none;
+    }
+
+    .state-controller .label {
+      color: var(--text-muted);
+      padding: 0 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .state-btn {
+      background: transparent;
+      border: none;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .state-btn:hover {
+      background: #F1F2F6;
+      color: var(--text-dominant);
+    }
+
+    .state-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(95, 95, 225, 0.35);
+    }
+
+    /* Modal Backdrop Simulator */
+    .modal-backdrop-preview {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Main Modal Window (Exact bounds: 600px wide, 600px tall) */
+    .channel-modal {
+      width: 600px;
+      height: 600px;
+      background: var(--bg-surface);
+      border-radius: 16px;
+      box-shadow: var(--shadow-modal);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(230, 234, 239, 0.9);
+      position: relative;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.98) translateY(6px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Modal Header */
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #FFFFFF;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .channel-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .channel-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-dominant);
+      letter-spacing: -0.3px;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+    }
+
+    .close-btn:hover {
+      background: #F2F4F7;
+      color: var(--text-dominant);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-pill-btn {
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #D0D5DD;
+      background: #FFFFFF;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #344054;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .action-pill-btn:hover {
+      background: #F9FAFB;
+      border-color: #B0B5C0;
+    }
+
+    .action-pill-btn.icon-only {
+      padding: 0 8px;
+    }
+
+    .action-pill-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-subtle);
+      color: var(--primary);
+    }
+
+    /* Parent Tabs (About, People 303, Agents, Files) */
+    .parent-tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+    }
+
+    .parent-tab {
+      background: transparent;
+      border: none;
+      padding: 12px 0 10px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s ease;
+    }
+
+    .parent-tab:hover {
+      color: var(--text-dominant);
+    }
+
+    .parent-tab.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .parent-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .count-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #F2F4F7;
+      color: #344054;
+    }
+
+    .parent-tab.active .count-badge {
+      background: var(--primary-subtle);
+      color: var(--primary);
+    }
+
+    /* Files Tab Body */
+    .files-tab-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #FFFFFF;
+    }
+
+    /* Sub-Toolbar (Search + Demarcated Category Pills + View Mode Toggle) */
+    .files-sub-toolbar {
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #FAFBFD;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 140px;
+      flex-shrink: 0;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .files-search-input {
+      width: 100%;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid #D0D5DD;
+      background: #FFFFFF;
+      padding: 0 8px 0 28px;
+      font-family: inherit;
+      font-size: 11.5px;
+      color: var(--text-dominant);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .files-search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(95, 95, 225, 0.15);
+    }
+
+    /* Sub-Filter Pills (All, Documents, Images, Videos, Audio) */
+    .sub-filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      overflow-x: auto;
+      flex: 1;
+      scrollbar-width: none;
+    }
+
+    .sub-filter-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-pill {
+      height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid #E4E7EC;
+      background: #FFFFFF;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #475467;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .filter-pill:hover {
+      background: #F2F4F7;
+      border-color: #D0D5DD;
+    }
+
+    .filter-pill.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(95, 95, 225, 0.25);
+    }
+
+    .filter-pill .pill-counter {
+      font-size: 10px;
+      opacity: 0.85;
+    }
+
+    /* Tiny Open Text on File Cards */
+    .tiny-open-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 6px;
+      opacity: 0.75;
+      transition: opacity 0.15s ease;
+    }
+    .file-card-row:hover .tiny-open-text {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* Media Grid in All Tab (Employed directly from Zedu codebase) */
+    .code-media-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .code-media-thumb {
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #E6EAEF;
+      background: #F6F7F9;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .code-media-thumb:hover {
+      border-color: #CBD0DC;
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .video-play-center {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Segmented View Mode Toggle (Hybrid vs List) */
+    .view-mode-toggle {
+      display: inline-flex;
+      align-items: center;
+      background: #F2F4F7;
+      padding: 2px;
+      border-radius: 8px;
+      gap: 2px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .view-mode-btn {
+      height: 26px;
+      padding: 0 8px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      color: #667085;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .view-mode-btn:hover {
+      color: #1D2939;
+    }
+
+    .view-mode-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.12);
+    }
+
+    /* Mode Switching Rules for view-tab-all */
+    .mode-hybrid .code-media-grid {
+      display: grid !important;
+    }
+    .mode-hybrid .list-media-row {
+      display: none !important;
+    }
+
+    .mode-list .code-media-grid {
+      display: none !important;
+    }
+    .mode-list .list-media-row {
+      display: flex !important;
+    }
+
+    /* Wide Document Preview Modal Overlay */
+    .wide-preview-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: overlayFadeIn 0.2s ease-out;
+    }
+
+    @keyframes overlayFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .wide-preview-dialog {
+      width: 960px;
+      max-width: 94vw;
+      height: 88vh;
+      max-height: 820px;
+      background: #FFFFFF;
+      border-radius: 14px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      animation: dialogScaleUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dialogScaleUp {
+      from { opacity: 0; transform: scale(0.96) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .wide-preview-header {
+      height: 56px;
+      padding: 0 20px;
+      border-bottom: 1px solid #E5E7EB;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    .wide-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wide-badge-pdf {
+      background: #E53935;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 5px;
+      letter-spacing: 0.3px;
+    }
+
+    .wide-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .wide-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-doc-download {
+      background: #7141F8;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(113, 65, 248, 0.35);
+      transition: background 0.15s ease;
+    }
+    .btn-doc-download:hover {
+      background: #5E2FE6;
+    }
+
+    .btn-doc-secondary {
+      background: #FFFFFF;
+      border: 1px solid #D0D5DD;
+      color: #344054;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-doc-secondary:hover {
+      background: #F9FAFB;
+      border-color: #98A2B3;
+    }
+
+    .btn-doc-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #667085;
+      transition: all 0.15s ease;
+    }
+    .btn-doc-close:hover {
+      background: #F2F4F7;
+      color: #1D2939;
+    }
+
+    /* PDF Viewer Sub-Toolbar */
+    .pdf-sub-toolbar {
+      height: 38px;
+      background: #323639;
+      color: #E5E7EB;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      border-bottom: 1px solid #202224;
+      flex-shrink: 0;
+    }
+
+    .pdf-split-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      background: #525659;
+    }
+
+    .pdf-thumbnail-sidebar {
+      width: 220px;
+      background: #323639;
+      border-right: 1px solid #202224;
+      padding: 16px 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .pdf-thumb-card {
+      width: 140px;
+      height: 180px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      padding: 12px 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.15s ease;
+    }
+    .pdf-thumb-card:hover {
+      transform: scale(1.02);
+    }
+    .pdf-thumb-card.active {
+      outline: 2px solid #5F5FE1;
+      box-shadow: 0 0 0 3px rgba(95, 95, 225, 0.4);
+    }
+
+    .pdf-main-canvas-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      background: #525659;
+    }
+
+    .pdf-page-sheet {
+      width: 620px;
+      min-height: 800px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      padding: 40px 44px;
+      color: #111827;
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+
+    .wide-preview-footer {
+      height: 36px;
+      background: #FFFFFF;
+      border-top: 1px solid #E5E7EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11.5px;
+      color: #667085;
+      flex-shrink: 0;
+    }
+
+    /* Scrollable Content Viewport */
+    .files-scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px 20px;
+      scroll-behavior: smooth;
+    }
+
+    .files-scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .files-scroll-container::-webkit-scrollbar-thumb {
+      background: #D0D5DD;
+      border-radius: 999px;
+    }
+    .files-scroll-container::-webkit-scrollbar-thumb:hover {
+      background: #98A2B3;
+    }
+
+    /* Date Section Headers */
+    .date-group {
+      margin-bottom: 20px;
+    }
+
+    .date-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .files-list-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* File List Card Item */
+    .file-card-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .file-card-row:hover {
+      border-color: #C8CCD6;
+      background: #FAFBFD;
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-1px);
+    }
+
+    .file-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .file-type-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+      text-transform: uppercase;
+    }
+
+    .file-type-icon.pdf { background: #FEE4E2; color: #D92D20; }
+    .file-type-icon.docx { background: #E0EAFF; color: #175CD3; }
+    .file-type-icon.figma { background: #F4EBFF; color: #6941C6; }
+    .file-type-icon.video { background: #FCE7F6; color: #C11574; }
+    .file-type-icon.audio { background: #FEF0C7; color: #B54708; }
+    .file-type-icon.image { background: #E6F4EA; color: #137333; }
+    .file-type-icon.xlsx { background: #E6F4EA; color: #027A48; }
+    .file-type-icon.zip { background: #F2F4F7; color: #344054; }
+    .file-type-icon.svg { background: #FFFAEB; color: #B54708; }
+
+    .file-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .file-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .file-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dominant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .file-size-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: #F2F4F7;
+      padding: 1px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .file-meta-sub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .user-avatar-micro {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #7141F8;
+      color: #FFFFFF;
+      font-size: 9px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hover Quick Actions Bar */
+    .file-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .file-card-row:hover .file-card-actions {
+      opacity: 1;
+    }
+
+    .card-action-btn {
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 6px;
+      border: 1px solid #D0D5DD;
+      background: #FFFFFF;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #344054;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+    }
+
+    .card-action-btn:hover {
+      background: #F2F4F7;
+      border-color: #98A2B3;
+    }
+
+    .card-action-btn.icon-only {
+      width: 28px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    /* Grid Gallery View (for Media & Images) */
+    .files-grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .grid-media-card {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .grid-media-card:hover {
+      border-color: #C8CCD6;
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
+
+    .grid-thumb-box {
+      width: 100%;
+      height: 108px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .grid-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s ease;
+    }
+
+    .grid-media-card:hover .grid-thumb-box img {
+      transform: scale(1.04);
+    }
+
+    .video-play-pill {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      transition: transform 0.15s ease;
+    }
+
+    .grid-media-card:hover .video-play-pill {
+      transform: scale(1.1);
+      background: rgba(95, 95, 225, 0.9);
+    }
+
+    .video-duration-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .grid-card-meta {
+      padding: 8px 10px;
+    }
+
+    .grid-filename {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dominant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .grid-subtext {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Audio Player Card */
+    .audio-card-waveform {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #FFFDF5;
+      border: 1px solid #FEDF89;
+      border-radius: 10px;
+    }
+
+    .audio-play-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: #F79009;
+      color: #FFFFFF;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Empty States Styling */
+    .empty-state-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 50px 24px;
+      height: 100%;
+    }
+
+    .empty-icon-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 999px;
+      background: #F4F3FF;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .empty-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-dominant);
+      margin-bottom: 6px;
+    }
+
+    .empty-subtext {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      max-width: 320px;
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+
+    .empty-action-btn {
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(95, 95, 225, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    .empty-action-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Skeleton Loading State Animation */
+    .skeleton-pulse {
+      background: linear-gradient(90deg, #F2F4F7 25%, #E4E7EC 50%, #F2F4F7 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 6px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-card {
+      height: 56px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    /* Views container toggle */
+    .tab-content-view {
+      display: none;
+    }
+
+    .tab-content-view.active-view {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating State Controller Bar -->
+  <aside class="state-controller">
+    <span class="label">Views & States:</span>
+    <button class="state-btn active" onclick="activateFilterTab('all')">1. All Tab (Code Listing Layout)</button>
+    <button class="state-btn" onclick="activateFilterTab('documents')">2. Documents (Actions & Open)</button>
+    <button class="state-btn" onclick="activateFilterTab('images')">3. Images Only</button>
+    <button class="state-btn" onclick="activateFilterTab('videos')">4. Videos Only</button>
+    <button class="state-btn" onclick="activateFilterTab('audio')">5. Audio Only</button>
+    <button class="state-btn" onclick="openWideDocPreview()" style="background:#7141F8; color:#FFFFFF; font-weight:700;">★ 6. Wide Document Preview</button>
+    <button class="state-btn" onclick="activateSpecialState('search-active')">7. Search Active</button>
+    <button class="state-btn" onclick="activateSpecialState('empty-filter')">8. No Results</button>
+    <button class="state-btn" onclick="activateSpecialState('empty-channel')">9. Zero Files</button>
+    <button class="state-btn" onclick="activateSpecialState('loading')">10. Skeleton</button>
+  </aside>
+
+  <!-- Centered Modal Preview Simulator (Exact window size 600px × 600px) -->
+  <main class="modal-backdrop-preview">
+    <div class="channel-modal" role="dialog" aria-labelledby="channel-dialog-title">
+      
+      <!-- Modal Header (Preserves '# zedu-contributors', close X, Star, Mute) -->
+      <header class="modal-header">
+        <div class="header-top">
+          <div class="channel-title-row">
+            <h2 id="channel-dialog-title" class="channel-title"># zedu-contributors</h2>
+          </div>
+          <button class="close-btn" aria-label="Close dialog">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="header-actions">
+          <button class="action-pill-btn icon-only" id="star-btn" title="Star channel" onclick="this.classList.toggle('active')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </button>
+          <button class="action-pill-btn" id="mute-btn" onclick="this.classList.toggle('active')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              <path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path>
+              <path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path>
+              <path d="M18 8a6 6 0 0 0-9.33-5"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+            <span>Mute</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Parent Tabs Bar (About, People 303, Agents, Files) -->
+      <nav class="parent-tabs-bar" aria-label="Channel details navigation">
+        <button class="parent-tab">About</button>
+        <button class="parent-tab">People <span class="count-badge">303</span></button>
+        <button class="parent-tab">Agents</button>
+        <button class="parent-tab active">Files <span class="count-badge">24</span></button>
+      </nav>
+
+      <!-- Redesigned Files Tab Body -->
+      <section class="files-tab-body">
+        
+        <!-- Sticky Sub-Toolbar: Search + Sub-Filter Pills + Segmented View Mode Toggle -->
+        <div class="files-sub-toolbar">
+          <div class="search-wrapper">
+            <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="file-search-box" class="files-search-input" placeholder="Search files..." oninput="handleSearchInput(this.value)">
+          </div>
+
+          <!-- Sub-Filter Pills (Demarcated: All, Documents first right after All, Images, Videos, Audio) -->
+          <div class="sub-filter-pills" role="tablist">
+            <button class="filter-pill active" id="pill-all" onclick="activateFilterTab('all')">All <span class="pill-counter">24</span></button>
+            <button class="filter-pill" id="pill-documents" onclick="activateFilterTab('documents')">Documents <span class="pill-counter">10</span></button>
+            <button class="filter-pill" id="pill-images" onclick="activateFilterTab('images')">Images <span class="pill-counter">8</span></button>
+            <button class="filter-pill" id="pill-videos" onclick="activateFilterTab('videos')">Videos <span class="pill-counter">4</span></button>
+            <button class="filter-pill" id="pill-audio" onclick="activateFilterTab('audio')">Audio <span class="pill-counter">2</span></button>
+          </div>
+
+          <!-- Segmented View Mode Toggle (Hybrid: media grid + doc rows vs List: all rows) -->
+          <div class="view-mode-toggle" id="all-view-toggle">
+            <button class="view-mode-btn active" id="toggle-hybrid-view" onclick="setLayoutMode('hybrid')" title="Hybrid View (Square media grid + Document list)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <line x1="3" y1="15" x2="21" y2="15"></line>
+                <line x1="3" y1="19" x2="21" y2="19"></line>
+              </svg>
+              <span>Hybrid</span>
+            </button>
+            <button class="view-mode-btn" id="toggle-list-view" onclick="setLayoutMode('list')" title="List View (All files listed row-by-row)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+              <span>List</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Scrollable Files Viewport -->
+        <div class="files-scroll-container">
+
+          <!-- 1. ALL TAB VIEW (Dual mode: Hybrid [default] and Pure List) -->
+          <div id="view-tab-all" class="tab-content-view active-view mode-hybrid">
+            
+            <!-- Date Group 1: October 6 · Today -->
+            <div class="date-group">
+              <span class="date-badge">October 6 · Today</span>
+              
+              <!-- Media Grid for Images & Videos in this date group (from codebase) -->
+              <div class="code-media-grid">
+                <!-- Media 1: Image -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Wireframe_Mockup_V1.png', '3.8 MB', 'Sarah', 'PNG')" title="Wireframe_Mockup_V1.png">
+                  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; padding:6px; text-align:center;">
+                    <span style="font-size:10px; font-weight:700;">Wireframe Mockup</span>
+                    <span style="font-size:9px; opacity:0.8;">PNG · 3.8 MB</span>
+                  </div>
+                </div>
+
+                <!-- Media 2: Image -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Landing_Page_V2.png', '4.1 MB', 'Favy', 'PNG')" title="Landing_Page_V2.png">
+                  <div style="background: linear-gradient(135deg, #2af598 0%, #009efd 100%); width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; padding:6px; text-align:center;">
+                    <span style="font-size:10px; font-weight:700;">Landing Page v2</span>
+                    <span style="font-size:9px; opacity:0.8;">PNG · 4.1 MB</span>
+                  </div>
+                </div>
+
+                <!-- Media 3: Video with Play Overlay -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Quick_Demo_Sync.mp4', '18.4 MB', 'David', 'MP4')" title="Quick_Demo_Sync.mp4">
+                  <div style="width:100%; height:100%; background:#1F2937; position:relative; display:flex; align-items:center; justify-content:center;">
+                    <div class="video-play-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span style="position:absolute; bottom:4px; right:4px; background:rgba(0,0,0,0.75); color:white; font-size:9px; font-weight:700; padding:1px 4px; border-radius:3px;">05:12</span>
+                  </div>
+                </div>
+
+                <!-- Media 4: Image -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Color_Tokens_Asset.jpg', '2.9 MB', 'David', 'JPG')" title="Color_Tokens_Asset.jpg">
+                  <div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%); width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#222; padding:6px; text-align:center;">
+                    <span style="font-size:10px; font-weight:700;">Color Tokens</span>
+                    <span style="font-size:9px; opacity:0.8;">JPG · 2.9 MB</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Non-Media Documents & Audio Listed Below (from codebase) -->
+              <div class="files-list-stack">
+                
+                <!-- File 1: PDF Document (From your screenshot) -->
+                <div class="file-card-row" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
+                    <div class="file-type-icon pdf">PDF</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Ticket_Guide_Stage1.pdf</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">2.4 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Sadiq · Today at 11:30 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Document Action Buttons: Download, Share, Open in Browser -->
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- File 2: DOCX File -->
+                <div class="file-card-row" onclick="openWideDocPreview('Sprint_2_Frontend_Tasks.docx', '1.1 MB', 'Favy', 'DOC')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#175CD3;">F</span>
+                    <div class="file-type-icon docx">DOC</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Sprint_2_Frontend_Tasks.docx</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">1.1 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Favy · Today at 4:15 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- List-Mode Media Rows (Shown only when in List view mode) -->
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Wireframe_Mockup_V1.png', '3.8 MB', 'Sarah', 'PNG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#667eea;">S</span>
+                    <div class="file-type-icon image">PNG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Wireframe_Mockup_V1.png</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">3.8 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Sarah · Today at 10:14 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Wireframe_Mockup_V1.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Wireframe_Mockup_V1.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Landing_Page_V2.png', '4.1 MB', 'Favy', 'PNG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#009efd;">F</span>
+                    <div class="file-type-icon image">PNG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Landing_Page_V2.png</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">4.1 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Favy · Today at 9:30 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Landing_Page_V2.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Landing_Page_V2.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Quick_Demo_Sync.mp4', '18.4 MB', 'David', 'MP4')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#C11574;">D</span>
+                    <div class="file-type-icon video">MP4</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Quick_Demo_Sync.mp4</span>
+                        <span class="tiny-open-text">Play video ↗</span>
+                        <span class="file-size-tag">18.4 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>David · Today at 6:45 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Quick_Demo_Sync.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Quick_Demo_Sync.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Color_Tokens_Asset.jpg', '2.9 MB', 'David', 'JPG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#ff9a9e;">D</span>
+                    <div class="file-type-icon image">JPG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Color_Tokens_Asset.jpg</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">2.9 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>David · Today at 5:00 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Color_Tokens_Asset.jpg')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Color_Tokens_Asset.jpg')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Date Group 2: October 5 · Yesterday -->
+            <div class="date-group">
+              <span class="date-badge">October 5 · Yesterday</span>
+
+              <!-- Media Grid -->
+              <div class="code-media-grid">
+                <!-- Video 1 -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Cohort_Mentorship_Sync.mp4', '128 MB', 'Sadiq', 'MP4')" title="Cohort_Mentorship_Sync.mp4">
+                  <div style="width:100%; height:100%; background:#111827; position:relative; display:flex; align-items:center; justify-content:center;">
+                    <div class="video-play-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span style="position:absolute; bottom:4px; right:4px; background:rgba(0,0,0,0.75); color:white; font-size:9px; font-weight:700; padding:1px 4px; border-radius:3px;">45:12</span>
+                  </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('User_Flow_Walkthrough.mp4', '42.5 MB', 'David', 'MP4')" title="User_Flow_Walkthrough.mp4">
+                  <div style="width:100%; height:100%; background:#1F2937; position:relative; display:flex; align-items:center; justify-content:center;">
+                    <div class="video-play-center">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span style="position:absolute; bottom:4px; right:4px; background:rgba(0,0,0,0.75); color:white; font-size:9px; font-weight:700; padding:1px 4px; border-radius:3px;">14:20</span>
+                  </div>
+                </div>
+
+                <!-- Image 3 -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Component_Grid.png', '5.6 MB', 'Mark', 'PNG')" title="Component_Grid.png">
+                  <div style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; padding:6px; text-align:center;">
+                    <span style="font-size:10px; font-weight:700;">Components</span>
+                    <span style="font-size:9px; opacity:0.8;">PNG · 5.6 MB</span>
+                  </div>
+                </div>
+
+                <!-- Image 4 -->
+                <div class="code-media-thumb" onclick="openWideDocPreview('Banner_Artwork.webp', '1.4 MB', 'Mentor', 'WEBP')" title="Banner_Artwork.webp">
+                  <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:white; padding:6px; text-align:center;">
+                    <span style="font-size:10px; font-weight:700;">Banner Art</span>
+                    <span style="font-size:9px; opacity:0.8;">WEBP · 1.4 MB</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Non-Media Files -->
+              <div class="files-list-stack">
+                
+                <!-- Audio File -->
+                <div class="file-card-row" onclick="alert('Playing Team_Standup_VoiceNote.m4a')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#B54708;">D</span>
+                    <div class="file-type-icon audio">M4A</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Team_Standup_VoiceNote.m4a</span>
+                        <span class="tiny-open-text">Play audio ↗</span>
+                        <span class="file-size-tag">03:15 · 2.1 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>David · Yesterday at 10:00 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Team_Standup_VoiceNote.m4a')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Team_Standup_VoiceNote.m4a')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- PDF File -->
+                <div class="file-card-row" onclick="openWideDocPreview('HNG15_Internship_Rules.pdf', '3.5 MB', 'Mentor', 'PDF')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#D92D20;">M</span>
+                    <div class="file-type-icon pdf">PDF</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">HNG15_Internship_Rules.pdf</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">3.5 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mentor · Yesterday at 8:30 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- List-Mode Media Rows for Date Group 2 (Shown only when in List view mode) -->
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Cohort_Mentorship_Sync.mp4', '128 MB', 'Sadiq', 'MP4')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#D92D20;">S</span>
+                    <div class="file-type-icon video">MP4</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Cohort_Mentorship_Sync.mp4</span>
+                        <span class="tiny-open-text">Play video ↗</span>
+                        <span class="file-size-tag">128 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Sadiq · Yesterday at 9:00 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Cohort_Mentorship_Sync.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Cohort_Mentorship_Sync.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('User_Flow_Walkthrough.mp4', '42.5 MB', 'David', 'MP4')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#1F2937;">D</span>
+                    <div class="file-type-icon video">MP4</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">User_Flow_Walkthrough.mp4</span>
+                        <span class="tiny-open-text">Play video ↗</span>
+                        <span class="file-size-tag">42.5 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>David · Yesterday at 4:30 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('User_Flow_Walkthrough.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('User_Flow_Walkthrough.mp4')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Component_Grid.png', '5.6 MB', 'Mark', 'PNG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#a18cd1;">M</span>
+                    <div class="file-type-icon image">PNG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Component_Grid.png</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">5.6 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mark · Yesterday at 2:10 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Component_Grid.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Component_Grid.png')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="file-card-row list-media-row" onclick="openWideDocPreview('Banner_Artwork.webp', '1.4 MB', 'Mentor', 'WEBP')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#fa709a;">M</span>
+                    <div class="file-type-icon image">WEBP</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Banner_Artwork.webp</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">1.4 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mentor · Yesterday at 11:15 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Banner_Artwork.webp')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Banner_Artwork.webp')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Date Group 3: October 4 · Earlier -->
+            <div class="date-group">
+              <span class="date-badge">October 4 · Earlier</span>
+              <div class="files-list-stack">
+                
+                <!-- File: Figma Design -->
+                <div class="file-card-row" onclick="openWideDocPreview('Zedu_Mobile_Components.fig', '14.8 MB', 'Mark', 'FIG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#6941C6;">M</span>
+                    <div class="file-type-icon figma">FIG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Zedu_Mobile_Components.fig</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">14.8 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mark · Oct 4, 8:20 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- File: Excel Spreadsheet -->
+                <div class="file-card-row" onclick="openWideDocPreview('Contributor_Scorecard_Q3.xlsx', '840 KB', 'Mentor', 'XLS')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#027A48;">M</span>
+                    <div class="file-type-icon xlsx">XLS</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Contributor_Scorecard_Q3.xlsx</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">840 KB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mentor · Oct 4, 3:10 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- File: ZIP Archive -->
+                <div class="file-card-row" onclick="alert('Downloading Backend_API_Contract_v2.zip...')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#475467;">A</span>
+                    <div class="file-type-icon zip">ZIP</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Backend_API_Contract_v2.zip</span>
+                        <span class="tiny-open-text">Download archive ↗</span>
+                        <span class="file-size-tag">5.2 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Alex · Oct 4, 8:15 AM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Backend_API_Contract_v2.zip')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Backend_API_Contract_v2.zip')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. DOCUMENTS ONLY TAB VIEW (Demarcated: Strictly documents only, with dedicated action buttons) -->
+          <div id="view-tab-documents" class="tab-content-view">
+            <div class="date-group">
+              <span class="date-badge">October 6 · Today</span>
+              <div class="files-list-stack">
+                
+                <!-- Document 1: PDF Guide -->
+                <div class="file-card-row" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
+                    <div class="file-type-icon pdf">PDF</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Ticket_Guide_Stage1.pdf</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">2.4 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Sadiq · 11:30 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Document 2: Word Doc -->
+                <div class="file-card-row" onclick="openWideDocPreview('Sprint_2_Frontend_Tasks.docx', '1.1 MB', 'Favy', 'DOC')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#175CD3;">F</span>
+                    <div class="file-type-icon docx">DOC</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Sprint_2_Frontend_Tasks.docx</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">1.1 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Favy · 4:15 PM</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Sprint_2_Frontend_Tasks.docx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Document 3: Figma File -->
+                <div class="file-card-row" onclick="openWideDocPreview('Zedu_Mobile_Components.fig', '14.8 MB', 'Mark', 'FIG')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#6941C6;">M</span>
+                    <div class="file-type-icon figma">FIG</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Zedu_Mobile_Components.fig</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">14.8 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mark · Oct 4</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Zedu_Mobile_Components.fig')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Document 4: PDF Rules -->
+                <div class="file-card-row" onclick="openWideDocPreview('HNG15_Internship_Rules.pdf', '3.5 MB', 'Mentor', 'PDF')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#D92D20;">M</span>
+                    <div class="file-type-icon pdf">PDF</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">HNG15_Internship_Rules.pdf</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">3.5 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mentor · Oct 4</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('HNG15_Internship_Rules.pdf')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Document 5: Scorecard Excel -->
+                <div class="file-card-row" onclick="openWideDocPreview('Contributor_Scorecard_Q3.xlsx', '840 KB', 'Mentor', 'XLS')">
+                  <div class="file-card-left">
+                    <span class="user-avatar-micro" style="background:#027A48;">M</span>
+                    <div class="file-type-icon xlsx">XLS</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name">Contributor_Scorecard_Q3.xlsx</span>
+                        <span class="tiny-open-text">Open file ↗</span>
+                        <span class="file-size-tag">840 KB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span>Mentor · Oct 4</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-card-actions" onclick="event.stopPropagation()">
+                    <button class="card-action-btn" title="Download" onclick="downloadDoc('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                      <span>Download</span>
+                    </button>
+                    <button class="card-action-btn" title="Share" onclick="shareDoc('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                      <span>Share</span>
+                    </button>
+                    <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Contributor_Scorecard_Q3.xlsx')">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      <span>Open</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. IMAGES ONLY TAB VIEW (Demarcated: ONLY images appear here, zero videos or docs) -->
+          <div id="view-tab-images" class="tab-content-view">
+            <div class="date-group">
+              <span class="date-badge">October 5 · Image Assets</span>
+              <div class="files-grid-gallery">
+                
+                <div class="grid-media-card" onclick="openWideDocPreview('Wireframe_Mockup_V1.png', '3.8 MB', 'Sarah', 'PNG')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <span style="color:white; font-size:11.5px; font-weight:700;">UI Wireframe Mockup</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Wireframe_Mockup.png</p>
+                    <div class="grid-subtext">
+                      <span>3.8 MB</span>
+                      <span>@Sarah</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-media-card" onclick="openWideDocPreview('Landing_Page_V2.png', '4.1 MB', 'Favy', 'PNG')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #2af598 0%, #009efd 100%);">
+                    <span style="color:white; font-size:11.5px; font-weight:700;">Landing Page v2</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Landing_Page_V2.png</p>
+                    <div class="grid-subtext">
+                      <span>4.1 MB</span>
+                      <span>@Favy</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-media-card" onclick="openWideDocPreview('Color_Tokens_Asset.jpg', '2.9 MB', 'David', 'JPG')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%);">
+                    <span style="color:#222; font-size:11.5px; font-weight:700;">Color Tokens Asset</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">App_Design_Asset.jpg</p>
+                    <div class="grid-subtext">
+                      <span>2.9 MB</span>
+                      <span>@David</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-media-card" onclick="openWideDocPreview('Component_Grid.png', '5.6 MB', 'Mark', 'PNG')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                    <span style="color:white; font-size:11.5px; font-weight:700;">Component Library</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Component_Grid.png</p>
+                    <div class="grid-subtext">
+                      <span>5.6 MB</span>
+                      <span>@Mark</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-media-card" onclick="openWideDocPreview('Hero_Illustration.png', '1.8 MB', 'Sadiq', 'PNG')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);">
+                    <span style="color:#222; font-size:11.5px; font-weight:700;">Zedu Banner Artwork</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Hero_Illustration.png</p>
+                    <div class="grid-subtext">
+                      <span>1.8 MB</span>
+                      <span>@Sadiq</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid-media-card" onclick="openWideDocPreview('Banner_Artwork.webp', '1.4 MB', 'Mentor', 'WEBP')">
+                  <div class="grid-thumb-box" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <span style="color:white; font-size:11.5px; font-weight:700;">Event Banner</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Banner_Artwork.webp</p>
+                    <div class="grid-subtext">
+                      <span>1.4 MB</span>
+                      <span>@Mentor</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. VIDEOS ONLY TAB VIEW (Demarcated: ONLY videos appear here, zero images or docs) -->
+          <div id="view-tab-videos" class="tab-content-view">
+            <div class="date-group">
+              <span class="date-badge">October 5 · Video Recordings & Demos</span>
+              <div class="files-grid-gallery">
+                
+                <!-- Video 1 -->
+                <div class="grid-media-card" onclick="openWideDocPreview('Cohort_Mentorship_Sync.mp4', '128 MB', 'Sadiq', 'MP4')">
+                  <div class="grid-thumb-box" style="background: #111827;">
+                    <div class="video-play-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span class="video-duration-badge">45:12</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Cohort_Mentorship_Sync.mp4</p>
+                    <div class="grid-subtext">
+                      <span>128 MB</span>
+                      <span>@Sadiq</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="grid-media-card" onclick="openWideDocPreview('User_Flow_Walkthrough.mp4', '42.5 MB', 'David', 'MP4')">
+                  <div class="grid-thumb-box" style="background: #1F2937;">
+                    <div class="video-play-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span class="video-duration-badge">14:20</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">User_Flow_Walkthrough.mp4</p>
+                    <div class="grid-subtext">
+                      <span>42.5 MB</span>
+                      <span>@David</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="grid-media-card" onclick="openWideDocPreview('Live_Debugging_Session.mp4', '210 MB', 'Mark', 'MP4')">
+                  <div class="grid-thumb-box" style="background: #374151;">
+                    <div class="video-play-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span class="video-duration-badge">58:40</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Live_Debugging_Session.mp4</p>
+                    <div class="grid-subtext">
+                      <span>210 MB</span>
+                      <span>@Mark</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="grid-media-card" onclick="openWideDocPreview('Product_Roadmap_Q4.mp4', '68 MB', 'Mentor', 'MP4')">
+                  <div class="grid-thumb-box" style="background: #1E293B;">
+                    <div class="video-play-pill">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <span class="video-duration-badge">22:15</span>
+                  </div>
+                  <div class="grid-card-meta">
+                    <p class="grid-filename">Product_Roadmap_Q4.mp4</p>
+                    <div class="grid-subtext">
+                      <span>68 MB</span>
+                      <span>@Mentor</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. AUDIO ONLY TAB VIEW (Demarcated: ONLY audio files appear here) -->
+          <div id="view-tab-audio" class="tab-content-view">
+            <div class="date-group">
+              <span class="date-badge">October 5 · Audio Notes</span>
+              <div class="files-list-stack">
+                
+                <div class="audio-card-waveform">
+                  <button class="audio-play-btn" title="Play recording">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </button>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                      <span style="font-size:13px; font-weight:700; color:#B54708;">Team_Standup_VoiceNote.m4a</span>
+                      <span style="font-size:11px; font-weight:600; color:#7A271A; background:#FEF0C7; padding:1px 6px; border-radius:4px;">03:15 · 2.1 MB</span>
+                    </div>
+                    <!-- Audio Waveform Visualization Bars -->
+                    <div style="display:flex; align-items:center; gap:2px; height:18px;">
+                      <span style="width:3px; height:6px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:12px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:18px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:10px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:16px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:8px; background:#F79009; border-radius:2px;"></span>
+                      <span style="width:3px; height:14px; background:#FDB022; border-radius:2px;"></span>
+                      <span style="width:3px; height:4px; background:#FDB022; border-radius:2px;"></span>
+                      <span style="width:3px; height:12px; background:#FDB022; border-radius:2px;"></span>
+                      <span style="width:3px; height:18px; background:#FDB022; border-radius:2px;"></span>
+                      <span style="width:3px; height:8px; background:#FDB022; border-radius:2px;"></span>
+                    </div>
+                    <span style="font-size:11px; color:#B54708; display:block; margin-top:4px;">Recorded by David · Oct 5, 10:00 AM</span>
+                  </div>
+                </div>
+
+                <!-- Audio Note 2 -->
+                <div class="audio-card-waveform" style="margin-top:10px; background:#F8F9FC; border-color:#E2E8F0;">
+                  <button class="audio-play-btn" style="background:#4F46E5;" title="Play recording">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  </button>
+                  <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                      <span style="font-size:13px; font-weight:700; color:#1E1B4B;">Async_Design_Feedback.mp3</span>
+                      <span style="font-size:11px; font-weight:600; color:#312E81; background:#EEF2FF; padding:1px 6px; border-radius:4px;">01:45 · 1.2 MB</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:2px; height:18px;">
+                      <span style="width:3px; height:8px; background:#6366F1; border-radius:2px;"></span>
+                      <span style="width:3px; height:14px; background:#6366F1; border-radius:2px;"></span>
+                      <span style="width:3px; height:6px; background:#6366F1; border-radius:2px;"></span>
+                      <span style="width:3px; height:16px; background:#6366F1; border-radius:2px;"></span>
+                      <span style="width:3px; height:10px; background:#6366F1; border-radius:2px;"></span>
+                      <span style="width:3px; height:18px; background:#818CF8; border-radius:2px;"></span>
+                      <span style="width:3px; height:12px; background:#818CF8; border-radius:2px;"></span>
+                      <span style="width:3px; height:5px; background:#818CF8; border-radius:2px;"></span>
+                      <span style="width:3px; height:14px; background:#818CF8; border-radius:2px;"></span>
+                    </div>
+                    <span style="font-size:11px; color:#475569; display:block; margin-top:4px;">Recorded by Sarah · Oct 4, 6:40 PM</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. SPECIAL STATE: SEARCH ACTIVE -->
+          <div id="view-special-search-active" class="tab-content-view">
+            <div style="background:#F4F3FF; border:1px solid #D9D6FE; border-radius:8px; padding:8px 12px; margin-bottom:14px; font-size:12px; color:#5925DC; display:flex; justify-content:space-between; align-items:center;">
+              <span>Showing 1 file matching <strong>"Ticket_Guide"</strong></span>
+              <button onclick="activateFilterTab('all')" style="background:none; border:none; color:#5925DC; font-weight:700; cursor:pointer;">Clear search</button>
+            </div>
+            
+            <div class="file-card-row" style="border-color:#5F5FE1; background:#FAFBFD;" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
+              <div class="file-card-left">
+                <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
+                <div class="file-type-icon pdf">PDF</div>
+                <div class="file-info">
+                  <div class="file-name-row">
+                    <span class="file-name"><mark style="background:#E0EAFF; color:#175CD3; border-radius:3px; padding:0 2px;">Ticket_Guide</mark>_Stage1.pdf</span>
+                    <span class="tiny-open-text">Open file ↗</span>
+                    <span class="file-size-tag">2.4 MB</span>
+                  </div>
+                  <div class="file-meta-sub">
+                    <span>Sadiq · Oct 6, 11:30 PM</span>
+                  </div>
+                </div>
+              </div>
+              <div class="file-card-actions" style="opacity:1;" onclick="event.stopPropagation()">
+                <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>Download</span>
+                </button>
+                <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                  <span>Share</span>
+                </button>
+                <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                  <span>Open</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. SPECIAL STATE: EMPTY FILTER / NO SEARCH RESULTS -->
+          <div id="view-special-empty-filter" class="tab-content-view">
+            <div class="empty-state-card">
+              <div class="empty-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </div>
+              <h3 class="empty-title">No files found</h3>
+              <p class="empty-subtext">No files matched your search or selected filter. Try adjusting your query or category.</p>
+              <button class="empty-action-btn" onclick="activateFilterTab('all')">Reset filters & search</button>
+            </div>
+          </div>
+
+          <!-- 8. SPECIAL STATE: ZERO FILES IN CHANNEL -->
+          <div id="view-special-empty-channel" class="tab-content-view">
+            <div class="empty-state-card">
+              <div class="empty-icon-circle" style="background:#F2F4F7; color:#475467;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+              </div>
+              <h3 class="empty-title">No files shared yet</h3>
+              <p class="empty-subtext">Learning materials, assignments, slides, and recordings shared in <strong>#zedu-contributors</strong> will appear here.</p>
+              <button class="empty-action-btn">Upload a file</button>
+            </div>
+          </div>
+
+          <!-- 9. SPECIAL STATE: SKELETON LOADING -->
+          <div id="view-special-loading" class="tab-content-view">
+            <div class="skeleton-pulse" style="width: 100px; height: 12px; margin-bottom: 12px;"></div>
+            
+            <div class="skeleton-card">
+              <div class="skeleton-pulse" style="width: 36px; height: 36px; border-radius: 8px;"></div>
+              <div style="flex: 1; display:flex; flex-direction:column; gap:6px;">
+                <div class="skeleton-pulse" style="width: 55%; height: 13px;"></div>
+                <div class="skeleton-pulse" style="width: 30%; height: 10px;"></div>
+              </div>
+              <div class="skeleton-pulse" style="width: 50px; height: 26px; border-radius: 6px;"></div>
+            </div>
+
+            <div class="skeleton-card">
+              <div class="skeleton-pulse" style="width: 36px; height: 36px; border-radius: 8px;"></div>
+              <div style="flex: 1; display:flex; flex-direction:column; gap:6px;">
+                <div class="skeleton-pulse" style="width: 70%; height: 13px;"></div>
+                <div class="skeleton-pulse" style="width: 25%; height: 10px;"></div>
+              </div>
+              <div class="skeleton-pulse" style="width: 50px; height: 26px; border-radius: 6px;"></div>
+            </div>
+
+            <div class="skeleton-card">
+              <div class="skeleton-pulse" style="width: 36px; height: 36px; border-radius: 8px;"></div>
+              <div style="flex: 1; display:flex; flex-direction:column; gap:6px;">
+                <div class="skeleton-pulse" style="width: 45%; height: 13px;"></div>
+                <div class="skeleton-pulse" style="width: 35%; height: 10px;"></div>
+              </div>
+              <div class="skeleton-pulse" style="width: 50px; height: 26px; border-radius: 6px;"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- WIDE DOCUMENT PREVIEW DIALOG (Redesigned Wide Canvas, Solving Cramped Dialog) -->
+  <!-- ========================================================================= -->
+  <div id="wide-preview-overlay" class="wide-preview-overlay" style="display: none;" onclick="handleOverlayClick(event)">
+    <div class="wide-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-doc-title">
+      
+      <!-- Top Action Bar (Matching production: PDF Badge, Title, Download, Share, Open, Close) -->
+      <header class="wide-preview-header">
+        <div class="wide-header-left">
+          <span class="wide-badge-pdf" id="preview-file-type-badge">PDF</span>
+          <div style="display: flex; flex-direction: column;">
+            <h3 id="preview-doc-title" class="wide-header-title">Ticket_Guide_Stage1.pdf</h3>
+            <span id="preview-doc-submeta" style="font-size: 11px; color: #667085;">2.4 MB · Shared by @sadiq in #zedu-contributors</span>
+          </div>
+        </div>
+        <div class="wide-header-actions">
+          <button class="btn-doc-download" onclick="alert('Downloading document...')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download</span>
+          </button>
+          <button class="btn-doc-secondary" onclick="alert('Share link copied to clipboard!')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>Share</span>
+          </button>
+          <button class="btn-doc-secondary" onclick="alert('Opening in new browser tab...')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>Open</span>
+          </button>
+          <button class="btn-doc-close" onclick="closeWideDocPreview()" aria-label="Close document preview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- PDF Viewer Sub-Toolbar with Page Controls (From production screenshot) -->
+      <div class="pdf-sub-toolbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-weight: 600; display: flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <span id="pdf-page-indicator">Page 1 / 4</span>
+          </span>
+          <div style="height: 16px; width: 1px; background: #4B5563;"></div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button style="background:none; border:none; color:#E5E7EB; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom Out">−</button>
+            <span style="font-size: 11.5px; color: #9CA3AF;">100%</span>
+            <button style="background:none; border:none; color:#E5E7EB; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom In">+</button>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 13px;">
+          <span title="Fit page" style="cursor: pointer; opacity: 0.85;">⛶ Fit</span>
+          <span title="Rotate clockwise" style="cursor: pointer; opacity: 0.85;">↻ Rotate</span>
+          <span title="Print" style="cursor: pointer; opacity: 0.85;">🖶 Print</span>
+        </div>
+      </div>
+
+      <!-- PDF Main Split Viewer: Thumbnail Rail + Wide Main Document Canvas -->
+      <div class="pdf-split-container">
+        
+        <!-- Thumbnail Sidebar (140px cards with active outline) -->
+        <aside class="pdf-thumbnail-sidebar">
+          <div class="pdf-thumb-card active" onclick="switchPdfPage(1)">
+            <div style="font-size: 8px; font-weight: 800; color: #DC2626; margin-bottom: 2px;">PAGE 1</div>
+            <div style="height: 4px; background: #E5E7EB; width: 85%; margin-bottom: 3px; border-radius: 1px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 95%; margin-bottom: 2px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 90%; margin-bottom: 2px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 75%; margin-bottom: 6px;"></div>
+            <div style="height: 24px; background: #F9FAFB; border: 1px dashed #D1D5DB; border-radius: 2px;"></div>
+            <span style="margin-top: auto; font-size: 10px; color: #6B7280; text-align: center;">1</span>
+          </div>
+
+          <div class="pdf-thumb-card" onclick="switchPdfPage(2)">
+            <div style="font-size: 8px; font-weight: 800; color: #6B7280; margin-bottom: 2px;">PAGE 2</div>
+            <div style="height: 4px; background: #E5E7EB; width: 70%; margin-bottom: 3px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 90%; margin-bottom: 2px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 85%; margin-bottom: 6px;"></div>
+            <div style="height: 36px; background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 2px;"></div>
+            <span style="margin-top: auto; font-size: 10px; color: #6B7280; text-align: center;">2</span>
+          </div>
+
+          <div class="pdf-thumb-card" onclick="switchPdfPage(3)">
+            <div style="font-size: 8px; font-weight: 800; color: #6B7280; margin-bottom: 2px;">PAGE 3</div>
+            <div style="height: 4px; background: #E5E7EB; width: 80%; margin-bottom: 3px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 95%; margin-bottom: 2px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 70%; margin-bottom: 6px;"></div>
+            <div style="height: 20px; background: #F9FAFB; border: 1px dashed #D1D5DB; border-radius: 2px;"></div>
+            <span style="margin-top: auto; font-size: 10px; color: #6B7280; text-align: center;">3</span>
+          </div>
+
+          <div class="pdf-thumb-card" onclick="switchPdfPage(4)">
+            <div style="font-size: 8px; font-weight: 800; color: #6B7280; margin-bottom: 2px;">PAGE 4</div>
+            <div style="height: 4px; background: #E5E7EB; width: 60%; margin-bottom: 3px;"></div>
+            <div style="height: 3px; background: #F3F4F6; width: 85%; margin-bottom: 2px;"></div>
+            <span style="margin-top: auto; font-size: 10px; color: #6B7280; text-align: center;">4</span>
+          </div>
+        </aside>
+
+        <!-- Main Document Canvas Sheet (Wide Sheet Canvas with realistic margins) -->
+        <main class="pdf-main-canvas-area">
+          <div class="pdf-page-sheet" id="pdf-active-sheet">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1E293B; padding-bottom: 14px; margin-bottom: 24px;">
+              <div>
+                <h1 style="font-size: 22px; font-weight: 800; color: #0F172A; letter-spacing: -0.4px;">How to Submit Your Ticket</h1>
+                <p style="font-size: 13px; color: #64748B; margin-top: 4px;">Stage 1 Ticket Guide & Review Requirements</p>
+              </div>
+              <span style="font-size: 11px; font-weight: 700; color: #DC2626; background: #FEE2E2; padding: 4px 8px; border-radius: 4px;">OFFICIAL GUIDE</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <h2 style="font-size: 15px; font-weight: 700; color: #1E293B; margin-bottom: 8px;">1. What is Stage 1?</h2>
+              <p style="color: #334155; line-height: 1.65; margin-bottom: 10px;">
+                Before your ticket goes on GitHub (Zedu repository), please check this guide. Ensure your ticket follows the required template and has a clear summary. Once it is reviewed, you can create it on GitHub.
+              </p>
+            </div>
+
+            <div style="margin-bottom: 20px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px;">
+              <h3 style="font-size: 14px; font-weight: 700; color: #0F172A; margin-bottom: 8px;">The 4 Steps to Follow:</h3>
+              <ol style="padding-left: 20px; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                <li>Copy the ticket template and make your own copy.</li>
+                <li>Fill in every section of the template. Do not leave any section empty.</li>
+                <li>Set the sharing to <em>"Anyone with the link can view"</em> on Google Docs.</li>
+                <li>Message in Zedu with your Google Docs link, Zedu username, and team name.</li>
+              </ol>
+            </div>
+
+            <div style="margin-top: 24px; border: 1px solid #CBD5E1; border-radius: 8px; overflow: hidden;">
+              <div style="background: #F1F5F9; padding: 10px 14px; font-weight: 700; font-size: 13px; color: #1E293B; border-bottom: 1px solid #CBD5E1;">
+                Ticket Template Table Format
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 12px; font-weight: 600; width: 30%; background: #F8FAFC; color: #475569;">Title</td>
+                  <td style="padding: 8px 12px; color: #1E293B;">[Task] Short, clear description of the feature or bug</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 12px; font-weight: 600; background: #F8FAFC; color: #475569;">Your name</td>
+                  <td style="padding: 8px 12px; color: #1E293B;">Your real name</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 12px; font-weight: 600; background: #F8FAFC; color: #475569;">Zedu username</td>
+                  <td style="padding: 8px 12px; color: #1E293B;">@username on Zedu</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 12px; font-weight: 600; background: #F8FAFC; color: #475569;">Summary / Description</td>
+                  <td style="padding: 8px 12px; color: #1E293B;">Concise overview of what is being submitted and why.</td>
+                </tr>
+              </table>
+            </div>
+
+            <div style="margin-top: 28px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #94A3B8; border-top: 1px solid #E2E8F0; padding-top: 12px;">
+              <span>Zedu Internship 2026 Documentation</span>
+              <span>Page 1 of 4</span>
+            </div>
+          </div>
+        </main>
+
+      </div>
+
+      <!-- Modal Footer Hint -->
+      <footer class="wide-preview-footer">
+        <span>Press <kbd style="background:#F1F2F4; border:1px solid #D0D5DD; border-radius:4px; padding:1px 6px; font-size:10.5px; font-weight:600; color:#344054;">ESC</kbd> to close preview</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    // Primary controller to activate demarcated tabs
+    function activateFilterTab(category) {
+      // Hide all content views
+      document.querySelectorAll('.tab-content-view').forEach(view => {
+        view.classList.remove('active-view');
+      });
+
+      // Show selected demarcated view
+      const targetView = document.getElementById('view-tab-' + category);
+      if (targetView) {
+        targetView.classList.add('active-view');
+      }
+
+      // Update Sub-Filter Pills highlight
+      document.querySelectorAll('.filter-pill').forEach(pill => {
+        pill.classList.remove('active');
+      });
+      const targetPill = document.getElementById('pill-' + category);
+      if (targetPill) {
+        targetPill.classList.add('active');
+      }
+
+      // Manage view mode toggle visibility (relevant for 'all' tab)
+      const viewToggle = document.getElementById('all-view-toggle');
+      if (viewToggle) {
+        viewToggle.style.display = (category === 'all') ? 'inline-flex' : 'none';
+      }
+
+      // Update State Controller floating buttons
+      document.querySelectorAll('.state-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + category + "'")) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Layout Mode Controller for view-tab-all (Hybrid vs Pure List)
+    function setLayoutMode(mode) {
+      const allView = document.getElementById('view-tab-all');
+      const hybridBtn = document.getElementById('toggle-hybrid-view');
+      const listBtn = document.getElementById('toggle-list-view');
+
+      if (!allView) return;
+
+      if (mode === 'list') {
+        allView.classList.remove('mode-hybrid');
+        allView.classList.add('mode-list');
+        if (hybridBtn) hybridBtn.classList.remove('active');
+        if (listBtn) listBtn.classList.add('active');
+      } else {
+        allView.classList.remove('mode-list');
+        allView.classList.add('mode-hybrid');
+        if (hybridBtn) hybridBtn.classList.add('active');
+        if (listBtn) listBtn.classList.remove('active');
+      }
+    }
+
+    // Secondary controller for previewing states (search, empty, loading)
+    function activateSpecialState(stateKey) {
+      document.querySelectorAll('.tab-content-view').forEach(view => {
+        view.classList.remove('active-view');
+      });
+
+      const targetView = document.getElementById('view-special-' + stateKey);
+      if (targetView) {
+        targetView.classList.add('active-view');
+      }
+
+      document.querySelectorAll('.state-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + stateKey + "'")) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    function handleSearchInput(query) {
+      if (query.trim().length > 0) {
+        activateSpecialState('search-active');
+      } else {
+        activateFilterTab('all');
+      }
+    }
+
+    // Wide Document Preview Modal Logic
+    function openWideDocPreview(docName = 'Ticket_Guide_Stage1.pdf', docSize = '2.4 MB', uploader = 'Sadiq', fileType = 'PDF') {
+      const overlay = document.getElementById('wide-preview-overlay');
+      if (!overlay) return;
+
+      document.getElementById('preview-doc-title').textContent = docName;
+      document.getElementById('preview-doc-submeta').textContent = `${docSize} · Shared by @${uploader.toLowerCase()} in #zedu-contributors`;
+      document.getElementById('preview-file-type-badge').textContent = fileType;
+
+      overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeWideDocPreview() {
+      const overlay = document.getElementById('wide-preview-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(event) {
+      if (event.target.id === 'wide-preview-overlay') {
+        closeWideDocPreview();
+      }
+    }
+
+    function switchPdfPage(pageNum) {
+      const cards = document.querySelectorAll('.pdf-thumb-card');
+      cards.forEach((card, idx) => {
+        if (idx === pageNum - 1) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      });
+      const indicator = document.getElementById('pdf-page-indicator');
+      if (indicator) {
+        indicator.textContent = `Page ${pageNum} / 4`;
+      }
+    }
+
+    // Quick Action Handlers for Documents
+    function downloadDoc(fileName) {
+      alert(`Downloading "${fileName}"...`);
+    }
+
+    function shareDoc(fileName) {
+      navigator.clipboard?.writeText(window.location.href);
+      alert(`Share link for "${fileName}" copied to clipboard!`);
+    }
+
+    function openInBrowser(fileName) {
+      alert(`Opening "${fileName}" in new browser tab...`);
+    }
+
+    // Close wide preview with ESC key
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeWideDocPreview();
+      }
+    });
+  </script>
+</body>
+</html>
