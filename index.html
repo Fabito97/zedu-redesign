@@ -612,14 +612,14 @@
     /* PDF Viewer Sub-Toolbar */
     .pdf-sub-toolbar {
       height: 38px;
-      background: #323639;
-      color: #E5E7EB;
+      background: #F8F9FB;
+      color: #344054;
       padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
-      border-bottom: 1px solid #202224;
+      border-bottom: 1px solid #EAEBF0;
       flex-shrink: 0;
     }
 
@@ -627,13 +627,13 @@
       flex: 1;
       display: flex;
       overflow: hidden;
-      background: #525659;
+      background: #EEF1F6;
     }
 
     .pdf-thumbnail-sidebar {
       width: 220px;
-      background: #323639;
-      border-right: 1px solid #202224;
+      background: #FAFAFD;
+      border-right: 1px solid #EAEBF0;
       padding: 16px 12px;
       overflow-y: auto;
       display: flex;
@@ -647,21 +647,25 @@
       width: 140px;
       height: 180px;
       background: #FFFFFF;
-      border-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 1px solid #E4E7EC;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(16, 24, 40, 0.05);
       padding: 12px 10px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       gap: 4px;
-      transition: transform 0.15s ease;
+      transition: all 0.15s ease;
     }
     .pdf-thumb-card:hover {
-      transform: scale(1.02);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 24, 40, 0.08);
+      border-color: #D0D5DD;
     }
     .pdf-thumb-card.active {
       outline: 2px solid #5F5FE1;
-      box-shadow: 0 0 0 3px rgba(95, 95, 225, 0.4);
+      border-color: #5F5FE1;
+      box-shadow: 0 0 0 3px rgba(95, 95, 225, 0.2);
     }
 
     .pdf-main-canvas-area {
@@ -670,15 +674,15 @@
       padding: 24px;
       display: flex;
       justify-content: center;
-      background: #525659;
+      background: #EEF1F6;
     }
 
     .pdf-page-sheet {
       width: 620px;
       min-height: 800px;
       background: #FFFFFF;
-      border-radius: 4px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      border-radius: 6px;
+      box-shadow: 0 10px 30px -4px rgba(16, 24, 40, 0.1), 0 0 0 1px rgba(16, 24, 40, 0.04);
       padding: 40px 44px;
       color: #111827;
       font-size: 12.5px;
@@ -2220,21 +2224,21 @@
       <!-- PDF Viewer Sub-Toolbar with Page Controls (From production screenshot) -->
       <div class="pdf-sub-toolbar">
         <div style="display: flex; align-items: center; gap: 14px;">
-          <span style="font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          <span style="font-weight: 600; display: flex; align-items: center; gap: 6px; color: var(--primary);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            <span id="pdf-page-indicator">Page 1 / 4</span>
+            <span id="pdf-page-indicator" style="color: #344054;">Page 1 / 4</span>
           </span>
-          <div style="height: 16px; width: 1px; background: #4B5563;"></div>
+          <div style="height: 16px; width: 1px; background: #D0D5DD;"></div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button style="background:none; border:none; color:#E5E7EB; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom Out">−</button>
-            <span style="font-size: 11.5px; color: #9CA3AF;">100%</span>
-            <button style="background:none; border:none; color:#E5E7EB; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom In">+</button>
+            <button style="background:none; border:none; color:#475467; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom Out">−</button>
+            <span style="font-size: 11.5px; color: #667085; font-weight: 600;">100%</span>
+            <button style="background:none; border:none; color:#475467; cursor:pointer; font-size:16px; padding:0 4px;" title="Zoom In">+</button>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 14px; font-size: 13px;">
-          <span title="Fit page" style="cursor: pointer; opacity: 0.85;">⛶ Fit</span>
-          <span title="Rotate clockwise" style="cursor: pointer; opacity: 0.85;">↻ Rotate</span>
-          <span title="Print" style="cursor: pointer; opacity: 0.85;">🖶 Print</span>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 12.5px; color: #475467;">
+          <span title="Fit page" style="cursor: pointer; font-weight: 500;">⛶ Fit</span>
+          <span title="Rotate clockwise" style="cursor: pointer; font-weight: 500;">↻ Rotate</span>
+          <span title="Print" style="cursor: pointer; font-weight: 500;">🖶 Print</span>
         </div>
       </div>
 
