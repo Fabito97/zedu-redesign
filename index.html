@@ -385,22 +385,7 @@
       opacity: 0.85;
     }
 
-    /* Tiny Open Text on File Cards */
-    .tiny-open-text {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--primary);
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      margin-left: 6px;
-      opacity: 0.75;
-      transition: opacity 0.15s ease;
-    }
-    .file-card-row:hover .tiny-open-text {
-      opacity: 1;
-      text-decoration: underline;
-    }
+    /* File action cues */
 
     /* Media Grid in All Tab (Employed directly from Zedu codebase) */
     .code-media-grid {
@@ -450,19 +435,18 @@
     }
 
     .view-mode-btn {
+      width: 28px;
       height: 26px;
-      padding: 0 8px;
+      padding: 0;
       border: none;
       background: transparent;
       border-radius: 6px;
       font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
       color: #667085;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
       transition: all 0.15s ease;
     }
 
@@ -871,18 +855,17 @@
     }
 
     .card-action-btn {
+      width: 28px;
       height: 28px;
-      padding: 0 8px;
+      padding: 0;
       border-radius: 6px;
       border: 1px solid #D0D5DD;
       background: #FFFFFF;
       font-family: inherit;
-      font-size: 11.5px;
-      font-weight: 600;
       color: #344054;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
       cursor: pointer;
       transition: all 0.12s ease;
     }
@@ -890,6 +873,7 @@
     .card-action-btn:hover {
       background: #F2F4F7;
       border-color: #98A2B3;
+      color: var(--primary);
     }
 
     .card-action-btn.icon-only {
@@ -1205,7 +1189,6 @@
                 <line x1="3" y1="15" x2="21" y2="15"></line>
                 <line x1="3" y1="19" x2="21" y2="19"></line>
               </svg>
-              <span>Hybrid</span>
             </button>
             <button class="view-mode-btn" id="toggle-list-view" onclick="setLayoutMode('list')" title="List View (All files listed row-by-row)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1216,7 +1199,6 @@
                 <line x1="3" y1="12" x2="3.01" y2="12"></line>
                 <line x1="3" y1="18" x2="3.01" y2="18"></line>
               </svg>
-              <span>List</span>
             </button>
           </div>
         </div>
@@ -1274,15 +1256,14 @@
                 <!-- File 1: PDF Document (From your screenshot) -->
                 <div class="file-card-row" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
                     <div class="file-type-icon pdf">PDF</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Ticket_Guide_Stage1.pdf</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">2.4 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
                         <span>Sadiq · Today at 11:30 PM</span>
                       </div>
                     </div>
@@ -1291,15 +1272,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1307,15 +1285,14 @@
                 <!-- File 2: DOCX File -->
                 <div class="file-card-row" onclick="openWideDocPreview('Sprint_2_Frontend_Tasks.docx', '1.1 MB', 'Favy', 'DOC')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#175CD3;">F</span>
                     <div class="file-type-icon docx">DOC</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Sprint_2_Frontend_Tasks.docx</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">1.1 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#175CD3;">F</span>
                         <span>Favy · Today at 4:15 PM</span>
                       </div>
                     </div>
@@ -1323,15 +1300,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1339,15 +1313,14 @@
                 <!-- List-Mode Media Rows (Shown only when in List view mode) -->
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Wireframe_Mockup_V1.png', '3.8 MB', 'Sarah', 'PNG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#667eea;">S</span>
                     <div class="file-type-icon image">PNG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Wireframe_Mockup_V1.png</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">3.8 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#667eea;">S</span>
                         <span>Sarah · Today at 10:14 PM</span>
                       </div>
                     </div>
@@ -1355,26 +1328,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Wireframe_Mockup_V1.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Wireframe_Mockup_V1.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Landing_Page_V2.png', '4.1 MB', 'Favy', 'PNG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#009efd;">F</span>
                     <div class="file-type-icon image">PNG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Landing_Page_V2.png</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">4.1 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#009efd;">F</span>
                         <span>Favy · Today at 9:30 PM</span>
                       </div>
                     </div>
@@ -1382,26 +1352,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Landing_Page_V2.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Landing_Page_V2.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Quick_Demo_Sync.mp4', '18.4 MB', 'David', 'MP4')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#C11574;">D</span>
                     <div class="file-type-icon video">MP4</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Quick_Demo_Sync.mp4</span>
-                        <span class="tiny-open-text">Play video ↗</span>
                         <span class="file-size-tag">18.4 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#C11574;">D</span>
                         <span>David · Today at 6:45 PM</span>
                       </div>
                     </div>
@@ -1409,26 +1376,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Quick_Demo_Sync.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Quick_Demo_Sync.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Color_Tokens_Asset.jpg', '2.9 MB', 'David', 'JPG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#ff9a9e;">D</span>
                     <div class="file-type-icon image">JPG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Color_Tokens_Asset.jpg</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">2.9 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#ff9a9e;">D</span>
                         <span>David · Today at 5:00 PM</span>
                       </div>
                     </div>
@@ -1436,11 +1400,9 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Color_Tokens_Asset.jpg')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Color_Tokens_Asset.jpg')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -1497,15 +1459,14 @@
                 <!-- Audio File -->
                 <div class="file-card-row" onclick="alert('Playing Team_Standup_VoiceNote.m4a')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#B54708;">D</span>
                     <div class="file-type-icon audio">M4A</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Team_Standup_VoiceNote.m4a</span>
-                        <span class="tiny-open-text">Play audio ↗</span>
                         <span class="file-size-tag">03:15 · 2.1 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#B54708;">D</span>
                         <span>David · Yesterday at 10:00 AM</span>
                       </div>
                     </div>
@@ -1513,11 +1474,9 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Team_Standup_VoiceNote.m4a')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Team_Standup_VoiceNote.m4a')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -1525,15 +1484,14 @@
                 <!-- PDF File -->
                 <div class="file-card-row" onclick="openWideDocPreview('HNG15_Internship_Rules.pdf', '3.5 MB', 'Mentor', 'PDF')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#D92D20;">M</span>
                     <div class="file-type-icon pdf">PDF</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">HNG15_Internship_Rules.pdf</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">3.5 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#D92D20;">M</span>
                         <span>Mentor · Yesterday at 8:30 AM</span>
                       </div>
                     </div>
@@ -1541,15 +1499,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1557,15 +1512,14 @@
                 <!-- List-Mode Media Rows for Date Group 2 (Shown only when in List view mode) -->
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Cohort_Mentorship_Sync.mp4', '128 MB', 'Sadiq', 'MP4')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#D92D20;">S</span>
                     <div class="file-type-icon video">MP4</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Cohort_Mentorship_Sync.mp4</span>
-                        <span class="tiny-open-text">Play video ↗</span>
                         <span class="file-size-tag">128 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#D92D20;">S</span>
                         <span>Sadiq · Yesterday at 9:00 PM</span>
                       </div>
                     </div>
@@ -1573,26 +1527,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Cohort_Mentorship_Sync.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Cohort_Mentorship_Sync.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('User_Flow_Walkthrough.mp4', '42.5 MB', 'David', 'MP4')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#1F2937;">D</span>
                     <div class="file-type-icon video">MP4</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">User_Flow_Walkthrough.mp4</span>
-                        <span class="tiny-open-text">Play video ↗</span>
                         <span class="file-size-tag">42.5 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#1F2937;">D</span>
                         <span>David · Yesterday at 4:30 PM</span>
                       </div>
                     </div>
@@ -1600,26 +1551,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('User_Flow_Walkthrough.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('User_Flow_Walkthrough.mp4')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Component_Grid.png', '5.6 MB', 'Mark', 'PNG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#a18cd1;">M</span>
                     <div class="file-type-icon image">PNG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Component_Grid.png</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">5.6 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#a18cd1;">M</span>
                         <span>Mark · Yesterday at 2:10 PM</span>
                       </div>
                     </div>
@@ -1627,26 +1575,23 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Component_Grid.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Component_Grid.png')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
 
                 <div class="file-card-row list-media-row" onclick="openWideDocPreview('Banner_Artwork.webp', '1.4 MB', 'Mentor', 'WEBP')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#fa709a;">M</span>
                     <div class="file-type-icon image">WEBP</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Banner_Artwork.webp</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">1.4 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#fa709a;">M</span>
                         <span>Mentor · Yesterday at 11:15 AM</span>
                       </div>
                     </div>
@@ -1654,11 +1599,9 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Banner_Artwork.webp')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Banner_Artwork.webp')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -1674,15 +1617,14 @@
                 <!-- File: Figma Design -->
                 <div class="file-card-row" onclick="openWideDocPreview('Zedu_Mobile_Components.fig', '14.8 MB', 'Mark', 'FIG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#6941C6;">M</span>
                     <div class="file-type-icon figma">FIG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Zedu_Mobile_Components.fig</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">14.8 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#6941C6;">M</span>
                         <span>Mark · Oct 4, 8:20 PM</span>
                       </div>
                     </div>
@@ -1690,15 +1632,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1706,15 +1645,14 @@
                 <!-- File: Excel Spreadsheet -->
                 <div class="file-card-row" onclick="openWideDocPreview('Contributor_Scorecard_Q3.xlsx', '840 KB', 'Mentor', 'XLS')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#027A48;">M</span>
                     <div class="file-type-icon xlsx">XLS</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Contributor_Scorecard_Q3.xlsx</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">840 KB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#027A48;">M</span>
                         <span>Mentor · Oct 4, 3:10 PM</span>
                       </div>
                     </div>
@@ -1722,15 +1660,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1738,15 +1673,14 @@
                 <!-- File: ZIP Archive -->
                 <div class="file-card-row" onclick="alert('Downloading Backend_API_Contract_v2.zip...')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#475467;">A</span>
                     <div class="file-type-icon zip">ZIP</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Backend_API_Contract_v2.zip</span>
-                        <span class="tiny-open-text">Download archive ↗</span>
                         <span class="file-size-tag">5.2 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#475467;">A</span>
                         <span>Alex · Oct 4, 8:15 AM</span>
                       </div>
                     </div>
@@ -1754,11 +1688,9 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Backend_API_Contract_v2.zip')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Backend_API_Contract_v2.zip')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                   </div>
                 </div>
@@ -1776,15 +1708,14 @@
                 <!-- Document 1: PDF Guide -->
                 <div class="file-card-row" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
                     <div class="file-type-icon pdf">PDF</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Ticket_Guide_Stage1.pdf</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">2.4 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
                         <span>Sadiq · 11:30 PM</span>
                       </div>
                     </div>
@@ -1792,15 +1723,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1808,15 +1736,14 @@
                 <!-- Document 2: Word Doc -->
                 <div class="file-card-row" onclick="openWideDocPreview('Sprint_2_Frontend_Tasks.docx', '1.1 MB', 'Favy', 'DOC')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#175CD3;">F</span>
                     <div class="file-type-icon docx">DOC</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Sprint_2_Frontend_Tasks.docx</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">1.1 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#175CD3;">F</span>
                         <span>Favy · 4:15 PM</span>
                       </div>
                     </div>
@@ -1824,15 +1751,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Sprint_2_Frontend_Tasks.docx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1840,15 +1764,14 @@
                 <!-- Document 3: Figma File -->
                 <div class="file-card-row" onclick="openWideDocPreview('Zedu_Mobile_Components.fig', '14.8 MB', 'Mark', 'FIG')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#6941C6;">M</span>
                     <div class="file-type-icon figma">FIG</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Zedu_Mobile_Components.fig</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">14.8 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#6941C6;">M</span>
                         <span>Mark · Oct 4</span>
                       </div>
                     </div>
@@ -1856,15 +1779,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Zedu_Mobile_Components.fig')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1872,15 +1792,14 @@
                 <!-- Document 4: PDF Rules -->
                 <div class="file-card-row" onclick="openWideDocPreview('HNG15_Internship_Rules.pdf', '3.5 MB', 'Mentor', 'PDF')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#D92D20;">M</span>
                     <div class="file-type-icon pdf">PDF</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">HNG15_Internship_Rules.pdf</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">3.5 MB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#D92D20;">M</span>
                         <span>Mentor · Oct 4</span>
                       </div>
                     </div>
@@ -1888,15 +1807,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('HNG15_Internship_Rules.pdf')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -1904,15 +1820,14 @@
                 <!-- Document 5: Scorecard Excel -->
                 <div class="file-card-row" onclick="openWideDocPreview('Contributor_Scorecard_Q3.xlsx', '840 KB', 'Mentor', 'XLS')">
                   <div class="file-card-left">
-                    <span class="user-avatar-micro" style="background:#027A48;">M</span>
                     <div class="file-type-icon xlsx">XLS</div>
                     <div class="file-info">
                       <div class="file-name-row">
                         <span class="file-name">Contributor_Scorecard_Q3.xlsx</span>
-                        <span class="tiny-open-text">Open file ↗</span>
                         <span class="file-size-tag">840 KB</span>
                       </div>
                       <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#027A48;">M</span>
                         <span>Mentor · Oct 4</span>
                       </div>
                     </div>
@@ -1920,15 +1835,12 @@
                   <div class="file-card-actions" onclick="event.stopPropagation()">
                     <button class="card-action-btn" title="Download" onclick="downloadDoc('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                      <span>Download</span>
                     </button>
                     <button class="card-action-btn" title="Share" onclick="shareDoc('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                      <span>Share</span>
                     </button>
                     <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Contributor_Scorecard_Q3.xlsx')">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      <span>Open</span>
                     </button>
                   </div>
                 </div>
@@ -2174,32 +2086,28 @@
             
             <div class="file-card-row" style="border-color:#5F5FE1; background:#FAFBFD;" onclick="openWideDocPreview('Ticket_Guide_Stage1.pdf', '2.4 MB', 'Sadiq', 'PDF')">
               <div class="file-card-left">
-                <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
-                <div class="file-type-icon pdf">PDF</div>
-                <div class="file-info">
-                  <div class="file-name-row">
-                    <span class="file-name"><mark style="background:#E0EAFF; color:#175CD3; border-radius:3px; padding:0 2px;">Ticket_Guide</mark>_Stage1.pdf</span>
-                    <span class="tiny-open-text">Open file ↗</span>
-                    <span class="file-size-tag">2.4 MB</span>
+                    <div class="file-type-icon pdf">PDF</div>
+                    <div class="file-info">
+                      <div class="file-name-row">
+                        <span class="file-name"><mark style="background:#E0EAFF; color:#175CD3; border-radius:3px; padding:0 2px;">Ticket_Guide</mark>_Stage1.pdf</span>
+                        <span class="file-size-tag">2.4 MB</span>
+                      </div>
+                      <div class="file-meta-sub">
+                        <span class="user-avatar-micro" style="background:#5F5FE1;">S</span>
+                        <span>Sadiq · Oct 6, 11:30 PM</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="file-meta-sub">
-                    <span>Sadiq · Oct 6, 11:30 PM</span>
-                  </div>
-                </div>
-              </div>
               <div class="file-card-actions" style="opacity:1;" onclick="event.stopPropagation()">
                 <button class="card-action-btn" title="Download" onclick="downloadDoc('Ticket_Guide_Stage1.pdf')">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                  <span>Download</span>
-                </button>
+                    </button>
                 <button class="card-action-btn" title="Share" onclick="shareDoc('Ticket_Guide_Stage1.pdf')">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                  <span>Share</span>
-                </button>
+                    </button>
                 <button class="card-action-btn" title="Open in browser" onclick="openInBrowser('Ticket_Guide_Stage1.pdf')">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                  <span>Open</span>
-                </button>
+                    </button>
               </div>
             </div>
           </div>
