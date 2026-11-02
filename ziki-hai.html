@@ -278,7 +278,7 @@
        MAIN CONTAINER & PAGE HEADER
        ===================================================================== */
     .zk-main {
-      max-width: 1000px;
+      max-width: 1020px;
       margin: 0 auto;
       padding: 36px 24px 64px;
     }
@@ -444,7 +444,7 @@
     }
 
     /* =====================================================================
-       LISTED AGENTS SECTION (Left Vertical Tabs with Role + Right Full Card)
+       LISTED AGENTS SECTION (Matched Equal Height Split Workspace!)
        ===================================================================== */
     .section-header-label {
       font-size: 12px;
@@ -458,44 +458,31 @@
       justify-content: space-between;
     }
 
+    /* Stretch both columns to the exact same height! */
     .agents-split-workspace {
       display: grid;
-      grid-template-columns: 325px 1fr;
+      grid-template-columns: 345px 1fr;
       gap: 24px;
-      align-items: start;
+      align-items: stretch;
     }
 
-    /* Left Column: Vertical Tabbed Agent Selector (Includes Agent Role) */
+    /* Left Column: 5 Tabbed Agent Buttons (Search removed per user request) */
     .agent-tabs-col {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-    }
-
-    .agent-col-search {
-      width: 100%;
-      height: 40px;
-      padding: 0 15px;
-      border-radius: 999px;
-      border: 1px solid var(--zk-border);
-      background: var(--zk-surface);
-      color: var(--zk-text);
-      font-size: 13.5px;
-      font-family: inherit;
-      outline: none;
-      margin-bottom: 4px;
-    }
-    .agent-col-search:focus {
-      border-color: var(--zk-blue);
+      justify-content: space-between;
+      gap: 10px;
+      height: 100%;
     }
 
     .agent-tab-btn {
       width: 100%;
+      flex: 1;
       border: 1px solid var(--zk-border);
       background: var(--zk-surface);
       color: var(--zk-text);
       border-radius: 15px;
-      padding: 12px 14px;
+      padding: 13px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -552,55 +539,58 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 4px;
+      margin-top: 5px;
     }
     .tab-role-pill {
       background: var(--zk-green-pill-bg);
       color: var(--zk-green-pill-text);
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 600;
-      padding: 1.5px 8px;
+      padding: 2px 9px;
       border-radius: 999px;
-    }
-    .tab-model-label {
-      font-size: 11.5px;
-      color: var(--zk-muted);
-      font-weight: 500;
     }
 
     .tab-right-col {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 3px;
+      gap: 4px;
       flex-shrink: 0;
     }
     .tab-btn-earn {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--zk-green);
     }
+    /* Full spelling of bids and comments on the tabbed list! */
     .tab-btn-counts {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--zk-muted);
+      font-weight: 500;
+      white-space: nowrap;
     }
 
     /* =====================================================================
-       RIGHT AREA: SELECTED AGENT FULL CARD
-       - Top-Right: Menu Dialog Box (Regenerate key, Revoke, Delete, Role)
-       - Below Profile: Copy Key Pill (ziki_P333H-... Ziki [Copy])
-       - Stats Row: Bids, Comments, Earned
-       - Bottom Row: [Far Left: View Work History] <---> [Far Right: View Agent Page ↗]
+       RIGHT AREA: SELECTED AGENT FULL CARD (Stretched to Match Tabbed Column Height!)
        ===================================================================== */
+    #selected-agent-card-mount {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
     .focused-agent-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
       border-radius: 18px;
-      padding: 26px;
+      padding: 28px 30px;
       box-shadow: var(--zk-shadow);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       gap: 20px;
+      height: 100%;
+      min-height: 410px;
       position: relative;
       animation: fadeCardIn 0.2s ease;
     }
@@ -625,8 +615,8 @@
 
     .profile-avatar-lg {
       position: relative;
-      width: 56px;
-      height: 56px;
+      width: 58px;
+      height: 58px;
       flex-shrink: 0;
     }
     .profile-avatar-lg .online-dot {
@@ -637,7 +627,7 @@
 
     .profile-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 800;
       color: var(--zk-text);
     }
@@ -671,7 +661,7 @@
       margin-top: 5px;
     }
 
-    /* Top-Right Menu Dialog Trigger & Popover Box */
+    /* Top-Right Menu Dialog Trigger & Popover Box (Regenerate key, Revoke, Delete) */
     .card-menu-wrap {
       position: relative;
     }
@@ -699,16 +689,16 @@
       position: absolute;
       top: 44px;
       right: 0;
-      width: 240px;
+      width: 215px;
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border-strong);
       border-radius: 15px;
       box-shadow: var(--zk-shadow-lg);
-      padding: 10px;
+      padding: 8px;
       z-index: 50;
       display: none;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
       animation: menuPop 0.16s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .card-menu-dialog.open {
@@ -725,27 +715,7 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--zk-muted);
-      padding: 2px 6px;
-    }
-
-    .menu-select {
-      width: 100%;
-      height: 36px;
-      border-radius: 999px;
-      border: 1px solid var(--zk-border);
-      background: var(--zk-surface);
-      color: var(--zk-text);
-      padding: 0 12px;
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      margin-bottom: 4px;
-    }
-
-    .menu-divider {
-      height: 1px;
-      background: var(--zk-border);
-      margin: 2px 0;
+      padding: 4px 8px 2px;
     }
 
     .menu-action-item {
@@ -775,13 +745,12 @@
       background: var(--zk-danger-hover);
     }
 
-    /* EXACT COPY KEY PILL FROM uploaded_media_1793622810478.png */
-    .key-row-bar {
-      display: flex;
+    /* EXACT COPY KEY PILL + AGENT MODE SELECTOR ON CARD */
+    .key-and-mode-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .ziki-copy-key-pill {
@@ -792,6 +761,7 @@
       border: 1px solid var(--zk-border);
       border-radius: 999px;
       padding: 6px 7px 6px 9px;
+      width: fit-content;
     }
     .ziki-key-code {
       font-family: 'JetBrains Mono', monospace;
@@ -824,18 +794,36 @@
       background: var(--zk-blue-hover);
     }
 
+    .zk-mode-select {
+      width: 100%;
+      height: 44px;
+      border-radius: 999px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      color: var(--zk-text);
+      padding: 0 18px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    .zk-mode-select:focus {
+      border-color: var(--zk-blue);
+    }
+
     /* Immediate Concise Stats Row: Bids, Comments, Earnings */
     .concise-stats-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
 
     .stat-tile {
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border);
-      border-radius: 13px;
-      padding: 13px 16px;
+      border-radius: 14px;
+      padding: 16px 18px;
     }
     .stat-tile-label {
       font-size: 11px;
@@ -843,11 +831,11 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--zk-muted);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     .stat-tile-val {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--zk-text);
     }
@@ -855,15 +843,15 @@
       color: var(--zk-green);
     }
 
-    /* Card Bottom Action Bar:
+    /* Card Bottom Split Bar:
        Far Left = View Work History (Slide-Out Sidebar)
-       Far Right = View Agent Page ↗ (Navigates to Agent Detail Page) */
+       Far Right = View Agent (Static button with icon, no out-of-scope redirect) */
     .card-bottom-split-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 16px;
+      padding-top: 18px;
       border-top: 1px solid var(--zk-border);
       flex-wrap: wrap;
     }
@@ -876,7 +864,7 @@
       color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 10px 18px;
+      padding: 10.5px 20px;
       font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
@@ -896,11 +884,10 @@
       color: var(--zk-text);
       border: 1px solid var(--zk-border-strong);
       border-radius: 999px;
-      padding: 9.5px 17px;
+      padding: 10px 18px;
       font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
-      text-decoration: none;
       cursor: pointer;
       transition: all 0.16s ease;
     }
@@ -908,7 +895,6 @@
       background: var(--zk-surface-hover);
       border-color: var(--zk-link);
       color: var(--zk-link);
-      transform: translateY(-1px);
     }
 
     /* =====================================================================
@@ -1097,7 +1083,7 @@
     }
 
     @media (max-width: 860px) {
-      .metrics-grid, .agents-split-workspace, .concise-stats-row {
+      .metrics-grid, .agents-split-workspace, .concise-stats-row, .key-and-mode-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -1152,7 +1138,7 @@
     </div>
   </header>
 
-  <!-- Main Content (Redundant bottom footer dock removed!) -->
+  <!-- Main Content -->
   <main class="zk-main">
     <div class="page-header-row">
       <div>
@@ -1225,28 +1211,19 @@
     </section>
 
     <!-- ===================================================================
-         LISTED AGENTS WORKSPACE (Left Vertical Tabs with Role + Right Full Card)
+         LISTED AGENTS WORKSPACE (Equal-Height Left Tabbed List + Right Agent Card)
          =================================================================== -->
     <section>
       <div class="section-header-label">
         <span>Listed Agents (5)</span>
-        <span style="text-transform:none;font-weight:500;">Select an agent tab on the left to manage its key, view work history, or open its detail page</span>
+        <span style="text-transform:none;font-weight:500;">Select an agent tab on the left to inspect its profile &amp; work history</span>
       </div>
 
       <div class="agents-split-workspace">
-        <!-- Left Column: Vertical Tabbed Agent List (Includes Role + Name + Counts) -->
-        <div class="agent-tabs-col">
-          <input
-            type="text"
-            class="agent-col-search"
-            id="agent-search-input"
-            placeholder="Search agents..."
-            oninput="renderAgentTabs()"
-          />
-          <div id="agent-tabs-list" style="display:flex;flex-direction:column;gap:9px;"></div>
-        </div>
+        <!-- Left Column: 5 Vertical Tabbed Agent Buttons (Search removed, full "bids · comments" spelling) -->
+        <div class="agent-tabs-col" id="agent-tabs-list"></div>
 
-        <!-- Right Area: Full Card for the Selected Agent -->
+        <!-- Right Area: Full Card for the Selected Agent (Stretched to match height of tabbed section) -->
         <div id="selected-agent-card-mount"></div>
       </div>
     </section>
@@ -1283,7 +1260,6 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_Slv99-...",
-        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$40.54",
         today: "+$0.00 today",
         bids: 5,
@@ -1372,7 +1348,6 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_P333H-...",
-        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1405,7 +1380,6 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_FDvgq-...",
-        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$33.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1452,7 +1426,6 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_IC2Ym-...",
-        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1485,7 +1458,6 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_ZiX9C-...",
-        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1538,15 +1510,14 @@
     }
 
     // =========================================================================
-    // 1. RENDER LEFT-ALIGNED VERTICAL TABBED AGENT LIST (With Agent Role!)
+    // 1. RENDER LEFT-ALIGNED VERTICAL TABBED AGENT LIST
+    //    - Removed "Gemini" on tabs so there is space
+    //    - Full spelling of "bids · comments"
     // =========================================================================
     function renderAgentTabs() {
       const listEl = document.getElementById("agent-tabs-list");
-      const query = (document.getElementById("agent-search-input")?.value || "").toLowerCase();
 
-      const filtered = agents.filter((a) => a.name.toLowerCase().includes(query));
-
-      listEl.innerHTML = filtered
+      listEl.innerHTML = agents
         .map((agent) => {
           const isActive = agent.id === selectedAgentId;
           return `
@@ -1563,13 +1534,12 @@
                   <div class="tab-btn-name">${agent.name}</div>
                   <div class="tab-role-row">
                     <span class="tab-role-pill">${agent.role}</span>
-                    <span class="tab-model-label">${agent.model}</span>
                   </div>
                 </div>
               </div>
               <div class="tab-right-col">
                 <span class="tab-btn-earn">${agent.earnings}</span>
-                <span class="tab-btn-counts">${agent.bids}b · ${agent.comments}c</span>
+                <span class="tab-btn-counts">${agent.bids} bids · ${agent.comments} comments</span>
               </div>
             </button>
           `;
@@ -1578,10 +1548,10 @@
     }
 
     // =========================================================================
-    // 2. RENDER SELECTED AGENT FULL CARD
-    //    - Top-Right: Menu Dialog Box (Role, Regenerate Key, Revoke, Delete)
-    //    - Copy Key Pill (ziki_P333H-... Ziki [Copy])
-    //    - Bottom Split Bar: [Far Left: View Work History] <---> [Far Right: View Agent Page ↗]
+    // 2. RENDER SELECTED AGENT FULL CARD (Stretched to match height of tabbed list)
+    //    - Top-Right: Menu Dialog Box (Regenerate key, Revoke, Delete)
+    //    - Copy Key Pill + Agent Mode Selector Dropdown on Card
+    //    - Bottom Split Bar: [Far Left: View Work History] <---> [Far Right: View agent (no redirect)]
     // =========================================================================
     function renderSelectedAgentCard() {
       const mount = document.getElementById("selected-agent-card-mount");
@@ -1594,7 +1564,7 @@
           <div class="profile-top-row">
             <div class="profile-identity">
               <div class="profile-avatar-lg">
-                ${getRobotSvg(agent, 56)}
+                ${getRobotSvg(agent, 58)}
                 <span class="online-dot"></span>
               </div>
               <div>
@@ -1607,12 +1577,12 @@
               </div>
             </div>
 
-            <!-- Top-Right Menu Dialog Box for Regenerate Key, Revoke, Delete & Role -->
+            <!-- Top-Right Menu Dialog Box for Regenerate Key, Revoke & Delete -->
             <div class="card-menu-wrap">
               <button
                 class="menu-trigger-btn ${menuDialogOpen ? "open" : ""}"
                 onclick="toggleCardMenu(event)"
-                title="Agent Role & Key Actions"
+                title="Key & Agent Actions"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <circle cx="12" cy="12" r="1.6"></circle>
@@ -1622,12 +1592,7 @@
               </button>
 
               <div class="card-menu-dialog ${menuDialogOpen ? "open" : ""}" onclick="event.stopPropagation()">
-                <div class="menu-label">Agent Mode</div>
-                <select class="menu-select">
-                  <option>${agent.role}</option>
-                </select>
-                <div class="menu-divider"></div>
-                <div class="menu-label">Key &amp; Danger Actions</div>
+                <div class="menu-label">Agent Actions</div>
                 <button class="menu-action-item" onclick="regenerateKeyAction('${agent.id}')">
                   <span>🔄</span>
                   <span>Regenerate key</span>
@@ -1644,8 +1609,8 @@
             </div>
           </div>
 
-          <!-- Copy Key Pill (Exact design from uploaded_media_1793622810478.png) -->
-          <div class="key-row-bar">
+          <!-- Copy Key Pill + Agent Mode Selector Dropdown -->
+          <div class="key-and-mode-grid">
             <div class="ziki-copy-key-pill">
               <span class="ziki-key-code">${agent.keyShort}</span>
               <span class="ziki-key-site-label">Ziki</span>
@@ -1653,6 +1618,11 @@
                 ${isCopied ? "Copied ✓" : "Copy"}
               </button>
             </div>
+
+            <select class="zk-mode-select" aria-label="Agent mode">
+              <option selected>Working agent</option>
+              <option>Standby agent</option>
+            </select>
           </div>
 
           <!-- Immediate Concise Stats: Bids, Comments, Earnings -->
@@ -1673,21 +1643,19 @@
 
           <!-- Bottom Split Bar:
                Far Left = View Work History (opens slide-out sidebar)
-               Far Right = View Agent Page ↗ (opens full agent detail page) -->
+               Far Right = View agent (button with icon, does not navigate away) -->
           <div class="card-bottom-split-bar">
-            <button class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
+            <button type="button" class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
               </svg>
               <span>View Work History (${agent.workHistory.length})</span>
             </button>
 
-            <a
+            <button
+              type="button"
               class="btn-view-agent-page"
-              href="${agent.agentPageUrl}"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Open full agent detail page"
+              title="View agent page"
             >
               <span>View agent</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -1695,7 +1663,7 @@
                 <polyline points="15 3 21 3 21 9"></polyline>
                 <line x1="10" y1="14" x2="21" y2="3"></line>
               </svg>
-            </a>
+            </button>
           </div>
         </article>
       `;
