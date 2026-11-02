@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ziki & Zedu Whimsical Edition — The Enchanted Agent Conservatory & Cohort Treehouse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 20% 15%, #FFF7ED 0%, #FDF2F8 45%, #EEF2FF 100%);
+      color: #1E1B4B;
+    }
+    h1, h2, h3, .whimsy-font {
+      font-family: 'Fredoka', sans-serif;
+    }
+    @keyframes float-bob {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(1.5deg); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .float-card { animation: float-bob 4s ease-in-out infinite; }
+    .float-card-delayed { animation: float-bob 4.5s ease-in-out 1.2s infinite; }
+    .wiggle-bug { animation: wiggle 1.2s ease-in-out infinite; }
+    .toy-card {
+      border: 3px solid #1E1B4B;
+      box-shadow: 0 6px 0 #1E1B4B;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .toy-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 #1E1B4B;
+    }
+    .toy-btn {
+      border: 2.5px solid #1E1B4B;
+      box-shadow: 0 4px 0 #1E1B4B;
+      transition: all 0.12s ease;
+    }
+    .toy-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #1E1B4B;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16">
+  <!-- Whimsical Top Banner -->
+  <header class="sticky top-0 z-40 border-b-4 border-indigo-950 bg-amber-100/95 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-3">
+      <div class="flex items-center gap-3">
+        <div class="toy-btn flex h-11 w-11 items-center justify-center rounded-2xl bg-pink-400 text-2xl">🪄</div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="whimsy-font text-xl font-bold text-indigo-950">Ziki &amp; Zedu Wonderland</span>
+            <span class="rounded-full border-2 border-indigo-950 bg-emerald-300 px-2.5 py-0.5 text-xs font-bold text-indigo-950">Whimsical Design</span>
+          </div>
+          <p class="text-xs font-medium text-indigo-900/75">Designed &amp; Built by Fabian Muoghalu (@Fabito97) · Interactive Playground</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher & Links -->
+      <div class="flex items-center gap-2.5">
+        <button id="tab-ziki" onclick="switchWorld('ziki')" class="toy-btn rounded-xl bg-violet-400 px-3.5 py-1.5 text-xs font-bold text-indigo-950">🌱 Ziki Agent Conservatory</button>
+        <button id="tab-zedu" onclick="switchWorld('zedu')" class="toy-btn rounded-xl bg-white px-3.5 py-1.5 text-xs font-bold text-indigo-950">🫧 Zedu Cohort Treehouse</button>
+        <a href="./ziki-hai.html" class="toy-btn rounded-xl bg-sky-200 px-3 py-1.5 text-xs font-bold text-indigo-950">🤖 HAI Spec</a>
+        <a href="./index.html" class="toy-btn rounded-xl bg-amber-200 px-3 py-1.5 text-xs font-bold text-indigo-950">📁 Files UI</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-6 pt-8 space-y-10">
+    <!-- Hero Banner -->
+    <section class="toy-card relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-200 via-pink-100 to-amber-100 p-7 md:p-9">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="max-w-2xl space-y-3">
+          <div class="inline-flex items-center gap-2 rounded-full border-2 border-indigo-950 bg-white px-3.5 py-1 text-xs font-bold text-indigo-950">
+            <span>✨ Interactive Toybox Experience</span>
+            <span>·</span>
+            <span id="nectar-counter" class="text-pink-600">🍯 555 Nectar Points Earned</span>
+          </div>
+          <h1 class="whimsy-font text-3xl md:text-5xl font-bold text-indigo-950 leading-tight" id="world-title">
+            Welcome to the Ziki Bug-Squashing Botanical Conservatory!
+          </h1>
+          <p class="text-sm md:text-base font-medium text-indigo-950/80" id="world-subtitle">
+            Where grumpy software bugs are caught in butterfly nets, brewed into clean pull requests by propeller-hat sprites, and launched into the Production Constellation!
+          </p>
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button onclick="feedAllAgents()" class="toy-btn rounded-2xl bg-emerald-400 px-5 py-2.5 text-sm font-bold text-indigo-950">
+              🍓 Feed All 5 Agent Sprites (+15 Nectar)
+            </button>
+            <button onclick="squashNextBug()" class="toy-btn rounded-2xl bg-amber-300 px-5 py-2.5 text-sm font-bold text-indigo-950">
+              🦋 Catch &amp; Brew Next Bug Critter!
+            </button>
+          </div>
+        </div>
+
+        <!-- Floating Mascot SVG -->
+        <div class="float-card flex flex-col items-center">
+          <div class="toy-card rounded-3xl bg-white p-4 text-center w-52">
+            <svg viewBox="0 0 120 120" class="w-28 h-28 mx-auto">
+              <!-- Propeller -->
+              <ellipse cx="60" cy="14" rx="22" ry="4" fill="#F472B6" stroke="#1E1B4B" stroke-width="3"/>
+              <line x1="60" y1="14" x2="60" y2="26" stroke="#1E1B4B" stroke-width="4"/>
+              <!-- Leaf Sprout -->
+              <path d="M60 22 C75 8, 90 20, 62 26" fill="#34D399" stroke="#1E1B4B" stroke-width="3"/>
+              <!-- Body -->
+              <rect x="26" y="26" width="68" height="62" rx="24" fill="#A78BFA" stroke="#1E1B4B" stroke-width="4"/>
+              <!-- Screen Face -->
+              <rect x="35" y="37" width="50" height="34" rx="12" fill="#FEF3C7" stroke="#1E1B4B" stroke-width="3"/>
+              <!-- Happy Eyes -->
+              <circle cx="49" cy="51" r="4.5" fill="#1E1B4B"/>
+              <circle cx="71" cy="51" r="4.5" fill="#1E1B4B"/>
+              <circle cx="47.5" cy="49.5" r="1.5" fill="#FFFFFF"/>
+              <circle cx="69.5" cy="49.5" r="1.5" fill="#FFFFFF"/>
+              <!-- Rosy Cheeks -->
+              <ellipse cx="42" cy="57" rx="4" ry="2.5" fill="#F472B6"/>
+              <ellipse cx="78" cy="57" rx="4" ry="2.5" fill="#F472B6"/>
+              <!-- Smile -->
+              <path d="M53 57 Q60 64 67 57" fill="none" stroke="#1E1B4B" stroke-width="3" stroke-linecap="round"/>
+              <!-- Little Feet -->
+              <ellipse cx="45" cy="94" rx="10" ry="6" fill="#FBBF24" stroke="#1E1B4B" stroke-width="3"/>
+              <ellipse cx="75" cy="94" rx="10" ry="6" fill="#FBBF24" stroke="#1E1B4B" stroke-width="3"/>
+            </svg>
+            <div class="whimsy-font font-bold text-indigo-950 text-sm mt-1">Captain Ziki-Bot</div>
+            <div id="mascot-speech" class="text-[11px] font-semibold text-pink-600 mt-0.5">"555 pts &amp; counting! Bzz-hoot!"</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORLD 1: ZIKI AGENT CONSERVATORY -->
+    <div id="world-ziki" class="space-y-8">
+      <!-- Conveyor Belt Stage Bar -->
+      <section class="toy-card rounded-3xl bg-white p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-violet-600">The Bug-to-Blossom Alchemy Belt</span>
+            <h2 class="whimsy-font text-2xl font-bold text-indigo-950">Click Any Critter Stage to Advance the Conveyor!</h2>
+          </div>
+          <span id="conveyor-toast" class="rounded-full border-2 border-indigo-950 bg-amber-200 px-3.5 py-1 text-xs font-bold text-indigo-950">
+            Current Recipe: #2060 Contact Sales Size Selector 🧪
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <button onclick="advanceStage(0)" id="stage-0" class="toy-btn rounded-2xl bg-lime-200 p-4 text-left space-y-1">
+            <div class="text-2xl">🌱 1. Idea Seed</div>
+            <div class="whimsy-font font-bold text-sm text-indigo-950">Plant the Report</div>
+            <div class="text-xs text-indigo-900/75">3 Sunlight Votes to Sprout!</div>
+          </button>
+          <button onclick="advanceStage(1)" id="stage-1" class="toy-btn rounded-2xl bg-sky-200 p-4 text-left space-y-1">
+            <div class="text-2xl">🔍 2. Magnify</div>
+            <div class="whimsy-font font-bold text-sm text-indigo-950">3x Critter Check</div>
+            <div class="text-xs text-indigo-900/75">Confirmed genuine bug!</div>
+          </button>
+          <button onclick="advanceStage(2)" id="stage-2" class="toy-btn rounded-2xl bg-amber-200 p-4 text-left space-y-1">
+            <div class="text-2xl">🔨 3. Solver Anvil</div>
+            <div class="whimsy-font font-bold text-sm text-indigo-950">Hammer the Patch</div>
+            <div class="text-xs text-indigo-900/75">Craft clean LF commit!</div>
+          </button>
+          <button onclick="advanceStage(3)" id="stage-3" class="toy-btn rounded-2xl bg-pink-200 p-4 text-left space-y-1">
+            <div class="text-2xl">🧪 4. Taste Test</div>
+            <div class="whimsy-font font-bold text-sm text-indigo-950">Two Sip Verdicts</div>
+            <div class="text-xs text-indigo-900/75">goodToMerge: Delicious!</div>
+          </button>
+          <button onclick="advanceStage(4)" id="stage-4" class="toy-btn rounded-2xl bg-emerald-300 p-4 text-left space-y-1 col-span-2 sm:col-span-1">
+            <div class="text-2xl">🚀 5. Star Launch</div>
+            <div class="whimsy-font font-bold text-sm text-indigo-950">Live On Prod!</div>
+            <div class="text-xs text-indigo-900/75">Nectar shower unlocked!</div>
+          </button>
+        </div>
+      </section>
+
+      <!-- The 5 Agent Sprites Greenhouse -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="whimsy-font text-2xl font-bold text-indigo-950">🌿 Your 5 Autonomous Agent Terrariums (Click to Pet or Steer!)</h2>
+          <span class="text-xs font-bold text-indigo-900/70">All 5 Agents Unified as "Working Sprites"</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="agent-grid">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </section>
+    </div>
+
+    <!-- WORLD 2: ZEDU COHORT TREEHOUSE (Hidden by default, toggled via top button) -->
+    <div id="world-zedu" class="hidden space-y-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left: Treehouse Channels & Buzz Bubble Lounge (7 cols) -->
+        <div class="lg:col-span-7 toy-card rounded-3xl bg-white p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-pink-600">Zedu Live Bubble Audio</span>
+              <h2 class="whimsy-font text-2xl font-bold text-indigo-950">🫧 The Buzz Soap-Bubble Lounge</h2>
+            </div>
+            <button onclick="popBubble()" class="toy-btn rounded-xl bg-pink-300 px-3.5 py-1.5 text-xs font-bold text-indigo-950">🎉 Send Cheer Confetti</button>
+          </div>
+
+          <p class="text-xs font-medium text-indigo-900/75">
+            Instead of rigid video rectangles, learners float inside iridescent soap-bubbles that bounce higher when they speak or raise a hand! Click any learner bubble to high-five them:
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2" id="bubble-grid">
+            <div onclick="highFive(this, 'Fabian (Mentor)')" class="toy-card float-card cursor-pointer rounded-full aspect-square bg-gradient-to-br from-sky-200 via-indigo-100 to-pink-200 p-4 flex flex-col items-center justify-center text-center">
+              <div class="text-3xl">🧑‍🚀</div>
+              <div class="whimsy-font font-bold text-sm text-indigo-950 mt-1">Fabian</div>
+              <div class="text-[11px] font-bold text-emerald-700">🎙️ Explaining ASTs</div>
+            </div>
+            <div onclick="highFive(this, 'Layomi (Design)')" class="toy-card float-card-delayed cursor-pointer rounded-full aspect-square bg-gradient-to-br from-amber-200 via-pink-100 to-violet-200 p-4 flex flex-col items-center justify-center text-center">
+              <div class="text-3xl">🧙‍♀️</div>
+              <div class="whimsy-font font-bold text-sm text-indigo-950 mt-1">Layomi</div>
+              <div class="text-[11px] font-bold text-pink-700">✋ Hand Raised!</div>
+            </div>
+            <div onclick="highFive(this, 'Zedu AI Owl')" class="toy-card float-card cursor-pointer rounded-full aspect-square bg-gradient-to-br from-emerald-200 via-teal-100 to-amber-100 p-4 flex flex-col items-center justify-center text-center">
+              <div class="text-3xl">🦉</div>
+              <div class="whimsy-font font-bold text-sm text-indigo-950 mt-1">Professor Hoot</div>
+              <div class="text-[11px] font-bold text-indigo-700">📝 Scribbling Notes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Enchanted Scroll Library (5 cols) -->
+        <div class="lg:col-span-5 toy-card rounded-3xl bg-amber-50 p-6 space-y-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Magical File Management</span>
+          <h2 class="whimsy-font text-2xl font-bold text-indigo-950">📜 The Cohort Scroll Vault</h2>
+          <p class="text-xs text-indigo-900/75">Click a potion recipe or scroll to unroll the wide crystal-ball preview:</p>
+          <div class="space-y-2.5">
+            <div onclick="unrollScroll('Cohort_Spellbook_v4.pdf', '🧙‍♂️ Chapter 1: Never ship CRLF line endings to a sleeping dragon!')" class="toy-btn cursor-pointer rounded-2xl bg-white p-3.5 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">📜</span>
+                <div>
+                  <div class="whimsy-font font-bold text-sm text-indigo-950">Cohort_Spellbook_v4.pdf</div>
+                  <div class="text-[11px] text-indigo-900/60">2.4 MB · Enchanted by Fabian</div>
+                </div>
+              </div>
+              <span class="rounded-lg bg-violet-200 px-2.5 py-1 text-xs font-bold text-indigo-950">Unroll ↗</span>
+            </div>
+            <div onclick="unrollScroll('Buzz_Potion_Formula.fig', '🫧 Mix 3 drops of WebRTC with 2 spoons of Kindergarten Joy!')" class="toy-btn cursor-pointer rounded-2xl bg-white p-3.5 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl">🧪</span>
+                <div>
+                  <div class="whimsy-font font-bold text-sm text-indigo-950">Buzz_Potion_Formula.fig</div>
+                  <div class="text-[11px] text-indigo-900/60">8.1 MB · Brewed in #design-lab</div>
+                </div>
+              </div>
+              <span class="rounded-lg bg-pink-200 px-2.5 py-1 text-xs font-bold text-indigo-950">Unroll ↗</span>
+            </div>
+          </div>
+          <div id="scroll-preview" class="rounded-2xl border-2 border-dashed border-indigo-950 bg-white/90 p-4 text-xs font-semibold text-indigo-950">
+            🔮 <strong>Crystal Ball Preview:</strong> Click any scroll above to read its secret inscription!
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let nectar = 555;
+    const agents = [
+      { name: "Zedu Solver 1", icon: "🛠️", hat: "Propeller Alchemist", mood: "Hammering #632 Avatar Fix!", bg: "bg-violet-200", snacks: 4 },
+      { name: "Zedu Tester 2", icon: "🧐", hat: "Monocle Taste-Tester", mood: "Approved #2060 with a gold star!", bg: "bg-pink-200", snacks: 6 },
+      { name: "Zedu Validator 1", icon: "🛡️", hat: "Gatekeeper Knight", mood: "Guarding zeduchat:staging!", bg: "bg-emerald-200", snacks: 3 },
+      { name: "Zedu Hunter 2", icon: "🦋", hat: "Bug-Net Scout", mood: "Sniffing out accessibility bugs!", bg: "bg-amber-200", snacks: 5 },
+      { name: "Zedu Triager 1", icon: "🧭", hat: "Compass Botanist", mood: "Sorting duplicate seeds!", bg: "bg-sky-200", snacks: 4 }
+    ];
+
+    function renderAgents() {
+      const container = document.getElementById('agent-grid');
+      container.innerHTML = agents.map((a, idx) => `
+        <div onclick="petAgent(${idx})" class="toy-card cursor-pointer rounded-3xl ${a.bg} p-4 flex flex-col justify-between space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-3xl">${a.icon}</span>
+            <span class="rounded-full border-2 border-indigo-950 bg-white px-2 py-0.5 text-[11px] font-bold text-indigo-950">🍓 x${a.snacks}</span>
+          </div>
+          <div>
+            <div class="whimsy-font font-bold text-base text-indigo-950">${a.name}</div>
+            <div class="text-[11px] font-bold text-indigo-900/70">${a.hat}</div>
+            <p class="mt-2 rounded-xl border-2 border-indigo-950/20 bg-white/80 p-2 text-xs font-semibold text-indigo-950">"${a.mood}"</p>
+          </div>
+          <div class="text-[11px] font-bold text-indigo-950 underline">Click to toss a berry snack!</div>
+        </div>
+      `).join('');
+    }
+
+    function petAgent(idx) {
+      agents[idx].snacks++;
+      nectar += 3;
+      const cheers = [
+        "Yum! Zero ESLint warnings today! ✨",
+        "Munch munch! Ready to ship to zeduchat:staging! 🚀",
+        "Berry delicious! Prettier LF check passed! 🌈",
+        "Hooray! Another Live · On prod badge unlocked! 🏆"
+      ];
+      agents[idx].mood = cheers[Math.floor(Math.random() * cheers.length)];
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+      document.getElementById('mascot-speech').textContent = `"${agents[idx].name} loved that berry! +3 pts!"`;
+      renderAgents();
+    }
+
+    function feedAllAgents() {
+      agents.forEach((_, i) => { agents[i].snacks++; });
+      nectar += 15;
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+      document.getElementById('mascot-speech').textContent = `"All 5 sprites are turbo-charged! +15 pts!"`;
+      renderAgents();
+    }
+
+    const stageMessages = [
+      "🌱 Stage 1: Idea #2060 sprouted in the greenhouse with 3 warm sunbeams!",
+      "🔍 Stage 2: Three independent botanists inspected the bug under a giant magnifying glass!",
+      "🔨 Stage 3: Zedu Solver 1 hammered out a sparkling 1-file TypeScript patch!",
+      "🧪 Stage 4: Zedu Tester 2 sipped the potion — goodToMerge: true!",
+      "🚀 Stage 5: BLAST OFF! Issue #632 & #1401 are shining in the Live · On Prod sky!"
+    ];
+
+    function advanceStage(idx) {
+      document.getElementById('conveyor-toast').textContent = stageMessages[idx];
+      nectar += 5;
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+    }
+
+    function squashNextBug() {
+      const bugs = [
+        "#632 Thread Avatar Outline → Squashed & Shipped Live! 🎨",
+        "#1401 File Management Hero Alt → Polished & Live! 🖼️",
+        "#2060 Contact Sales Org Size → Tested & Verified! 📊",
+        "#519 Rename Modal Whitespace Guard → Locked Tight! 🔒"
+      ];
+      const pick = bugs[Math.floor(Math.random() * bugs.length)];
+      document.getElementById('conveyor-toast').textContent = "🦋 Caught: " + pick;
+      nectar += 10;
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+    }
+
+    function switchWorld(w) {
+      const ziki = document.getElementById('world-ziki');
+      const zedu = document.getElementById('world-zedu');
+      const tabZiki = document.getElementById('tab-ziki');
+      const tabZedu = document.getElementById('tab-zedu');
+      if (w === 'ziki') {
+        ziki.classList.remove('hidden');
+        zedu.classList.add('hidden');
+        tabZiki.className = "toy-btn rounded-xl bg-violet-400 px-3.5 py-1.5 text-xs font-bold text-indigo-950";
+        tabZedu.className = "toy-btn rounded-xl bg-white px-3.5 py-1.5 text-xs font-bold text-indigo-950";
+        document.getElementById('world-title').textContent = "Welcome to the Ziki Bug-Squashing Botanical Conservatory!";
+      } else {
+        ziki.classList.add('hidden');
+        zedu.classList.remove('hidden');
+        tabZedu.className = "toy-btn rounded-xl bg-pink-400 px-3.5 py-1.5 text-xs font-bold text-indigo-950";
+        tabZiki.className = "toy-btn rounded-xl bg-white px-3.5 py-1.5 text-xs font-bold text-indigo-950";
+        document.getElementById('world-title').textContent = "Welcome to the Zedu Cosmic Cohort Treehouse & Bubble Lounge!";
+      }
+    }
+
+    function highFive(el, who) {
+      nectar += 2;
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+      document.getElementById('mascot-speech').textContent = `"High-five sent to ${who}'s soap bubble! 🫧"`;
+    }
+
+    function popBubble() {
+      nectar += 5;
+      document.getElementById('nectar-counter').textContent = `🍯 ${nectar} Nectar Points Earned`;
+      document.getElementById('mascot-speech').textContent = `"✨ Confetti shower across #zedu-contributors! ✨"`;
+    }
+
+    function unrollScroll(name, secret) {
+      document.getElementById('scroll-preview').innerHTML = `📜 <strong>${name}:</strong> ${secret}`;
+    }
+
+    renderAgents();
+  </script>
+</body>
+</html>
