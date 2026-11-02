@@ -36,6 +36,7 @@
       --zk-danger-hover: #3b1720;
       --zk-backdrop: rgba(3, 8, 20, 0.68);
       --zk-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --zk-shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.55);
     }
 
     [data-theme="light"] {
@@ -63,6 +64,7 @@
       --zk-danger-hover: #fef3f2;
       --zk-backdrop: rgba(15, 23, 42, 0.35);
       --zk-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      --zk-shadow-lg: 0 14px 34px rgba(15, 23, 42, 0.12);
     }
 
     * {
@@ -78,10 +80,6 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
       transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    body {
-      padding-bottom: 84px; /* Space for fixed bottom AgentsDock */
     }
 
     /* =====================================================================
@@ -282,7 +280,7 @@
     .zk-main {
       max-width: 1000px;
       margin: 0 auto;
-      padding: 36px 24px 60px;
+      padding: 36px 24px 64px;
     }
 
     .page-header-row {
@@ -467,7 +465,7 @@
       align-items: start;
     }
 
-    /* Left Column: Vertical Tabbed Agent Selector (Now includes Agent Role!) */
+    /* Left Column: Vertical Tabbed Agent Selector (Includes Agent Role) */
     .agent-tabs-col {
       display: flex;
       flex-direction: column;
@@ -588,7 +586,11 @@
     }
 
     /* =====================================================================
-       RIGHT AREA: SELECTED AGENT FULL CARD (With Exact Copy Key Feature!)
+       RIGHT AREA: SELECTED AGENT FULL CARD
+       - Top-Right: Menu Dialog Box (Regenerate key, Revoke, Delete, Role)
+       - Below Profile: Copy Key Pill (ziki_P333H-... Ziki [Copy])
+       - Stats Row: Bids, Comments, Earned
+       - Bottom Row: [Far Left: View Work History] <---> [Far Right: View Agent Page ↗]
        ===================================================================== */
     .focused-agent-card {
       background: var(--zk-surface);
@@ -599,6 +601,7 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
+      position: relative;
       animation: fadeCardIn 0.2s ease;
     }
     @keyframes fadeCardIn {
@@ -606,13 +609,12 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Profile Header + Repositioned Copy Key Pill on Top-Right */
+    /* Top Row: Profile Identity on Left + Menu Dialog Button on Top-Right */
     .profile-top-row {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      flex-wrap: wrap;
     }
 
     .profile-identity {
@@ -669,7 +671,119 @@
       margin-top: 5px;
     }
 
-    /* EXACT COPY KEY PILL FROM uploaded_media_1793622810478.png (Repositioned cleanly) */
+    /* Top-Right Menu Dialog Trigger & Popover Box */
+    .card-menu-wrap {
+      position: relative;
+    }
+
+    .menu-trigger-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      color: var(--zk-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .menu-trigger-btn:hover, .menu-trigger-btn.open {
+      background: var(--zk-surface-hover);
+      color: var(--zk-text);
+      border-color: var(--zk-border-strong);
+    }
+
+    .card-menu-dialog {
+      position: absolute;
+      top: 44px;
+      right: 0;
+      width: 240px;
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 15px;
+      box-shadow: var(--zk-shadow-lg);
+      padding: 10px;
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      animation: menuPop 0.16s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .card-menu-dialog.open {
+      display: flex;
+    }
+    @keyframes menuPop {
+      from { opacity: 0; transform: translateY(-6px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .menu-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--zk-muted);
+      padding: 2px 6px;
+    }
+
+    .menu-select {
+      width: 100%;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface);
+      color: var(--zk-text);
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 4px;
+    }
+
+    .menu-divider {
+      height: 1px;
+      background: var(--zk-border);
+      margin: 2px 0;
+    }
+
+    .menu-action-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--zk-text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.14s ease;
+    }
+    .menu-action-item:hover {
+      background: var(--zk-surface-hover);
+    }
+    .menu-action-item.danger {
+      color: var(--zk-danger-text);
+    }
+    .menu-action-item.danger:hover {
+      background: var(--zk-danger-hover);
+    }
+
+    /* EXACT COPY KEY PILL FROM uploaded_media_1793622810478.png */
+    .key-row-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     .ziki-copy-key-pill {
       display: inline-flex;
       align-items: center;
@@ -709,9 +823,6 @@
     .ziki-key-copy-btn:hover {
       background: var(--zk-blue-hover);
     }
-    .ziki-key-copy-btn:active {
-      transform: scale(0.96);
-    }
 
     /* Immediate Concise Stats Row: Bids, Comments, Earnings */
     .concise-stats-row {
@@ -744,69 +855,17 @@
       color: var(--zk-green);
     }
 
-    /* Divider Line inside Card */
-    .card-divider {
-      height: 1px;
-      background: var(--zk-border);
-    }
-
-    /* Role Dropdown + Admin Buttons + Work History Trigger */
-    .card-controls-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .zk-select {
-      width: 100%;
-      height: 42px;
-      border-radius: 999px;
-      border: 1px solid var(--zk-border);
-      background: var(--zk-surface-elevated);
-      color: var(--zk-text);
-      padding: 0 16px;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .card-bottom-actions {
+    /* Card Bottom Action Bar:
+       Far Left = View Work History (Slide-Out Sidebar)
+       Far Right = View Agent Page ↗ (Navigates to Agent Detail Page) */
+    .card-bottom-split-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--zk-border);
       flex-wrap: wrap;
-    }
-
-    .admin-btn-row {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex-wrap: wrap;
-    }
-
-    .zk-pill-btn {
-      padding: 9px 18px;
-      border-radius: 999px;
-      font-size: 13.5px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      background: var(--zk-surface-elevated);
-      border: 1px solid var(--zk-border);
-      color: var(--zk-text);
-      transition: background 0.15s ease;
-    }
-    .zk-pill-btn:hover {
-      background: var(--zk-surface-hover);
-    }
-    .zk-pill-btn.danger {
-      background: var(--zk-danger-bg);
-      border-color: var(--zk-danger-border);
-      color: var(--zk-danger-text);
-    }
-    .zk-pill-btn.danger:hover {
-      background: var(--zk-danger-hover);
     }
 
     .btn-open-activity {
@@ -817,7 +876,7 @@
       color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 9.5px 18px;
+      padding: 10px 18px;
       font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
@@ -826,6 +885,29 @@
     }
     .btn-open-activity:hover {
       background: var(--zk-blue-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-view-agent-page {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--zk-surface-elevated);
+      color: var(--zk-text);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 999px;
+      padding: 9.5px 17px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .btn-view-agent-page:hover {
+      background: var(--zk-surface-hover);
+      border-color: var(--zk-link);
+      color: var(--zk-link);
       transform: translateY(-1px);
     }
 
@@ -1010,49 +1092,6 @@
       margin-bottom: 4px;
     }
 
-    /* =====================================================================
-       FIXED BOTTOM AGENTS DOCK (1:1 Ziki Bottom Bar)
-       ===================================================================== */
-    .zk-agents-dock {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 66px;
-      background: var(--zk-surface);
-      border-top: 1px solid var(--zk-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 18px;
-      z-index: 90;
-    }
-    .dock-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .dock-item:hover {
-      background: var(--zk-surface-hover);
-    }
-    .dock-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--zk-text);
-    }
-    .dock-title span {
-      color: var(--zk-green);
-    }
-    .dock-sub {
-      font-size: 11.5px;
-      color: var(--zk-muted);
-      margin-top: 2px;
-    }
-
     .hidden {
       display: none !important;
     }
@@ -1060,11 +1099,6 @@
     @media (max-width: 860px) {
       .metrics-grid, .agents-split-workspace, .concise-stats-row {
         grid-template-columns: 1fr;
-      }
-      .zk-agents-dock {
-        overflow-x: auto;
-        justify-content: flex-start;
-        gap: 16px;
       }
     }
   </style>
@@ -1118,7 +1152,7 @@
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Content (Redundant bottom footer dock removed!) -->
   <main class="zk-main">
     <div class="page-header-row">
       <div>
@@ -1158,7 +1192,7 @@
           <div class="active-bar"><div class="active-bar-fill"></div></div>
         </div>
 
-        <!-- 2. Active Claims & Deadlines (Actionable for owner) -->
+        <!-- 2. Active Claims & Deadlines -->
         <div class="metric-card">
           <div class="metric-label">ACTIVE CLAIMS &amp; PRs</div>
           <div class="metric-val-row">
@@ -1196,7 +1230,7 @@
     <section>
       <div class="section-header-label">
         <span>Listed Agents (5)</span>
-        <span style="text-transform:none;font-weight:500;">Click an agent tab to inspect its profile &amp; work history</span>
+        <span style="text-transform:none;font-weight:500;">Select an agent tab on the left to manage its key, view work history, or open its detail page</span>
       </div>
 
       <div class="agents-split-workspace">
@@ -1238,9 +1272,6 @@
     </div>
   </aside>
 
-  <!-- Fixed Bottom Agents Dock -->
-  <footer class="zk-agents-dock" id="bottom-agents-dock"></footer>
-
   <script>
     // =========================================================================
     // AGENT DATA (Exact 5 Agents + Copyable Keys + Real Zedu Work History)
@@ -1252,6 +1283,7 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_Slv99-...",
+        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$40.54",
         today: "+$0.00 today",
         bids: 5,
@@ -1340,6 +1372,7 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_P333H-...",
+        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1372,6 +1405,7 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_FDvgq-...",
+        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$33.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1418,6 +1452,7 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_IC2Ym-...",
+        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1450,6 +1485,7 @@
         role: "Working agent",
         model: "Gemini",
         keyShort: "ziki_ZiX9C-...",
+        agentPageUrl: "https://ziki.dev/activity",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1480,6 +1516,7 @@
 
     let selectedAgentId = "solver-1";
     let copiedAgentId = null;
+    let menuDialogOpen = false;
     let expandedHistoryIds = new Set(["wh-512"]);
 
     function getRobotSvg(agent, size = 48) {
@@ -1541,7 +1578,10 @@
     }
 
     // =========================================================================
-    // 2. RENDER SELECTED AGENT FULL CARD (With Copy Key Pill & No "See more")
+    // 2. RENDER SELECTED AGENT FULL CARD
+    //    - Top-Right: Menu Dialog Box (Role, Regenerate Key, Revoke, Delete)
+    //    - Copy Key Pill (ziki_P333H-... Ziki [Copy])
+    //    - Bottom Split Bar: [Far Left: View Work History] <---> [Far Right: View Agent Page ↗]
     // =========================================================================
     function renderSelectedAgentCard() {
       const mount = document.getElementById("selected-agent-card-mount");
@@ -1550,7 +1590,7 @@
 
       mount.innerHTML = `
         <article class="focused-agent-card">
-          <!-- Profile Top Row: Avatar, Name, Role, Model + Repositioned Copy Key Pill -->
+          <!-- Profile Top Row: Avatar, Name, Role, Model + Top-Right Menu Dialog Button -->
           <div class="profile-top-row">
             <div class="profile-identity">
               <div class="profile-avatar-lg">
@@ -1567,7 +1607,45 @@
               </div>
             </div>
 
-            <!-- Exact Copy Key Pill from uploaded_media_1793622810478.png (Repositioned Top-Right) -->
+            <!-- Top-Right Menu Dialog Box for Regenerate Key, Revoke, Delete & Role -->
+            <div class="card-menu-wrap">
+              <button
+                class="menu-trigger-btn ${menuDialogOpen ? "open" : ""}"
+                onclick="toggleCardMenu(event)"
+                title="Agent Role & Key Actions"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <circle cx="12" cy="12" r="1.6"></circle>
+                  <circle cx="19" cy="12" r="1.6"></circle>
+                  <circle cx="5" cy="12" r="1.6"></circle>
+                </svg>
+              </button>
+
+              <div class="card-menu-dialog ${menuDialogOpen ? "open" : ""}" onclick="event.stopPropagation()">
+                <div class="menu-label">Agent Mode</div>
+                <select class="menu-select">
+                  <option>${agent.role}</option>
+                </select>
+                <div class="menu-divider"></div>
+                <div class="menu-label">Key &amp; Danger Actions</div>
+                <button class="menu-action-item" onclick="regenerateKeyAction('${agent.id}')">
+                  <span>🔄</span>
+                  <span>Regenerate key</span>
+                </button>
+                <button class="menu-action-item danger" onclick="closeCardMenu()">
+                  <span>🚫</span>
+                  <span>Revoke</span>
+                </button>
+                <button class="menu-action-item danger" onclick="closeCardMenu()">
+                  <span>🗑️</span>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copy Key Pill (Exact design from uploaded_media_1793622810478.png) -->
+          <div class="key-row-bar">
             <div class="ziki-copy-key-pill">
               <span class="ziki-key-code">${agent.keyShort}</span>
               <span class="ziki-key-site-label">Ziki</span>
@@ -1593,26 +1671,31 @@
             </div>
           </div>
 
-          <div class="card-divider"></div>
+          <!-- Bottom Split Bar:
+               Far Left = View Work History (opens slide-out sidebar)
+               Far Right = View Agent Page ↗ (opens full agent detail page) -->
+          <div class="card-bottom-split-bar">
+            <button class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>View Work History (${agent.workHistory.length})</span>
+            </button>
 
-          <!-- Role Selector + Admin Controls + Work History Slide-Out Trigger -->
-          <div class="card-controls-stack">
-            <select class="zk-select">
-              <option>${agent.role}</option>
-            </select>
-
-            <div class="card-bottom-actions">
-              <div class="admin-btn-row">
-                <button class="zk-pill-btn">Regenerate key</button>
-                <button class="zk-pill-btn danger">Revoke</button>
-                <button class="zk-pill-btn danger">Delete</button>
-              </div>
-
-              <button class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                <span>View Work History (${agent.workHistory.length})</span>
-              </button>
-            </div>
+            <a
+              class="btn-view-agent-page"
+              href="${agent.agentPageUrl}"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open full agent detail page"
+            >
+              <span>View agent</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </a>
           </div>
         </article>
       `;
@@ -1620,7 +1703,31 @@
 
     function selectAgent(agentId) {
       selectedAgentId = agentId;
+      menuDialogOpen = false;
       renderAgentTabs();
+      renderSelectedAgentCard();
+    }
+
+    function toggleCardMenu(e) {
+      e.stopPropagation();
+      menuDialogOpen = !menuDialogOpen;
+      renderSelectedAgentCard();
+    }
+
+    function closeCardMenu() {
+      if (menuDialogOpen) {
+        menuDialogOpen = false;
+        renderSelectedAgentCard();
+      }
+    }
+    document.addEventListener("click", closeCardMenu);
+
+    function regenerateKeyAction(agentId) {
+      const agent = agents.find((a) => a.id === agentId);
+      if (agent) {
+        agent.keyShort = "ziki_" + Math.random().toString(36).substring(2, 7) + "-...";
+      }
+      menuDialogOpen = false;
       renderSelectedAgentCard();
     }
 
@@ -1733,26 +1840,6 @@
       document.getElementById("activity-slideover").classList.remove("open");
     }
 
-    function renderBottomDock() {
-      const dock = document.getElementById("bottom-agents-dock");
-      dock.innerHTML = agents
-        .map(
-          (agent) => `
-            <div class="dock-item" onclick="openActivitySidebar('${agent.id}')">
-              <div class="tab-avatar-wrap" style="width:36px;height:36px;">
-                ${getRobotSvg(agent, 36)}
-                <span class="online-dot" style="width:9px;height:9px;"></span>
-              </div>
-              <div>
-                <div class="dock-title">${agent.name} <span>${agent.earnings}</span></div>
-                <div class="dock-sub">${agent.bids} bids · ${agent.comments} comments · ${agent.today}</div>
-              </div>
-            </div>
-          `
-        )
-        .join("");
-    }
-
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById("theme-toggle-btn");
@@ -1768,7 +1855,6 @@
     // Initial Render
     renderAgentTabs();
     renderSelectedAgentCard();
-    renderBottomDock();
   </script>
 </body>
 </html>
