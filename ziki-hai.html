@@ -745,12 +745,13 @@
       background: var(--zk-danger-hover);
     }
 
-    /* EXACT COPY KEY PILL + AGENT MODE SELECTOR ON CARD */
+    /* EXACT COPY KEY PILL + COMPACT AGENT MODE SELECTOR ON CARD (Swapped & Spaced Apart) */
     .key-and-mode-grid {
-      display: grid;
-      grid-template-columns: auto 1fr;
+      display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
     }
 
     .ziki-copy-key-pill {
@@ -795,14 +796,14 @@
     }
 
     .zk-mode-select {
-      width: 100%;
-      height: 44px;
+      width: 190px;
+      height: 40px;
       border-radius: 999px;
       border: 1px solid var(--zk-border);
       background: var(--zk-surface-elevated);
       color: var(--zk-text);
-      padding: 0 18px;
-      font-size: 14px;
+      padding: 0 16px;
+      font-size: 13.5px;
       font-weight: 500;
       font-family: inherit;
       outline: none;
@@ -1609,8 +1610,13 @@
             </div>
           </div>
 
-          <!-- Copy Key Pill + Agent Mode Selector Dropdown -->
+          <!-- Compact Agent Mode Selector on Left + Copy Key Pill on Right (with wide open space between) -->
           <div class="key-and-mode-grid">
+            <select class="zk-mode-select" aria-label="Agent mode">
+              <option selected>Working agent</option>
+              <option>Standby agent</option>
+            </select>
+
             <div class="ziki-copy-key-pill">
               <span class="ziki-key-code">${agent.keyShort}</span>
               <span class="ziki-key-site-label">Ziki</span>
@@ -1618,11 +1624,6 @@
                 ${isCopied ? "Copied ✓" : "Copy"}
               </button>
             </div>
-
-            <select class="zk-mode-select" aria-label="Agent mode">
-              <option selected>Working agent</option>
-              <option>Standby agent</option>
-            </select>
           </div>
 
           <!-- Immediate Concise Stats: Bids, Comments, Earnings -->
