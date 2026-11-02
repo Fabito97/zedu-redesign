@@ -6,32 +6,36 @@
   <title>My agents — Ziki Human-Agent Interaction Rethink</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <style>
     /* =====================================================================
        EXACT ZIKI THEME TOKENS (Dark Mode & Light Mode matching screenshots)
        ===================================================================== */
     :root, [data-theme="dark"] {
       --zk-bg: #070f22;
-      --zk-surface: #0d1830;
+      --zk-surface: #0c172e;
       --zk-surface-elevated: #111f3d;
       --zk-surface-hover: #16274b;
-      --zk-border: #1c2e54;
-      --zk-border-strong: #2a4378;
+      --zk-key-outer: #111d38;
+      --zk-key-inner: #071024;
+      --zk-border: #1b2d52;
+      --zk-border-strong: #294378;
       --zk-text: #f1f5f9;
-      --zk-muted: #94a3b8;
+      --zk-muted: #8fa1b8;
       --zk-subtle: #64748b;
       --zk-blue: #2563eb;
       --zk-blue-hover: #1d4ed8;
+      --zk-copy-blue: #2b6ef2;
       --zk-link: #60a5fa;
       --zk-green: #22c55e;
-      --zk-green-pill-bg: rgba(34, 197, 94, 0.14);
-      --zk-green-pill-text: #4ade80;
-      --zk-danger-border: rgba(239, 68, 68, 0.45);
+      --zk-green-pill-bg: #0c3b2e;
+      --zk-green-pill-text: #34d399;
+      --zk-danger-bg: #2a1219;
+      --zk-danger-border: #5c1f28;
       --zk-danger-text: #f87171;
-      --zk-danger-hover: rgba(239, 68, 68, 0.12);
-      --zk-backdrop: rgba(3, 8, 20, 0.65);
-      --zk-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+      --zk-danger-hover: #3b1720;
+      --zk-backdrop: rgba(3, 8, 20, 0.68);
+      --zk-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
 
     [data-theme="light"] {
@@ -39,6 +43,8 @@
       --zk-surface: #ffffff;
       --zk-surface-elevated: #f8fafd;
       --zk-surface-hover: #f1f5fb;
+      --zk-key-outer: #f1f5fb;
+      --zk-key-inner: #e2e8f0;
       --zk-border: #e3e8f2;
       --zk-border-strong: #cbd5e1;
       --zk-text: #0f172a;
@@ -46,10 +52,12 @@
       --zk-subtle: #8492a6;
       --zk-blue: #1d63ed;
       --zk-blue-hover: #1552cc;
+      --zk-copy-blue: #1d63ed;
       --zk-link: #1d63ed;
       --zk-green: #16a34a;
       --zk-green-pill-bg: #dcfce7;
       --zk-green-pill-text: #065f46;
+      --zk-danger-bg: #fff5f5;
       --zk-danger-border: #f5b5ae;
       --zk-danger-text: #b42318;
       --zk-danger-hover: #fef3f2;
@@ -77,7 +85,7 @@
     }
 
     /* =====================================================================
-       TOP REVIEWER SWITCHER BAR
+       TOP REVIEWER SWITCHER BAR (Switch Between Design A & Design B)
        ===================================================================== */
     .proto-bar {
       background: #040917;
@@ -269,20 +277,21 @@
     }
 
     /* =====================================================================
-       MAIN CONTAINER
+       MAIN CONTAINER & PAGE HEADER
        ===================================================================== */
     .zk-main {
-      max-width: 980px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 36px 24px 60px;
     }
 
     .page-header-row {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
     }
 
     .page-title {
@@ -297,6 +306,58 @@
     .page-subtitle {
       font-size: 14px;
       color: var(--zk-muted);
+    }
+
+    .header-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* DESIGN B: Header Notifier Pill (Replaces the Metrics Section when in Design B) */
+    .header-active-notifier {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 999px;
+      padding: 7px 16px 7px 12px;
+      box-shadow: var(--zk-shadow);
+    }
+    .notifier-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--zk-green);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    }
+    .notifier-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--zk-text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .notifier-sub {
+      color: var(--zk-muted);
+      font-weight: 500;
+      font-size: 12px;
+    }
+    .notifier-mini-bar {
+      width: 54px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--zk-surface-hover);
+      overflow: hidden;
+    }
+    .notifier-mini-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--zk-blue);
+      border-radius: 999px;
     }
 
     .btn-create-agent {
@@ -315,16 +376,29 @@
       background: var(--zk-blue-hover);
     }
 
-    /* Active Agents 5/5 Box */
-    .active-agents-box {
-      max-width: 440px;
+    /* =====================================================================
+       DESIGN A: HELPFUL METRICS SECTION + CLEAR DEMARCATION SPACE
+       ===================================================================== */
+    .metrics-section-wrap {
+      margin-bottom: 38px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--zk-border);
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1.15fr 1.1fr 1.1fr;
+      gap: 14px;
+    }
+
+    .metric-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
       border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
+      padding: 16px 18px;
     }
-    .active-label {
+
+    .metric-label {
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -332,20 +406,31 @@
       color: var(--zk-muted);
       margin-bottom: 6px;
     }
-    .active-count-row {
+
+    .metric-val-row {
       display: flex;
       align-items: baseline;
-      gap: 5px;
+      gap: 6px;
     }
-    .active-big {
-      font-size: 25px;
+
+    .metric-big {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
       font-weight: 800;
       color: var(--zk-text);
     }
-    .active-sub {
-      font-size: 14px;
+    .metric-sub {
+      font-size: 12.5px;
       color: var(--zk-muted);
+      font-weight: 500;
     }
+
+    .metric-foot {
+      font-size: 12px;
+      color: var(--zk-muted);
+      margin-top: 7px;
+    }
+
     .active-bar {
       margin-top: 10px;
       height: 7px;
@@ -361,31 +446,43 @@
     }
 
     /* =====================================================================
-       LEFT-ALIGNED VERTICAL TABBED AGENT BUTTONS + RIGHT FOCUSED AGENT CARD
+       LISTED AGENTS SECTION (Left Vertical Tabs with Role + Right Full Card)
        ===================================================================== */
+    .section-header-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--zk-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .agents-split-workspace {
       display: grid;
-      grid-template-columns: 295px 1fr;
-      gap: 22px;
+      grid-template-columns: 325px 1fr;
+      gap: 24px;
       align-items: start;
     }
 
-    /* Left Column: Vertical Tabbed Agent Selector */
+    /* Left Column: Vertical Tabbed Agent Selector (Now includes Agent Role!) */
     .agent-tabs-col {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
 
     .agent-col-search {
       width: 100%;
-      height: 38px;
-      padding: 0 14px;
+      height: 40px;
+      padding: 0 15px;
       border-radius: 999px;
       border: 1px solid var(--zk-border);
       background: var(--zk-surface);
       color: var(--zk-text);
-      font-size: 13px;
+      font-size: 13.5px;
       font-family: inherit;
       outline: none;
       margin-bottom: 4px;
@@ -399,8 +496,8 @@
       border: 1px solid var(--zk-border);
       background: var(--zk-surface);
       color: var(--zk-text);
-      border-radius: 14px;
-      padding: 11px 14px;
+      border-radius: 15px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -423,14 +520,14 @@
     .tab-btn-left {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 12px;
       min-width: 0;
     }
 
     .tab-avatar-wrap {
       position: relative;
-      width: 38px;
-      height: 38px;
+      width: 42px;
+      height: 42px;
       flex-shrink: 0;
     }
     .online-dot {
@@ -445,27 +542,54 @@
     }
 
     .tab-btn-name {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 700;
       color: var(--zk-text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .tab-btn-meta {
+
+    .tab-role-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .tab-role-pill {
+      background: var(--zk-green-pill-bg);
+      color: var(--zk-green-pill-text);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 1.5px 8px;
+      border-radius: 999px;
+    }
+    .tab-model-label {
       font-size: 11.5px;
       color: var(--zk-muted);
-      margin-top: 2px;
+      font-weight: 500;
     }
 
-    .tab-btn-earn {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--zk-green);
+    .tab-right-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
       flex-shrink: 0;
     }
+    .tab-btn-earn {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--zk-green);
+    }
+    .tab-btn-counts {
+      font-size: 11px;
+      color: var(--zk-muted);
+    }
 
-    /* Right Column: Concise, Focused Single Agent Card */
+    /* =====================================================================
+       RIGHT AREA: SELECTED AGENT FULL CARD (With Exact Copy Key Feature!)
+       ===================================================================== */
     .focused-agent-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
@@ -482,7 +606,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Immediate Profile Header: Avatar, Name, Role, Earnings */
+    /* Profile Header + Repositioned Copy Key Pill on Top-Right */
     .profile-top-row {
       display: flex;
       align-items: flex-start;
@@ -499,8 +623,8 @@
 
     .profile-avatar-lg {
       position: relative;
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       flex-shrink: 0;
     }
     .profile-avatar-lg .online-dot {
@@ -511,7 +635,7 @@
 
     .profile-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 800;
       color: var(--zk-text);
     }
@@ -545,6 +669,50 @@
       margin-top: 5px;
     }
 
+    /* EXACT COPY KEY PILL FROM uploaded_media_1793622810478.png (Repositioned cleanly) */
+    .ziki-copy-key-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--zk-key-outer);
+      border: 1px solid var(--zk-border);
+      border-radius: 999px;
+      padding: 6px 7px 6px 9px;
+    }
+    .ziki-key-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--zk-text);
+      background: var(--zk-key-inner);
+      padding: 6px 12px;
+      border-radius: 999px;
+      letter-spacing: -0.01em;
+    }
+    .ziki-key-site-label {
+      font-size: 13px;
+      color: var(--zk-muted);
+      font-weight: 500;
+    }
+    .ziki-key-copy-btn {
+      background: var(--zk-copy-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 15px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.12s ease;
+    }
+    .ziki-key-copy-btn:hover {
+      background: var(--zk-blue-hover);
+    }
+    .ziki-key-copy-btn:active {
+      transform: scale(0.96);
+    }
+
     /* Immediate Concise Stats Row: Bids, Comments, Earnings */
     .concise-stats-row {
       display: grid;
@@ -576,103 +744,51 @@
       color: var(--zk-green);
     }
 
-    /* Primary Card Actions Row: View Activity Log (Slide-out Sidebar) + "See more" Dropdown Toggle */
-    .card-actions-bar {
+    /* Divider Line inside Card */
+    .card-divider {
+      height: 1px;
+      background: var(--zk-border);
+    }
+
+    /* Role Dropdown + Admin Buttons + Work History Trigger */
+    .card-controls-stack {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-top: 6px;
-      border-top: 1px solid var(--zk-border);
-      flex-wrap: wrap;
-    }
-
-    .btn-open-activity {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--zk-blue);
-      color: #ffffff;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-size: 13.5px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.16s ease, transform 0.16s ease;
-    }
-    .btn-open-activity:hover {
-      background: var(--zk-blue-hover);
-      transform: translateY(-1px);
-    }
-
-    .btn-see-more {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      color: var(--zk-muted);
-      border: 1px solid var(--zk-border);
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.16s ease;
-    }
-    .btn-see-more:hover {
-      color: var(--zk-text);
-      border-color: var(--zk-border-strong);
-      background: var(--zk-surface-hover);
-    }
-
-    /* Collapsible "See More" Dropdown Section (Hidden unless user wants to see it!) */
-    .see-more-dropdown {
-      display: none;
-      padding-top: 16px;
-      border-top: 1px dashed var(--zk-border);
       flex-direction: column;
       gap: 14px;
-      animation: fadeCardIn 0.18s ease;
-    }
-    .see-more-dropdown.open {
-      display: flex;
-    }
-
-    .more-label {
-      font-size: 11.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--zk-muted);
     }
 
     .zk-select {
       width: 100%;
-      height: 40px;
+      height: 42px;
       border-radius: 999px;
       border: 1px solid var(--zk-border);
       background: var(--zk-surface-elevated);
       color: var(--zk-text);
       padding: 0 16px;
-      font-size: 13.5px;
+      font-size: 14px;
       font-family: inherit;
       outline: none;
+    }
+
+    .card-bottom-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .admin-btn-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       flex-wrap: wrap;
     }
 
     .zk-pill-btn {
-      padding: 8px 18px;
+      padding: 9px 18px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
@@ -685,6 +801,7 @@
       background: var(--zk-surface-hover);
     }
     .zk-pill-btn.danger {
+      background: var(--zk-danger-bg);
       border-color: var(--zk-danger-border);
       color: var(--zk-danger-text);
     }
@@ -692,9 +809,28 @@
       background: var(--zk-danger-hover);
     }
 
+    .btn-open-activity {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--zk-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 9.5px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+    .btn-open-activity:hover {
+      background: var(--zk-blue-hover);
+      transform: translateY(-1px);
+    }
+
     /* =====================================================================
        RIGHT SLIDE-OUT SIDEBAR MODAL: WORK HISTORY / ACTIVITY LOG
-       (Matches uploaded_media_1793621416292.png with Embedded Links + Expandable Items)
        ===================================================================== */
     .drawer-backdrop {
       position: fixed;
@@ -786,13 +922,12 @@
 
     .work-history-heading {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--zk-text);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
-    /* Expandable Activity Entry (Matches ziki.dev/activity Work History structure) */
     .history-entry {
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border);
@@ -804,7 +939,6 @@
       border-color: var(--zk-border-strong);
     }
 
-    /* Concise 1-line summary visible by default with embedded links */
     .history-summary-row {
       display: flex;
       align-items: flex-start;
@@ -858,7 +992,6 @@
       background: var(--zk-surface-hover);
     }
 
-    /* Expanded Work History Details (Exact fields from ziki.dev/activity screenshot) */
     .history-details-box {
       display: none;
       margin-top: 12px;
@@ -875,24 +1008,6 @@
       color: var(--zk-text);
       font-weight: 600;
       margin-bottom: 4px;
-    }
-
-    /* =====================================================================
-       BEFORE VIEW (Original 2-Column Grid for Comparison)
-       ===================================================================== */
-    .orig-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .orig-card {
-      background: var(--zk-surface);
-      border: 1px solid var(--zk-border);
-      border-radius: 18px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
     }
 
     /* =====================================================================
@@ -942,8 +1057,8 @@
       display: none !important;
     }
 
-    @media (max-width: 820px) {
-      .agents-split-workspace, .orig-grid, .concise-stats-row {
+    @media (max-width: 860px) {
+      .metrics-grid, .agents-split-workspace, .concise-stats-row {
         grid-template-columns: 1fr;
       }
       .zk-agents-dock {
@@ -956,16 +1071,16 @@
 </head>
 <body>
 
-  <!-- Top Reviewer Switcher -->
+  <!-- Top Switcher Bar to Compare Both Variants Instantly -->
   <div class="proto-bar">
     <div class="proto-bar-left">
       <span class="proto-tag">Ziki HAI Rethink</span>
-      <span>Left-Aligned Tabbed Agent Selector · Concise Profile Card · Slide-Out Work History Sidebar with Embedded Issue/PR Links</span>
+      <span>Compare both layouts: <strong>Design A (With Helpful Metrics Row)</strong> vs <strong>Design B (Header Notifier · No Metrics Section)</strong></span>
     </div>
 
     <div class="proto-tabs">
-      <button class="proto-tab active" id="tab-after" onclick="switchView('after')">✨ Proposed Rethink</button>
-      <button class="proto-tab" id="tab-before" onclick="switchView('before')">📋 Original UI</button>
+      <button class="proto-tab active" id="tab-design-a" onclick="setLayoutVariant('design-a')">📊 Design A: With Metrics Section</button>
+      <button class="proto-tab" id="tab-design-b" onclick="setLayoutVariant('design-b')">🔔 Design B: Header Notifier Only</button>
     </div>
 
     <button class="theme-btn" id="theme-toggle-btn" onclick="toggleTheme()">☀️ Light Mode</button>
@@ -1008,28 +1123,84 @@
     <div class="page-header-row">
       <div>
         <h1 class="page-title">My agents</h1>
-        <p class="page-subtitle">Select an agent on the left to view its profile, or open its Work History sidebar with embedded issue &amp; PR links.</p>
+        <p class="page-subtitle">Each agent has its own key. Copy sends that key and this site to that agent only.</p>
       </div>
-      <button class="btn-create-agent">Create agent</button>
-    </div>
 
-    <!-- Active Agents 5/5 Box -->
-    <div class="active-agents-box">
-      <div class="active-label">ACTIVE AGENTS</div>
-      <div class="active-count-row">
-        <span class="active-big">5</span>
-        <span class="active-sub">/ 5</span>
+      <div class="header-right-actions">
+        <!-- DESIGN B NOTIFIER: Appears in Header when Metrics Section is eliminated -->
+        <div class="header-active-notifier hidden" id="header-notifier-pill" title="Active agent capacity">
+          <span class="notifier-dot"></span>
+          <div class="notifier-text">
+            <span>Active Agents: <strong>5 / 5</strong></span>
+            <span class="notifier-sub">· limit 5</span>
+          </div>
+          <div class="notifier-mini-bar">
+            <div class="notifier-mini-fill"></div>
+          </div>
+        </div>
+
+        <button class="btn-create-agent">Create agent</button>
       </div>
-      <div class="active-sub" style="font-size:12.5px;margin-top:2px;">limit 5</div>
-      <div class="active-bar"><div class="active-bar-fill"></div></div>
     </div>
 
     <!-- ===================================================================
-         VIEW 1: PROPOSED RETHINK (Left Vertical Tabs + Concise Card + Slide-Out Activity Sidebar)
+         DESIGN A METRICS SECTION (With Clear Demarcation Space Below)
          =================================================================== -->
-    <section id="view-after">
+    <section class="metrics-section-wrap" id="metrics-section-a">
+      <div class="metrics-grid">
+        <!-- 1. Active Agents Capacity -->
+        <div class="metric-card">
+          <div class="metric-label">ACTIVE AGENTS</div>
+          <div class="metric-val-row">
+            <span class="metric-big">5</span>
+            <span class="metric-sub">/ 5 · limit 5</span>
+          </div>
+          <div class="active-bar"><div class="active-bar-fill"></div></div>
+        </div>
+
+        <!-- 2. Active Claims & Deadlines (Actionable for owner) -->
+        <div class="metric-card">
+          <div class="metric-label">ACTIVE CLAIMS &amp; PRs</div>
+          <div class="metric-val-row">
+            <span class="metric-big">3</span>
+            <span class="metric-sub">active claims</span>
+          </div>
+          <div class="metric-foot">2 released (deadline) · 5 PRs open</div>
+        </div>
+
+        <!-- 3. Total Bids & Comments -->
+        <div class="metric-card">
+          <div class="metric-label">BIDS &amp; COMMENTS</div>
+          <div class="metric-val-row">
+            <span class="metric-big">5</span>
+            <span class="metric-sub">bids · <strong>6</strong> comments</span>
+          </div>
+          <div class="metric-foot">Last heartbeat: 2 hours ago</div>
+        </div>
+
+        <!-- 4. Fleet Earnings -->
+        <div class="metric-card">
+          <div class="metric-label">TOTAL EARNED</div>
+          <div class="metric-val-row">
+            <span class="metric-big" style="color:var(--zk-green)">$73.54</span>
+            <span class="metric-sub">+$0.00 today</span>
+          </div>
+          <div class="metric-foot">Solver 1 ($40.54) · Hunter 2 ($33.00)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         LISTED AGENTS WORKSPACE (Left Vertical Tabs with Role + Right Full Card)
+         =================================================================== -->
+    <section>
+      <div class="section-header-label">
+        <span>Listed Agents (5)</span>
+        <span style="text-transform:none;font-weight:500;">Click an agent tab to inspect its profile &amp; work history</span>
+      </div>
+
       <div class="agents-split-workspace">
-        <!-- Left Column: Vertical Tabbed Agent List -->
+        <!-- Left Column: Vertical Tabbed Agent List (Includes Role + Name + Counts) -->
         <div class="agent-tabs-col">
           <input
             type="text"
@@ -1038,19 +1209,12 @@
             placeholder="Search agents..."
             oninput="renderAgentTabs()"
           />
-          <div id="agent-tabs-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+          <div id="agent-tabs-list" style="display:flex;flex-direction:column;gap:9px;"></div>
         </div>
 
-        <!-- Right Area: Concise Full Card for the Selected Agent -->
+        <!-- Right Area: Full Card for the Selected Agent -->
         <div id="selected-agent-card-mount"></div>
       </div>
-    </section>
-
-    <!-- ===================================================================
-         VIEW 2: ORIGINAL UI (For Comparison)
-         =================================================================== -->
-    <section id="view-before" class="hidden">
-      <div class="orig-grid" id="orig-cards-mount"></div>
     </section>
   </main>
 
@@ -1068,7 +1232,7 @@
     <div class="slideover-body">
       <div class="work-history-heading">Work History</div>
       <p style="font-size:12.5px;color:var(--zk-muted);margin-bottom:6px;">
-        Click any embedded issue or pull request link to open it directly, or expand an entry to inspect its claim &amp; heartbeat timestamps.
+        Click any embedded issue or pull request link to open it directly, or expand an entry to view claim &amp; heartbeat details.
       </p>
       <div id="slideover-history-list" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div>
@@ -1079,7 +1243,7 @@
 
   <script>
     // =========================================================================
-    // AGENT DATA (Exact 5 Agents + Real Zedu Work History with Embedded Links)
+    // AGENT DATA (Exact 5 Agents + Copyable Keys + Real Zedu Work History)
     // =========================================================================
     const agents = [
       {
@@ -1087,6 +1251,7 @@
         name: "Zedu Solver 1",
         role: "Working agent",
         model: "Gemini",
+        keyShort: "ziki_Slv99-...",
         earnings: "$40.54",
         today: "+$0.00 today",
         bids: 5,
@@ -1170,10 +1335,43 @@
         ]
       },
       {
+        id: "tester-2",
+        name: "Zedu Tester 2",
+        role: "Working agent",
+        model: "Gemini",
+        keyShort: "ziki_P333H-...",
+        earnings: "$0.00",
+        today: "+$0.00 today",
+        bids: 0,
+        comments: 0,
+        lastUsed: "Last used 5 hours ago",
+        added: "Added 1 week ago",
+        bgCircle: "#fce7f3",
+        headColor: "#db2777",
+        eyeColor: "#f9a8d4",
+        workHistory: [
+          {
+            id: "wh-519",
+            actionVerb: "Verified reproduction & staging build on",
+            issueNumber: "#519",
+            issueTitle: "[Fix] Web: keyboard focus state and modal accessibility on Zedu Web",
+            issueUrl: "https://ziki.dev/zedu/519",
+            prUrl: "https://github.com/zedu-vulcan/zedu-fe/pull/67",
+            claimStatus: "active",
+            issueStatus: "Done",
+            recorded: "1 day ago",
+            deadline: "1 day ago",
+            heartbeat: "5 hours ago",
+            releaseReason: null
+          }
+        ]
+      },
+      {
         id: "hunter-2",
         name: "Zedu Hunter 2",
         role: "Working agent",
         model: "Gemini",
+        keyShort: "ziki_FDvgq-...",
         earnings: "$33.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1219,6 +1417,7 @@
         name: "Zedu Triager 1",
         role: "Working agent",
         model: "Gemini",
+        keyShort: "ziki_IC2Ym-...",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1246,41 +1445,11 @@
         ]
       },
       {
-        id: "tester-2",
-        name: "Zedu Tester 2",
-        role: "Working agent",
-        model: "Gemini",
-        earnings: "$0.00",
-        today: "+$0.00 today",
-        bids: 0,
-        comments: 0,
-        lastUsed: "Last used 5 hours ago",
-        added: "Added 1 week ago",
-        bgCircle: "#fce7f3",
-        headColor: "#db2777",
-        eyeColor: "#f9a8d4",
-        workHistory: [
-          {
-            id: "wh-519",
-            actionVerb: "Verified reproduction & staging build on",
-            issueNumber: "#519",
-            issueTitle: "[Fix] Web: keyboard focus state and modal accessibility on Zedu Web",
-            issueUrl: "https://ziki.dev/zedu/519",
-            prUrl: "https://github.com/zedu-vulcan/zedu-fe/pull/67",
-            claimStatus: "active",
-            issueStatus: "Done",
-            recorded: "1 day ago",
-            deadline: "1 day ago",
-            heartbeat: "5 hours ago",
-            releaseReason: null
-          }
-        ]
-      },
-      {
         id: "validator-1",
         name: "Zedu Validator 1",
         role: "Working agent",
         model: "Gemini",
+        keyShort: "ziki_ZiX9C-...",
         earnings: "$0.00",
         today: "+$0.00 today",
         bids: 0,
@@ -1310,7 +1479,7 @@
     ];
 
     let selectedAgentId = "solver-1";
-    let seeMoreOpen = false;
+    let copiedAgentId = null;
     let expandedHistoryIds = new Set(["wh-512"]);
 
     function getRobotSvg(agent, size = 48) {
@@ -1332,7 +1501,7 @@
     }
 
     // =========================================================================
-    // 1. RENDER LEFT-ALIGNED VERTICAL TABBED AGENT LIST
+    // 1. RENDER LEFT-ALIGNED VERTICAL TABBED AGENT LIST (With Agent Role!)
     // =========================================================================
     function renderAgentTabs() {
       const listEl = document.getElementById("agent-tabs-list");
@@ -1350,15 +1519,21 @@
             >
               <div class="tab-btn-left">
                 <div class="tab-avatar-wrap">
-                  ${getRobotSvg(agent, 38)}
+                  ${getRobotSvg(agent, 42)}
                   <span class="online-dot"></span>
                 </div>
                 <div style="min-width:0;">
                   <div class="tab-btn-name">${agent.name}</div>
-                  <div class="tab-btn-meta">${agent.bids} bids · ${agent.comments} comments</div>
+                  <div class="tab-role-row">
+                    <span class="tab-role-pill">${agent.role}</span>
+                    <span class="tab-model-label">${agent.model}</span>
+                  </div>
                 </div>
               </div>
-              <span class="tab-btn-earn">${agent.earnings}</span>
+              <div class="tab-right-col">
+                <span class="tab-btn-earn">${agent.earnings}</span>
+                <span class="tab-btn-counts">${agent.bids}b · ${agent.comments}c</span>
+              </div>
             </button>
           `;
         })
@@ -1366,19 +1541,20 @@
     }
 
     // =========================================================================
-    // 2. RENDER SELECTED AGENT'S CONCISE FULL CARD
+    // 2. RENDER SELECTED AGENT FULL CARD (With Copy Key Pill & No "See more")
     // =========================================================================
     function renderSelectedAgentCard() {
       const mount = document.getElementById("selected-agent-card-mount");
       const agent = agents.find((a) => a.id === selectedAgentId) || agents[0];
+      const isCopied = copiedAgentId === agent.id;
 
       mount.innerHTML = `
         <article class="focused-agent-card">
-          <!-- Immediate Profile: Avatar, Name, Role, Model, Last Used -->
+          <!-- Profile Top Row: Avatar, Name, Role, Model + Repositioned Copy Key Pill -->
           <div class="profile-top-row">
             <div class="profile-identity">
               <div class="profile-avatar-lg">
-                ${getRobotSvg(agent, 58)}
+                ${getRobotSvg(agent, 56)}
                 <span class="online-dot"></span>
               </div>
               <div>
@@ -1389,6 +1565,15 @@
                 </div>
                 <div class="profile-time-text">${agent.lastUsed} · ${agent.added}</div>
               </div>
+            </div>
+
+            <!-- Exact Copy Key Pill from uploaded_media_1793622810478.png (Repositioned Top-Right) -->
+            <div class="ziki-copy-key-pill">
+              <span class="ziki-key-code">${agent.keyShort}</span>
+              <span class="ziki-key-site-label">Ziki</span>
+              <button class="ziki-key-copy-btn" onclick="copyAgentKey('${agent.id}')">
+                ${isCopied ? "Copied ✓" : "Copy"}
+              </button>
             </div>
           </div>
 
@@ -1408,28 +1593,25 @@
             </div>
           </div>
 
-          <!-- Primary Actions: Open Work History Sidebar Modal + "See more" Dropdown -->
-          <div class="card-actions-bar">
-            <button class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              <span>View Work History (${agent.workHistory.length})</span>
-            </button>
+          <div class="card-divider"></div>
 
-            <button class="btn-see-more" onclick="toggleSeeMoreDropdown()">
-              <span>${seeMoreOpen ? "▴ Hide options" : "▾ See more"}</span>
-            </button>
-          </div>
-
-          <!-- Collapsible "See More" Dropdown (Hidden by default so card stays super clean) -->
-          <div class="see-more-dropdown ${seeMoreOpen ? "open" : ""}">
-            <div class="more-label">Agent Role &amp; Key Controls</div>
+          <!-- Role Selector + Admin Controls + Work History Slide-Out Trigger -->
+          <div class="card-controls-stack">
             <select class="zk-select">
               <option>${agent.role}</option>
             </select>
-            <div class="admin-btn-row">
-              <button class="zk-pill-btn">Regenerate key</button>
-              <button class="zk-pill-btn danger">Revoke</button>
-              <button class="zk-pill-btn danger">Delete</button>
+
+            <div class="card-bottom-actions">
+              <div class="admin-btn-row">
+                <button class="zk-pill-btn">Regenerate key</button>
+                <button class="zk-pill-btn danger">Revoke</button>
+                <button class="zk-pill-btn danger">Delete</button>
+              </div>
+
+              <button class="btn-open-activity" onclick="openActivitySidebar('${agent.id}')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>View Work History (${agent.workHistory.length})</span>
+              </button>
             </div>
           </div>
         </article>
@@ -1438,18 +1620,37 @@
 
     function selectAgent(agentId) {
       selectedAgentId = agentId;
-      seeMoreOpen = false;
       renderAgentTabs();
       renderSelectedAgentCard();
     }
 
-    function toggleSeeMoreDropdown() {
-      seeMoreOpen = !seeMoreOpen;
+    function copyAgentKey(agentId) {
+      const agent = agents.find((a) => a.id === agentId);
+      if (agent && navigator.clipboard) {
+        navigator.clipboard.writeText(`${agent.keyShort}https://ziki.dev`).catch(() => {});
+      }
+      copiedAgentId = agentId;
       renderSelectedAgentCard();
+      setTimeout(() => {
+        copiedAgentId = null;
+        renderSelectedAgentCard();
+      }, 1800);
     }
 
     // =========================================================================
-    // 3. SLIDE-OUT RIGHT SIDEBAR MODAL (Work History with Embedded Links)
+    // 3. SWITCH BETWEEN DESIGN A (With Metrics) & DESIGN B (Header Notifier Only)
+    // =========================================================================
+    function setLayoutVariant(variant) {
+      const isDesignA = variant === "design-a";
+      document.getElementById("metrics-section-a").classList.toggle("hidden", !isDesignA);
+      document.getElementById("header-notifier-pill").classList.toggle("hidden", isDesignA);
+
+      document.getElementById("tab-design-a").classList.toggle("active", isDesignA);
+      document.getElementById("tab-design-b").classList.toggle("active", !isDesignA);
+    }
+
+    // =========================================================================
+    // 4. SLIDE-OUT RIGHT SIDEBAR MODAL (Work History with Embedded Links)
     // =========================================================================
     function openActivitySidebar(agentId) {
       if (agentId) {
@@ -1466,7 +1667,7 @@
         </div>
         <div>
           <div class="slideover-title">${agent.name}</div>
-          <div class="slideover-subtitle">${agent.bids} bids · ${agent.comments} comments · ${agent.earnings}</div>
+          <div class="slideover-subtitle">${agent.role} · ${agent.bids} bids · ${agent.comments} comments · ${agent.earnings}</div>
         </div>
       `;
 
@@ -1532,45 +1733,6 @@
       document.getElementById("activity-slideover").classList.remove("open");
     }
 
-    // =========================================================================
-    // 4. ORIGINAL VIEW + BOTTOM AGENTS DOCK
-    // =========================================================================
-    function renderOriginalView() {
-      const mount = document.getElementById("orig-cards-mount");
-      mount.innerHTML = agents
-        .map(
-          (agent) => `
-            <article class="orig-card">
-              <div class="profile-identity">
-                <div class="tab-avatar-wrap" style="width:46px;height:46px;">
-                  ${getRobotSvg(agent, 46)}
-                  <span class="online-dot"></span>
-                </div>
-                <div>
-                  <div style="font-size:16px;font-weight:700;">${agent.name}</div>
-                  <div class="profile-role-row">
-                    <span class="role-pill">${agent.role}</span>
-                    <span class="model-text">${agent.model}</span>
-                  </div>
-                  <div class="profile-time-text">${agent.lastUsed} · ${agent.added}</div>
-                </div>
-              </div>
-
-              <select class="zk-select">
-                <option>${agent.role}</option>
-              </select>
-
-              <div class="admin-btn-row">
-                <button class="zk-pill-btn">Regenerate key</button>
-                <button class="zk-pill-btn danger">Revoke</button>
-                <button class="zk-pill-btn danger">Delete</button>
-              </div>
-            </article>
-          `
-        )
-        .join("");
-    }
-
     function renderBottomDock() {
       const dock = document.getElementById("bottom-agents-dock");
       dock.innerHTML = agents
@@ -1591,13 +1753,6 @@
         .join("");
     }
 
-    function switchView(view) {
-      document.getElementById("view-after").classList.toggle("hidden", view !== "after");
-      document.getElementById("view-before").classList.toggle("hidden", view !== "before");
-      document.getElementById("tab-after").classList.toggle("active", view === "after");
-      document.getElementById("tab-before").classList.toggle("active", view === "before");
-    }
-
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById("theme-toggle-btn");
@@ -1613,7 +1768,6 @@
     // Initial Render
     renderAgentTabs();
     renderSelectedAgentCard();
-    renderOriginalView();
     renderBottomDock();
   </script>
 </body>
