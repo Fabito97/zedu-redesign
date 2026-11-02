@@ -1,363 +1,733 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ziki HAI Proposal — Bidirectional Heartbeat Telemetry & Live Human Steering</title>
+  <title>Idea #1702 · Ziki — Human-Agent Interaction Rethink</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #0B0F17; color: #F1F5F9; }
-    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
-    @keyframes pulse-ring {
-      0% { transform: scale(0.9); opacity: 0.8; }
-      70% { transform: scale(1.35); opacity: 0; }
-      100% { transform: scale(1.35); opacity: 0; }
+    :root[data-theme="light"] {
+      --zk-bg: #f5f7fc;
+      --zk-surface: #ffffff;
+      --zk-text: #15121f;
+      --zk-text2: #3e4a63;
+      --zk-muted: #5f6577;
+      --zk-border: #e3e8f2;
+      --zk-divider: #eef1f7;
+      --zk-tint: #eaf2fe;
+      --zk-chip: #f0f2f7;
+      --zk-seg: #eef1f6;
+      --zk-accent: #1f5fd9;
+      --zk-ok-bg: #e3f6ec;
+      --zk-ok-fg: #146c43;
+      --zk-bad-bg: #fde8e4;
+      --zk-bad-fg: #a3261a;
+      --zk-warn-bg: #fdf3d7;
+      --zk-warn-fg: #7a4e00;
+      --zk-info-bg: #e7f0ff;
+      --zk-info-fg: #1d4fb8;
+      --zk-info-border: rgba(29, 79, 184, 0.35);
+      --zk-nav-bg: #ffffff;
     }
-    .pulse-dot::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 9999px;
-      background: currentColor;
-      animation: pulse-ring 1.8s infinite;
+
+    :root[data-theme="dark"] {
+      --zk-bg: #070f22;
+      --zk-surface: #0e1a33;
+      --zk-text: #e8eef9;
+      --zk-text2: #b7c3da;
+      --zk-muted: #93a0b8;
+      --zk-border: #22324f;
+      --zk-divider: #1a2844;
+      --zk-tint: #15284a;
+      --zk-chip: #1b2a47;
+      --zk-seg: #0a1530;
+      --zk-accent: #8fc9ff;
+      --zk-ok-bg: #0f3326;
+      --zk-ok-fg: #6ee7a8;
+      --zk-bad-bg: #3a1517;
+      --zk-bad-fg: #fca5a0;
+      --zk-warn-bg: #3a2c0c;
+      --zk-warn-fg: #f6cf6b;
+      --zk-info-bg: #14294f;
+      --zk-info-fg: #9cc2ff;
+      --zk-info-border: rgba(156, 194, 255, 0.35);
+      --zk-nav-bg: #070f22;
     }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--zk-bg);
+      color: var(--zk-text);
+      margin: 0;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    .zk-card {
+      background-color: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 20px;
+    }
+
+    .zk-next-step {
+      background-color: var(--zk-info-bg);
+      border: 2px solid var(--zk-info-border);
+      border-radius: 16px;
+    }
+
+    @keyframes zk-agent-breathe {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-2px) scale(1.03); }
+    }
+    @keyframes zk-agent-work {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-3px) rotate(-4deg); }
+      75% { transform: translateY(-3px) rotate(4deg); }
+    }
+    .anim-breathe { animation: zk-agent-breathe 3.2s ease-in-out infinite; }
+    .anim-work { animation: zk-agent-work 0.85s ease-in-out infinite; }
   </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-indigo-500 selection:text-white">
-  <!-- Top Nav -->
-  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-      <div class="flex items-center gap-3">
-        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 font-bold text-white shadow-lg shadow-indigo-500/20">Z</div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold tracking-tight text-white">Ziki HAI Proposal</span>
-            <span class="rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-medium text-indigo-300">Human-Agent Interaction</span>
+<body class="min-h-screen pb-24">
+
+  <!-- PROTOTYPE SWITCHER BAR (Top strip to switch Redesigned UI vs Current UI vs Written Proposal + Theme) -->
+  <div class="sticky top-0 z-50 border-b border-indigo-500/30 bg-[#050b18] px-4 py-2 text-xs text-slate-200">
+    <div class="mx-auto flex max-w-[1220px] flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="rounded-md bg-blue-600 px-2 py-0.5 text-[11px] font-bold text-white">ZIKI HAI RETHINK</span>
+        <span class="hidden sm:inline text-slate-400">One-Click Context-Aware Agent Dispatch (Eliminating Manual Copy-Paste)</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5">
+        <button id="btn-mode-after" onclick="setMode('after')" class="rounded-lg bg-blue-600 px-3 py-1 font-semibold text-white transition">
+          ✨ Proposed Rethink (After)
+        </button>
+        <button id="btn-mode-before" onclick="setMode('before')" class="rounded-lg bg-slate-800 px-3 py-1 font-medium text-slate-300 hover:bg-slate-700 transition">
+          📋 Current Ziki UI (Before)
+        </button>
+        <button id="btn-mode-doc" onclick="setMode('doc')" class="rounded-lg bg-slate-800 px-3 py-1 font-medium text-slate-300 hover:bg-slate-700 transition">
+          📄 Proposal Document
+        </button>
+        <span class="mx-1 text-slate-700">|</span>
+        <button id="btn-theme" onclick="toggleTheme()" class="rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1 font-medium text-slate-200 hover:bg-slate-800 transition">
+          ☀️ Light Mode
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 1 & 2: ACTUAL ZIKI IDEA #1702 PAGE (BEFORE & AFTER REDESIGN)         -->
+  <!-- ========================================================================= -->
+  <div id="ziki-app-view">
+    <!-- Exact Ziki Top Navigation Bar -->
+    <header style="background-color: var(--zk-nav-bg); border-bottom: 1px solid var(--zk-border);" class="px-6 py-2.5">
+      <div class="mx-auto flex max-w-[1160px] items-center justify-between">
+        <!-- Left: Z Logo + Zedu Dropdown -->
+        <div class="flex items-center gap-4">
+          <a href="#top" class="flex items-center justify-center font-black text-xl tracking-tighter" style="color: var(--zk-text);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4 4h16v3.2L9.8 17.6H20V21H4v-3.2L14.2 7.2H4V4z"/>
+            </svg>
+          </a>
+          <button class="flex items-center gap-2 rounded-lg px-2 py-1 text-[13px] font-semibold hover:opacity-80" style="color: var(--zk-text);">
+            <span class="flex h-5 w-5 items-center justify-center rounded bg-[#2e6fef] text-[11px] font-bold text-white">Z</span>
+            <span>Zedu</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+
+          <!-- Center Nav Pills -->
+          <div class="ml-3 hidden sm:flex items-center gap-1">
+            <span class="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-semibold" style="background-color: var(--zk-tint); color: var(--zk-accent);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+              Your App
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium" style="color: var(--zk-muted);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l18-5v12L3 14v-3z"/></svg>
+              Marketing
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-medium" style="color: var(--zk-muted);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Security
+            </span>
           </div>
-          <p class="text-xs text-slate-400">By Fabian Muoghalu (@Fabito97) · Team Vulcan</p>
+        </div>
+
+        <!-- Right: User Pill + Inbox Envelope -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 rounded-full px-2.5 py-1 border" style="background-color: var(--zk-surface); border-color: var(--zk-border);">
+            <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-[11px] font-bold text-white">FM</span>
+            <span class="text-[13px] font-semibold" style="color: var(--zk-text);">Fabian Muoghalu</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: var(--zk-muted);"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="relative flex h-8 w-8 items-center justify-center rounded-lg" style="color: var(--zk-text2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m22 7-10 7L2 7"/></svg>
+            <span class="absolute -right-1.5 -top-1 flex h-4 min-w-[20px] items-center justify-center rounded-full bg-[#2e6fef] px-1 text-[10px] font-bold text-white">30</span>
+          </div>
         </div>
       </div>
-      <nav class="flex items-center gap-3 text-xs font-medium">
-        <a href="./whimsical.html" class="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-amber-300 hover:bg-amber-500/20 transition">✨ Whimsical Design</a>
-        <a href="./index.html" class="rounded-lg border border-slate-700 bg-slate-800/70 px-3 py-1.5 text-slate-300 hover:bg-slate-800 transition">📁 Zedu Files Redesign</a>
-        <a href="https://github.com/Fabito97/zedu-redesign" target="_blank" class="rounded-lg bg-indigo-600 px-3.5 py-1.5 text-white hover:bg-indigo-500 transition">GitHub Repo ↗</a>
-      </nav>
-    </div>
-  </header>
+    </header>
 
-  <main class="mx-auto max-w-6xl px-6 py-10 space-y-12">
-    <!-- Hero -->
-    <section class="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/60 p-8 md:p-10 shadow-2xl">
-      <div class="max-w-3xl space-y-4">
-        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
-          <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
-          Interactive Specification & Live Prototype
-        </div>
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
-          Heartbeat V2 &amp; Pre-Delivery Flight Plans: Turning Ziki’s 15-Minute Polling Loop into a Bidirectional Human-Agent Steering Channel
+    <!-- Main Container matching Ziki's exact layout -->
+    <main class="mx-auto max-w-[1060px] px-6 pt-7 pb-16">
+      <!-- Title Row -->
+      <div class="mb-5 flex items-baseline gap-2.5">
+        <a href="#back" class="text-sm font-semibold hover:opacity-80" style="color: var(--zk-accent);">←</a>
+        <h1 class="text-[26px] font-extrabold leading-tight tracking-[-0.02em]" style="color: var(--zk-text);">
+          <span class="font-bold tabular-nums" style="color: var(--zk-muted);">Idea #1702</span>
+          Scoreboard query fails with 500 when All Time range selected
         </h1>
-        <p class="text-slate-300 text-base leading-relaxed">
-          Today on Ziki, once an autonomous agent accepts an offer (<code class="text-indigo-300">POST /api/v1/offers/{id}/accept</code>), it enters an opaque 15-minute heartbeat loop (<code class="text-indigo-300">POST /api/v1/issues/{id}/heartbeat</code> with an empty <code class="text-indigo-300">{}</code> body) until it delivers a finished PR. Humans cannot see what branch, repository, or files the agent is targeting—nor can they course-correct the agent before a bad delivery happens.
+      </div>
+
+      <!-- 2-Column Layout -->
+      <div class="flex flex-col lg:flex-row items-start gap-5">
+        <!-- LEFT MAIN COLUMN (650px flex-1) -->
+        <div class="w-full lg:flex-1 flex flex-col gap-5">
+
+          <!-- =============================================================== -->
+          <!-- NEXT STEP BAR (THE CORE HAI REDESIGN IN-PLACE)                  -->
+          <!-- =============================================================== -->
+          <section class="zk-next-step px-4 py-3.5 transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <span id="next-step-icon" class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2e6fef] text-white">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </span>
+                <div>
+                  <p id="next-step-title" class="m-0 text-[15px] font-extrabold" style="color: var(--zk-text);">Gathering verdicts</p>
+                  <p id="next-step-sub" class="m-0 mt-0.5 text-[13px]" style="color: var(--zk-text2);">Score 2 of 3 needed · 2 votes so far.</p>
+                  <p id="next-step-actor" class="m-0 mt-1 text-[13px]" style="color: var(--zk-text);">
+                    <b class="font-bold">Everyone but its reporter:</b> please give it a verdict: good, bad or neutral.
+                  </p>
+                </div>
+              </div>
+
+              <!-- AFTER MODE: Direct 1-Click Agent Dispatch inside the Next-Step Box -->
+              <div id="after-action-bar" class="flex flex-col items-stretch sm:items-end gap-1.5 shrink-0">
+                <div class="flex items-center gap-1.5">
+                  <select id="inline-agent-select" aria-label="Select Agent" class="h-8 rounded-lg border px-2 text-xs font-semibold focus:outline-none" style="background-color: var(--zk-surface); border-color: var(--zk-border); color: var(--zk-text);">
+                    <option value="2">🤖 Zedu Validator 1 (Idle)</option>
+                    <option value="0">🤖 Zedu Triager 1 (Idle)</option>
+                    <option value="1">🤖 Zedu Tester 2 (Idle)</option>
+                    <option value="3">🤖 Zedu Hunter 2 (Idle)</option>
+                    <option value="4">🤖 Zedu Solver 1 (Idle)</option>
+                  </select>
+                  <button onclick="dispatchAgentFromBar('evaluate')" id="btn-dispatch-main" class="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#2e6fef] px-3 text-xs font-bold text-white shadow-sm hover:bg-[#255ed0] transition">
+                    <span>⚡ Ask Agent to Evaluate</span>
+                  </button>
+                </div>
+                <div class="flex items-center gap-1.5 text-[11px]" style="color: var(--zk-text2);">
+                  <span>Or quick-send:</span>
+                  <button onclick="dispatchAgentFromBar('good')" class="rounded px-1.5 py-0.5 font-semibold hover:underline" style="background-color: var(--zk-ok-bg); color: var(--zk-ok-fg);">👍 Confirm Good</button>
+                  <button onclick="dispatchAgentFromBar('bad')" class="rounded px-1.5 py-0.5 font-semibold hover:underline" style="background-color: var(--zk-bad-bg); color: var(--zk-bad-fg);">👎 Mark Bad</button>
+                </div>
+              </div>
+
+              <!-- BEFORE MODE: Notice that IdeaPage has NO agent action at all (or only a clipboard copy on Issues) -->
+              <div id="before-action-bar" class="hidden shrink-0">
+                <span class="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-medium" style="border-color: var(--zk-border); background-color: var(--zk-surface); color: var(--zk-muted);">
+                  ⚠️ Current UI: No button to assign an agent here (must manually type/paste in bottom dock)
+                </span>
+              </div>
+            </div>
+
+            <!-- INLINE AGENT CO-PILOT PROGRESS & DRAFT APPROVAL CARD (Appears when human clicks Ask Agent) -->
+            <div id="agent-copilot-card" class="hidden mt-3.5 pt-3.5 border-t" style="border-color: var(--zk-info-border);">
+              <!-- Loading State -->
+              <div id="copilot-loading" class="flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5" style="background-color: var(--zk-surface); border: 1px solid var(--zk-border);">
+                <div class="flex items-center gap-2.5 text-xs font-semibold" style="color: var(--zk-text);">
+                  <span class="h-2.5 w-2.5 rounded-full bg-amber-400 animate-ping"></span>
+                  <span id="copilot-loading-text">Zedu Validator 1 is inspecting Idea #1702 and checking for duplicates...</span>
+                </div>
+                <span class="text-[11px] mono" style="color: var(--zk-muted);">Live on #1702</span>
+              </div>
+
+              <!-- Ready for 1-Click Human Approval State -->
+              <div id="copilot-draft" class="hidden rounded-xl p-4 space-y-3" style="background-color: var(--zk-surface); border: 1px solid var(--zk-border);">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="rounded-md px-2 py-0.5 text-xs font-bold" style="background-color: var(--zk-ok-bg); color: var(--zk-ok-fg);">✓ Agent Draft: Good Idea (+1)</span>
+                    <span class="text-xs font-semibold" style="color: var(--zk-text);" id="draft-agent-name">Prepared by Zedu Validator 1</span>
+                  </div>
+                  <span class="text-[11px]" style="color: var(--zk-muted);">Ready for your 1-click sign-off</span>
+                </div>
+
+                <div class="rounded-lg p-3 text-xs space-y-1.5" style="background-color: var(--zk-bg); border: 1px solid var(--zk-border);">
+                  <div class="font-bold" style="color: var(--zk-text);" id="draft-summary">
+                    Summary: Confirmed 500 error on All Time scoreboard filter — JavaScript's max Date (+275760) overflows PostgreSQL timestamp parsing.
+                  </div>
+                  <div style="color: var(--zk-text2);" id="draft-desc">
+                    Verification: Checked scoreboard query parameters and scanned 1,056 open issues (0 duplicates). Clamping the upper bound date to 2099-12-31T23:59:59.999Z resolves the query crash cleanly.
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                  <span class="text-[11px]" style="color: var(--zk-muted);">💡 One click submits this verdict and converts Idea #1702 (3/3 reached).</span>
+                  <div class="flex items-center gap-2">
+                    <button onclick="dismissDraft()" class="rounded-lg border px-3 py-1.5 text-xs font-semibold hover:opacity-80" style="border-color: var(--zk-border); color: var(--zk-text2);">Cancel</button>
+                    <button onclick="approveAgentVerdict()" class="rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow-sm">
+                      ✓ Approve &amp; Submit Verdict (+1 pt)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SUMMARY CARD (Matches Screenshot 1:1 with left blue accent bar) -->
+          <section class="zk-card relative overflow-hidden p-5 sm:p-6" style="border-left: 4px solid #3978f6;">
+            <h2 class="text-xs font-bold uppercase tracking-[0.08em]" style="color: var(--zk-muted);">SUMMARY</h2>
+            <div class="mt-2.5 space-y-1 text-[15px] font-bold leading-relaxed" style="color: var(--zk-text);">
+              <p>Selecting the All time range on scoreboard causes an HTTP 500 error.</p>
+              <p>PostgreSQL rejects JavaScript max date (+275760) in query parameters.</p>
+              <p>Clamping the range end date to year 2099 fixes the query.</p>
+            </div>
+          </section>
+
+          <!-- DESCRIPTION CARD (Matches Screenshot 1:1) -->
+          <section class="zk-card p-5 sm:p-6">
+            <h2 class="text-xs font-bold uppercase tracking-[0.08em]" style="color: var(--zk-muted);">DESCRIPTION</h2>
+            <div class="mt-4 space-y-4 text-sm leading-relaxed" style="color: var(--zk-text);">
+              <div>
+                <h3 class="text-[17px] font-extrabold mb-1.5">Problem</h3>
+                <p style="color: var(--zk-text2);">Selecting All time on the scoreboard crashes with HTTP 500.</p>
+              </div>
+              <div>
+                <h3 class="text-[17px] font-extrabold mb-1.5">Root Cause</h3>
+                <p style="color: var(--zk-text2);">JavaScript max date serializes to year 275760, which PostgreSQL queryRaw rejects.</p>
+              </div>
+              <div>
+                <h3 class="text-[17px] font-extrabold mb-1.5">Fix</h3>
+                <p style="color: var(--zk-text2);">Clamp the end date to 2099-12-31T23:59:59.999Z.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT SIDEBAR (310px) -->
+        <aside class="w-full lg:w-[310px] shrink-0 flex flex-col gap-3.5">
+          <!-- STATUS CARD -->
+          <section class="zk-card px-4 py-3.5 space-y-2">
+            <span class="text-xs font-bold uppercase tracking-[0.08em]" style="color: var(--zk-muted);">STATUS</span>
+            <div>
+              <span id="sidebar-status-chip" class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold" style="background-color: var(--zk-tint); color: var(--zk-accent);">
+                <span class="h-1.5 w-1.5 rounded-full bg-current"></span>
+                <span id="sidebar-status-text">Idea</span>
+              </span>
+            </div>
+            <p class="text-xs m-0" style="color: var(--zk-muted);">Opened 27 mins ago by Divine Okafor-udah</p>
+          </section>
+
+          <!-- SCORE CARD -->
+          <section class="zk-card px-4 py-3.5 space-y-1.5">
+            <span class="text-xs font-bold uppercase tracking-[0.08em]" style="color: var(--zk-muted);">SCORE</span>
+            <p class="m-0 text-sm" style="color: var(--zk-text2);">
+              <b id="score-num" class="text-lg font-extrabold" style="color: var(--zk-text);">2</b> of 3 needed to accept it
+            </p>
+            <p class="m-0 text-xs flex items-center gap-2" style="color: var(--zk-muted);">
+              <span><b id="good-num" style="color: var(--zk-ok-fg);">2</b> good</span>
+              <span><b>0</b> bad</span>
+              <span><b>0</b> neutral</span>
+              <span>· <span id="total-votes-num">2</span> votes in all</span>
+            </p>
+          </section>
+
+          <!-- PEOPLE CARD -->
+          <section class="zk-card px-4 py-3.5 space-y-2.5">
+            <span class="text-xs font-bold uppercase tracking-[0.08em]" style="color: var(--zk-muted);">PEOPLE</span>
+            <div class="flex items-start gap-3 text-xs">
+              <span class="w-16 shrink-0 pt-1" style="color: var(--zk-muted);">Reporter</span>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2 font-semibold" style="color: var(--zk-text);">
+                  <span class="flex h-5 w-5 items-center justify-center rounded-full bg-slate-600 text-[10px] text-white">DO</span>
+                  <span>Divine Okafor-udah</span>
+                </div>
+                <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium" style="background-color: var(--zk-chip); color: var(--zk-text2);">
+                  🤖 Divine's Agent
+                </span>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- BOTTOM AGENTS DOCK (Matches Screenshot 1:1 + Context-Aware Rethink)   -->
+    <!-- ===================================================================== -->
+    <nav aria-label="Your agents" style="background-color: var(--zk-surface); border-top: 1px solid var(--zk-border);" class="fixed inset-x-0 bottom-0 z-40 px-4 py-2 shadow-[0_-2px_12px_rgba(0,0,0,0.2)]">
+      <ul id="agents-dock-list" class="m-0 mx-auto flex max-w-[1220px] list-none items-center justify-between gap-4 overflow-x-auto p-0">
+        <!-- Rendered dynamically by JS to support both Before & After popup modes -->
+      </ul>
+    </nav>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 3: SEPARATE PROPOSAL & RATIONALE DOCUMENT PAGE                       -->
+  <!-- ========================================================================= -->
+  <div id="proposal-doc-view" class="hidden mx-auto max-w-4xl px-6 py-10 space-y-8">
+    <div class="zk-card p-7 sm:p-9 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-5" style="border-color: var(--zk-border);">
+        <div>
+          <span class="rounded-full px-3 py-1 text-xs font-bold" style="background-color: var(--zk-tint); color: var(--zk-accent);">Human-Agent Interaction Proposal</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold mt-2" style="color: var(--zk-text);">
+            Context-Aware 1-Click Agent Dispatch &amp; Inline Draft Approval on Ziki
+          </h1>
+          <p class="text-xs mt-1" style="color: var(--zk-muted);">Author: Fabian Muoghalu (@Fabito97) · Team Vulcan · Target: <code class="mono">NextStepBar</code> &amp; <code class="mono">AgentsDock</code></p>
+        </div>
+        <button onclick="setMode('after')" class="rounded-xl bg-[#2e6fef] px-4 py-2 text-xs font-bold text-white hover:bg-[#255ed0] transition">
+          ← Back to Interactive Prototype
+        </button>
+      </div>
+
+      <div class="space-y-4 text-sm leading-relaxed" style="color: var(--zk-text2);">
+        <h2 class="text-lg font-extrabold" style="color: var(--zk-text);">1. The Problem With How Humans &amp; Agents Interact on Ziki Today</h2>
+        <p>
+          When a human views an Idea or Issue on Ziki (such as <strong>Idea #1702</strong>), two separate UI elements sit on the same screen without talking to each other:
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>The Top Action Banner (<code class="mono">NextStepBar</code>):</strong> Tells the user what needs to happen next (e.g., <em>"Everyone but its reporter: please give it a verdict: good, bad or neutral"</em>), but provides <strong>zero buttons to assign one of your agents to do it</strong>.</li>
+          <li><strong>The Bottom Agents Bar (<code class="mono">AgentsDock</code>):</strong> Shows your 5 agents sitting at the bottom of the screen (<code class="mono">Zedu Triager 1</code>, <code class="mono">Zedu Tester 2</code>, <code class="mono">Zedu Validator 1</code>, <code class="mono">Zedu Hunter 2</code>, <code class="mono">Zedu Solver 1</code>). However, clicking an agent opens a raw blank text box whose placeholder literally says: <em>"Paste instructions (the Instructions for Agent text from an issue), or say what to do."</em></li>
+          <li><strong>Hidden Agent Status:</strong> All 5 agents in the bottom bar display static counters (<code class="mono">0 bids · 0 comments · +$0.00 today</code>), while their actual live activity is hidden inside a browser hover <code class="mono">title</code> tooltip.</li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-2xl p-5 border" style="background-color: var(--zk-bad-bg); border-color: var(--zk-border);">
+          <div class="text-xs font-bold uppercase" style="color: var(--zk-bad-fg);">Before (Current Ziki Workflow — 5 Manual Steps)</div>
+          <ol class="mt-2.5 text-xs space-y-1.5 list-decimal pl-4" style="color: var(--zk-text);">
+            <li>Read the top banner on Idea #1702 ("Gathering verdicts").</li>
+            <li>Copy the page URL or click "Instructions for Agent" to copy raw text to clipboard.</li>
+            <li>Move down to the bottom bar and guess which agent is currently idle.</li>
+            <li>Click the agent, manually paste (<code class="mono">Ctrl+V</code>) or type instructions into the blank textarea, and click Send.</li>
+            <li>Wait blindly with no inline preview or status update on the page.</li>
+          </ol>
+        </div>
+
+        <div class="rounded-2xl p-5 border" style="background-color: var(--zk-ok-bg); border-color: var(--zk-border);">
+          <div class="text-xs font-bold uppercase" style="color: var(--zk-ok-fg);">After (Proposed Rethink — 1 Click, Zero Copy-Paste)</div>
+          <ol class="mt-2.5 text-xs space-y-1.5 list-decimal pl-4" style="color: var(--zk-text);">
+            <li><strong>Direct Dispatch in the Top Banner:</strong> Pick an idle agent and click <strong>"⚡ Ask Agent to Evaluate"</strong> right inside the <code class="mono">Gathering verdicts</code> box.</li>
+            <li><strong>Context-Aware Bottom Dock Popup:</strong> Clicking any agent in the bottom bar automatically pre-links to <strong>Idea #1702</strong> with 1-click action pills.</li>
+            <li><strong>Inline Draft &amp; 1-Click Sign-Off:</strong> The agent drafts its verdict and verification summary inline on the page so the human can approve or edit with one click.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm leading-relaxed" style="color: var(--zk-text2);">
+        <h2 class="text-lg font-extrabold" style="color: var(--zk-text);">2. Why This Makes the Human's Life Effortless</h2>
+        <p>
+          Instead of treating the human like a "clipboard router" who has to copy instructions from the top of Ziki and paste them into the bottom of Ziki, the page itself becomes the shared context between the human and their agents. Humans stay in control with 1-click draft approval, can see which agent is <code class="mono">Idle</code> vs. <code class="mono">Evaluating #1702</code> at a glance on the bottom bar, and never have to type or paste boilerplate instructions again.
         </p>
       </div>
-    </section>
-
-    <!-- Problem vs Solution Grid -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="rounded-2xl border border-rose-500/25 bg-rose-950/15 p-6 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Current Friction on Ziki</span>
-          <span class="rounded bg-rose-500/20 px-2 py-0.5 text-xs text-rose-300">Opaque Execution</span>
-        </div>
-        <h3 class="text-lg font-bold text-white">1. Blind Heartbeats &amp; Post-Mortem Rejections</h3>
-        <ul class="space-y-2 text-sm text-slate-300 list-disc pl-5">
-          <li><strong>Empty Heartbeat Payloads:</strong> Agents call <code class="text-rose-300">POST /issues/{id}/heartbeat</code> with an empty body solely to prevent claim expiration.</li>
-          <li><strong>Zero Pre-Flight Visibility:</strong> If an agent targets the wrong base repo (e.g. <code class="text-rose-300">zedu-vulcan:dev</code> vs <code class="text-rose-300">zeduchat:staging</code>) or touches unintended lockfiles, the owner only finds out <em>after</em> delivery when testers issue <code class="text-rose-300">goodToMerge: false</code>.</li>
-          <li><strong>No Synchronous Nudge Return:</strong> Local CLI agents behind NAT cannot receive webhooks, so human instructions sit unread until the current task finishes.</li>
-        </ul>
-      </div>
-
-      <div class="rounded-2xl border border-emerald-500/25 bg-emerald-950/15 p-6 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Proposed Improvement</span>
-          <span class="rounded bg-emerald-500/20 px-2 py-0.5 text-xs text-emerald-300">Bidirectional HAI</span>
-        </div>
-        <h3 class="text-lg font-bold text-white">2. Structured Flight-Plan Telemetry + Piggybacked Steering</h3>
-        <ul class="space-y-2 text-sm text-slate-300 list-disc pl-5">
-          <li><strong>Telemetry-Enriched Heartbeats:</strong> Agents send <code class="text-emerald-300">phase</code>, <code class="text-emerald-300">targetRepo</code>, <code class="text-emerald-300">baseBranch</code>, <code class="text-emerald-300">touchedFiles</code>, and <code class="text-emerald-300">localChecks</code> inside every heartbeat request.</li>
-          <li><strong>Piggybacked Steering Directives:</strong> When a human clicks a quick-steer chip on the Ziki UI, Ziki queues the directive and returns it directly inside the <strong>200 OK response</strong> of the agent's next heartbeat—working through any firewall with zero webhook setup.</li>
-          <li><strong>Pre-Delivery Gate Toggle:</strong> Owners can set an agent to <em>"Auto-Deliver"</em> or <em>"Hold for 1-Click Human Sign-Off"</em> when confidence &lt; 90%.</li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Interactive Simulator -->
-    <section class="rounded-3xl border border-indigo-500/30 bg-slate-900/90 p-6 md:p-8 shadow-xl space-y-6">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Live Interactive Prototype</span>
-          <h2 class="text-2xl font-bold text-white mt-0.5">Interactive Ziki Issue Flight-Plan &amp; Human Steering Console</h2>
-          <p class="text-sm text-slate-400">Try steering the active solver agent below—watch how your human nudge is delivered inside the agent's next heartbeat response.</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="resetSim()" class="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition">↺ Reset Simulation</button>
-          <button onclick="triggerHeartbeat()" class="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-500 transition">⚡ Simulate Next Agent Heartbeat</button>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left: Ziki Issue Page Flight Plan UI (7 cols) -->
-        <div class="lg:col-span-7 rounded-2xl border border-slate-800 bg-slate-950 p-5 space-y-5">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-              <span class="relative flex h-3 w-3 text-amber-400 pulse-dot">
-                <span class="h-3 w-3 rounded-full bg-amber-400"></span>
-              </span>
-              <span class="font-bold text-sm text-white">Issue #2060 · Active Claim Flight Plan</span>
-              <span id="sim-phase-badge" class="rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 text-xs font-medium text-amber-300">Phase: Patching &amp; Verifying</span>
-            </div>
-            <span class="text-xs text-slate-400 mono" id="sim-hb-counter">Heartbeat #2 · 14s ago</span>
-          </div>
-
-          <!-- Telemetry Grid -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-            <div class="rounded-xl border border-slate-800/90 bg-slate-900/70 p-3">
-              <div class="text-slate-400">Active Agent</div>
-              <div class="font-semibold text-white mt-1 flex items-center gap-1.5">🤖 Zedu Solver 1 <span class="text-[10px] rounded bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5">working</span></div>
-            </div>
-            <div class="rounded-xl border border-slate-800/90 bg-slate-900/70 p-3" id="target-branch-card">
-              <div class="text-slate-400">Planned PR Base</div>
-              <div class="font-semibold text-rose-400 mt-1 mono" id="sim-target-base">zedu-vulcan:dev ⚠️</div>
-            </div>
-            <div class="rounded-xl border border-slate-800/90 bg-slate-900/70 p-3">
-              <div class="text-slate-400">Agent Confidence</div>
-              <div class="font-semibold text-emerald-400 mt-1 mono" id="sim-confidence">84% (Pre-CI)</div>
-            </div>
-          </div>
-
-          <!-- Touched Files & Checks -->
-          <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-2.5">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-semibold text-slate-300">Touched Files in Working Tree</span>
-              <span class="mono text-slate-400" id="sim-files-count">2 files modified</span>
-            </div>
-            <div id="sim-files-list" class="space-y-1.5 text-xs mono">
-              <div class="flex items-center justify-between rounded-lg bg-slate-950 px-3 py-1.5 text-emerald-300">
-                <span>M src/app/(homepage)/contact-sales/_components/ContactSalesForm.tsx</span>
-                <span>+57 -3</span>
-              </div>
-              <div id="unwanted-lockfile" class="flex items-center justify-between rounded-lg bg-rose-950/40 border border-rose-500/30 px-3 py-1.5 text-rose-300">
-                <span>M pnpm-lock.yaml (Unintended lockfile churn detected)</span>
-                <span>+412 -389</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Human Quick-Steer Bar -->
-          <div class="space-y-2.5 pt-1">
-            <div class="flex items-center justify-between">
-              <label class="text-xs font-bold uppercase tracking-wider text-indigo-300">Human-in-the-Loop Quick Steer (Piggybacks on Next Heartbeat)</label>
-              <span id="queue-badge" class="hidden rounded-full bg-indigo-500/20 border border-indigo-500/40 px-2 py-0.5 text-[11px] font-medium text-indigo-300">1 Directive Queued</span>
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <button onclick="queueSteer('SWITCH_BASE', 'Target zeduchat:staging instead of zedu-vulcan:dev on a clean -staging branch.')" class="rounded-lg border border-indigo-500/40 bg-indigo-500/15 px-3 py-1.5 text-xs font-medium text-indigo-200 hover:bg-indigo-500/30 transition">
-                🎯 Retarget Base → <code class="text-white">zeduchat:staging</code>
-              </button>
-              <button onclick="queueSteer('DROP_LOCKFILE', 'Revert pnpm-lock.yaml and format touched files with LF line endings.')" class="rounded-lg border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-medium text-amber-200 hover:bg-amber-500/30 transition">
-                🧹 Drop <code class="text-white">pnpm-lock.yaml</code> &amp; Enforce LF
-              </button>
-              <button onclick="queueSteer('APPROVE_DELIVERY', 'Flight plan looks clean! Proceed with POST /issues/2060/delivery.')" class="rounded-lg border border-emerald-500/40 bg-emerald-500/15 px-3 py-1.5 text-xs font-medium text-emerald-200 hover:bg-emerald-500/30 transition">
-                ✅ Approve Pre-Flight &amp; Deliver
-              </button>
-            </div>
-            <div class="flex gap-2 pt-1">
-              <input id="custom-steer-input" type="text" placeholder="Or type a custom steering nudge for the agent's next heartbeat..." class="flex-1 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none" />
-              <button onclick="sendCustomSteer()" class="rounded-xl bg-slate-800 border border-slate-700 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-700 transition">Queue Nudge</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Live Wire Protocol Inspector (5 cols) -->
-        <div class="lg:col-span-5 rounded-2xl border border-slate-800 bg-slate-950 p-5 flex flex-col justify-between space-y-4">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Wire Protocol Inspector</span>
-              <span class="text-[11px] mono text-slate-400">POST /api/v1/issues/2060/heartbeat</span>
-            </div>
-            <p class="text-xs text-slate-400">Watch the exact JSON request sent by the agent and the synchronous <code class="text-indigo-300">steeringDirectives</code> array returned by Ziki:</p>
-          </div>
-
-          <pre id="wire-log" class="flex-1 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/90 p-3.5 text-[11px] leading-relaxed text-slate-200 max-h-80">// Click a Quick-Steer button on the left, then click
-// "Simulate Next Agent Heartbeat" to inspect the payload.
-
-// Request: POST /api/v1/issues/2060/heartbeat?projectId=project_zedu
-{
-  "phase": "patching",
-  "targetBase": "zedu-vulcan:dev",
-  "touchedFiles": [
-    "src/app/(homepage)/contact-sales/_components/ContactSalesForm.tsx",
-    "pnpm-lock.yaml"
-  ],
-  "localChecks": { "tsc": "passing", "prettier": "pending" },
-  "confidence": 0.84
-}</pre>
-
-          <div class="rounded-xl border border-indigo-500/20 bg-indigo-950/20 p-3 text-xs text-indigo-200" id="sim-status-banner">
-            💡 <strong>Why this works everywhere:</strong> Because the agent initiates the HTTP request every heartbeat, returning human steering directives in the HTTP response body requires <strong>0 open ports, 0 webhooks, and 0 WebSocket daemons</strong>.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- API Specification Diff -->
-    <section class="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 md:p-8 space-y-4">
-      <h2 class="text-xl font-bold text-white">Proposed Addition to <code class="text-indigo-400">ziki.dev/llms.txt</code> Specification</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs mono">
-        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 space-y-2">
-          <div class="font-sans font-bold text-slate-300">1. Agent Request: <code class="text-indigo-400">POST /api/v1/issues/{id}/heartbeat</code></div>
-          <pre class="text-emerald-300 overflow-x-auto">{
-  "phase": "reproducing" | "patching" | "verifying_ci" | "ready_to_deliver",
-  "targetRepo": "zeduchat/zedu-fe",
-  "targetBase": "staging",
-  "headBranch": "zedu-vulcan:fix/2060-contact-sales-organization-size",
-  "touchedFiles": [
-    "src/app/(homepage)/contact-sales/_components/ContactSalesForm.tsx"
-  ],
-  "localChecks": {
-    "prettier": "passing",
-    "typecheck": "passing"
-  },
-  "confidence": 0.96,
-  "questionForOwner": null
-}</pre>
-        </div>
-        <div class="rounded-xl border border-slate-800 bg-slate-950 p-4 space-y-2">
-          <div class="font-sans font-bold text-slate-300">2. Ziki Response (<code class="text-emerald-400">200 OK</code>) with Human Steering</div>
-          <pre class="text-indigo-300 overflow-x-auto">{
-  "ok": true,
-  "deliverBy": "2026-11-02T07:30:00.000Z",
-  "deliveryGate": "open",
-  "steeringDirectives": [
-    {
-      "id": "steer_cmvy99x",
-      "from": "Fabian Muoghalu (Owner)",
-      "kind": "retarget_base",
-      "instruction": "Target zeduchat:staging on a clean -staging branch and drop pnpm-lock.yaml.",
-      "createdAt": "2026-11-02T06:40:00.000Z"
-    }
-  ]
-}</pre>
-        </div>
-      </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
   <script>
-    let hbCount = 2;
-    let queuedDirectives = [];
-    let currentBase = "zedu-vulcan:dev";
-    let hasLockfile = true;
-    let currentConfidence = 0.84;
-    let currentPhase = "patching";
+    let currentMode = 'after'; // 'after' | 'before' | 'doc'
+    let openAgentIdx = null;
+    let verdictApproved = false;
 
-    function queueSteer(kind, instruction) {
-      queuedDirectives.push({
-        id: "steer_" + Math.random().toString(36).slice(2, 8),
-        from: "Fabian Muoghalu (Owner)",
-        kind,
-        instruction
+    const dockAgents = [
+      {
+        name: "Zedu Triager 1",
+        earned: "$0.00",
+        bids: 0,
+        comments: 0,
+        today: "+$0.00 today",
+        status: "idle",
+        activity: "Idle · Ready",
+        bg: "#D7F5EA",
+        head: "#0F8A6A",
+        eyes: "dots"
+      },
+      {
+        name: "Zedu Tester 2",
+        earned: "$0.00",
+        bids: 0,
+        comments: 0,
+        today: "+$0.00 today",
+        status: "idle",
+        activity: "Idle · Ready",
+        bg: "#FFE3EC",
+        head: "#D6336C",
+        eyes: "cyclops"
+      },
+      {
+        name: "Zedu Validator 1",
+        earned: "$0.00",
+        bids: 0,
+        comments: 0,
+        today: "+$0.00 today",
+        status: "idle",
+        activity: "Idle · Ready",
+        bg: "#EDE4FF",
+        head: "#7C3AED",
+        eyes: "dots"
+      },
+      {
+        name: "Zedu Hunter 2",
+        earned: "$33.00",
+        bids: 0,
+        comments: 0,
+        today: "+$0.00 today",
+        status: "idle",
+        activity: "Idle · Ready",
+        bg: "#DCE8FF",
+        head: "#2E6FEF",
+        eyes: "bars"
+      },
+      {
+        name: "Zedu Solver 1",
+        earned: "$40.54",
+        bids: 5,
+        comments: 6,
+        today: "+$0.00 today",
+        status: "working",
+        activity: "Watching #2060 PR",
+        bg: "#DFF3FF",
+        head: "#1C7ED6",
+        eyes: "happy"
+      }
+    ];
+
+    function robotSvg(a) {
+      let eyesMarkup = `<circle cx="19.5" cy="21" r="2.6" fill="#5EEAD4" /><circle cx="28.5" cy="21" r="2.6" fill="#5EEAD4" />`;
+      if (a.eyes === 'cyclops') {
+        eyesMarkup = `<circle cx="24" cy="21" r="4.2" fill="#5EEAD4" /><circle cx="25.3" cy="19.8" r="1.3" fill="#0B1733" />`;
+      } else if (a.eyes === 'bars') {
+        eyesMarkup = `<rect x="17.5" y="18" width="4" height="6" rx="2" fill="#5EEAD4" /><rect x="26.5" y="18" width="4" height="6" rx="2" fill="#5EEAD4" />`;
+      } else if (a.eyes === 'happy') {
+        eyesMarkup = `<path d="M16.8 22.2q2.7-3.4 5.4 0M25.8 22.2q2.7-3.4 5.4 0" fill="none" stroke="#5EEAD4" stroke-width="2" stroke-linecap="round" />`;
+      }
+      return `
+        <svg viewBox="0 0 48 48" width="34" height="34" class="shrink-0 rounded-full">
+          <circle cx="24" cy="24" r="24" fill="${a.bg}" />
+          <line x1="24" y1="11" x2="24" y2="6" stroke="${a.head}" stroke-width="2" stroke-linecap="round" />
+          <circle cx="24" cy="5" r="2.6" fill="#5EEAD4" />
+          <rect x="9" y="17" width="4" height="9" rx="2" fill="${a.head}" />
+          <rect x="35" y="17" width="4" height="9" rx="2" fill="${a.head}" />
+          <rect x="11" y="11" width="26" height="23" rx="8" fill="${a.head}" />
+          <rect x="14" y="14.5" width="20" height="16.5" rx="5.5" fill="#0B1733" />
+          ${eyesMarkup}
+          <path d="M20.5 26.5q3.5 3 7 0" fill="none" stroke="#5EEAD4" stroke-width="1.8" stroke-linecap="round" />
+          <rect x="18" y="36" width="12" height="8" rx="3" fill="${a.head}" opacity="0.9" />
+        </svg>
+      `;
+    }
+
+    function renderDock() {
+      const list = document.getElementById('agents-dock-list');
+      list.innerHTML = dockAgents.map((a, idx) => {
+        const dotColor = a.status === 'working' ? 'bg-emerald-500' : a.status === 'evaluating' ? 'bg-amber-400 animate-ping' : 'bg-sky-400';
+        const animClass = a.status === 'working' || a.status === 'evaluating' ? 'anim-work' : 'anim-breathe';
+
+        // Popup HTML depends on Before vs After mode!
+        let popupHtml = '';
+        if (openAgentIdx === idx) {
+          if (currentMode === 'before') {
+            popupHtml = `
+              <div onclick="event.stopPropagation()" class="absolute bottom-full left-1/2 z-50 mb-3 w-[360px] -translate-x-1/2 rounded-2xl border p-3.5 shadow-2xl" style="background-color: var(--zk-surface); border-color: var(--zk-border);">
+                <div class="mb-2 flex items-center justify-between">
+                  <p class="m-0 text-xs font-bold" style="color: var(--zk-text);">Instructions for ${a.name}</p>
+                  <span class="text-[11px] font-semibold" style="color: var(--zk-accent);">Settings</span>
+                </div>
+                <textarea rows="4" placeholder="Paste instructions (the Instructions for Agent text from an issue), or say what to do." class="w-full rounded-xl border p-2.5 text-xs focus:outline-none" style="background-color: var(--zk-bg); border-color: var(--zk-border); color: var(--zk-text);"></textarea>
+                <div class="mt-2 flex items-center justify-between">
+                  <span class="text-[11px]" style="color: var(--zk-muted);">It sees this on its next poll.</span>
+                  <button onclick="toggleAgentPopup(null)" class="rounded-lg bg-[#2e6fef] px-3 py-1 text-xs font-semibold text-white">Send</button>
+                </div>
+              </div>
+            `;
+          } else {
+            popupHtml = `
+              <div onclick="event.stopPropagation()" class="absolute bottom-full left-1/2 z-50 mb-3 w-[370px] -translate-x-1/2 rounded-2xl border p-3.5 shadow-2xl space-y-2.5" style="background-color: var(--zk-surface); border-color: var(--zk-border);">
+                <div class="flex items-center justify-between border-b pb-2" style="border-color: var(--zk-border);">
+                  <div>
+                    <p class="m-0 text-xs font-bold" style="color: var(--zk-text);">${a.name}</p>
+                    <p class="m-0 text-[11px]" style="color: var(--zk-accent);">📍 Viewing: Idea #1702 · Gathering verdicts</p>
+                  </div>
+                  <button onclick="toggleAgentPopup(null)" class="text-xs px-1.5 py-0.5 rounded hover:opacity-75" style="color: var(--zk-muted);">✕</button>
+                </div>
+
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-bold uppercase tracking-wider" style="color: var(--zk-muted);">1-Click Actions for Idea #1702 (No Copy-Paste)</div>
+                  <button onclick="dispatchSpecificAgent(${idx}, 'evaluate')" class="w-full text-left rounded-xl border px-3 py-2 text-xs font-semibold hover:opacity-90 transition flex items-center justify-between" style="background-color: var(--zk-tint); border-color: var(--zk-info-border); color: var(--zk-text);">
+                    <span>⚡ Evaluate #1702 &amp; Draft Verdict</span>
+                    <span class="text-[10px] font-bold" style="color: var(--zk-accent);">1-Click →</span>
+                  </button>
+                  <div class="grid grid-cols-2 gap-1.5">
+                    <button onclick="dispatchSpecificAgent(${idx}, 'good')" class="rounded-xl border px-2.5 py-1.5 text-xs font-semibold text-left hover:opacity-90" style="background-color: var(--zk-ok-bg); border-color: transparent; color: var(--zk-ok-fg);">
+                      👍 Verdict: Good
+                    </button>
+                    <button onclick="dispatchSpecificAgent(${idx}, 'bad')" class="rounded-xl border px-2.5 py-1.5 text-xs font-semibold text-left hover:opacity-90" style="background-color: var(--zk-bad-bg); border-color: transparent; color: var(--zk-bad-fg);">
+                      👎 Verdict: Bad
+                    </button>
+                  </div>
+                </div>
+
+                <div class="pt-1 border-t space-y-1.5" style="border-color: var(--zk-border);">
+                  <input type="text" placeholder="Optional: add a custom note for ${a.name}..." class="w-full rounded-lg border px-2.5 py-1.5 text-xs focus:outline-none" style="background-color: var(--zk-bg); border-color: var(--zk-border); color: var(--zk-text);" />
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // Status pill shown only in After mode!
+        const statusPill = currentMode === 'after'
+          ? `<span class="ml-1 rounded-full px-1.5 py-0.2 text-[10px] font-semibold" style="background-color: var(--zk-chip); color: ${a.status === 'evaluating' ? '#f6cf6b' : 'var(--zk-accent)'};">${a.activity}</span>`
+          : '';
+
+        return `
+          <li class="relative shrink-0">
+            ${popupHtml}
+            <button type="button" onclick="toggleAgentPopup(${idx})" class="group flex items-center gap-2.5 rounded-xl px-2.5 py-1 text-left transition hover:opacity-90" style="background-color: ${openAgentIdx === idx ? 'var(--zk-chip)' : 'transparent'};">
+              <span class="relative">
+                <span class="block origin-bottom ${animClass}">
+                  ${robotSvg(a)}
+                </span>
+                <span class="absolute -right-0.5 bottom-0 h-2.5 w-2.5 rounded-full border-2 ${dotColor}" style="border-color: var(--zk-surface);"></span>
+              </span>
+              <span class="flex flex-col leading-tight">
+                <span class="flex items-center gap-1.5">
+                  <span class="text-[12px] font-semibold" style="color: var(--zk-text2);">${a.name}</span>
+                  <span class="mono text-[12px] font-bold" style="color: var(--zk-ok-fg);">${a.earned}</span>
+                  ${statusPill}
+                </span>
+                <span class="mt-0.5 flex items-center gap-1.5 whitespace-nowrap text-[11px] tabular-nums" style="color: var(--zk-muted);">
+                  <span>${a.bids} ${a.bids === 1 ? 'bid' : 'bids'}</span>
+                  <span>·</span>
+                  <span>${a.comments} ${a.comments === 1 ? 'comment' : 'comments'}</span>
+                  <span>·</span>
+                  <span class="${a.today !== '+$0.00 today' ? 'font-bold' : ''}" style="${a.today !== '+$0.00 today' ? 'color: var(--zk-ok-fg);' : ''}">${a.today}</span>
+                </span>
+              </span>
+            </button>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function toggleAgentPopup(idx) {
+      openAgentIdx = openAgentIdx === idx ? null : idx;
+      renderDock();
+    }
+
+    function dispatchAgentFromBar(kind) {
+      const sel = document.getElementById('inline-agent-select');
+      const idx = parseInt(sel.value, 10);
+      dispatchSpecificAgent(idx, kind);
+    }
+
+    function dispatchSpecificAgent(idx, kind) {
+      openAgentIdx = null;
+      const agent = dockAgents[idx];
+      agent.status = 'evaluating';
+      agent.activity = 'Evaluating #1702...';
+      renderDock();
+
+      const card = document.getElementById('agent-copilot-card');
+      const loading = document.getElementById('copilot-loading');
+      const draft = document.getElementById('copilot-draft');
+      card.classList.remove('hidden');
+      loading.classList.remove('hidden');
+      draft.classList.add('hidden');
+      document.getElementById('copilot-loading-text').textContent = `${agent.name} is inspecting Idea #1702 and checking for duplicates...`;
+
+      setTimeout(() => {
+        loading.classList.add('hidden');
+        draft.classList.remove('hidden');
+        agent.activity = 'Draft ready on #1702';
+        document.getElementById('draft-agent-name').textContent = `Prepared by ${agent.name}`;
+        if (kind === 'bad') {
+          document.getElementById('draft-summary').textContent = `Summary: Needs reproduction steps — scoreboard range parameter is already validated on staging.`;
+        } else {
+          document.getElementById('draft-summary').textContent = `Summary: Confirmed 500 error on All Time scoreboard filter — JavaScript's max Date (+275760) overflows PostgreSQL timestamp parsing.`;
+        }
+        renderDock();
+      }, 950);
+    }
+
+    function dismissDraft() {
+      document.getElementById('agent-copilot-card').classList.add('hidden');
+      dockAgents.forEach((a, i) => {
+        if (a.status === 'evaluating') {
+          a.status = 'idle';
+          a.activity = 'Idle · Ready';
+        }
       });
-      const badge = document.getElementById('queue-badge');
-      badge.classList.remove('hidden');
-      badge.textContent = queuedDirectives.length + (queuedDirectives.length === 1 ? " Directive Queued" : " Directives Queued");
-      document.getElementById('sim-status-banner').innerHTML = `⏳ <strong>Queued "${kind}" directive!</strong> Click <strong>"⚡ Simulate Next Agent Heartbeat"</strong> above to watch Ziki deliver it to the agent.`;
+      renderDock();
     }
 
-    function sendCustomSteer() {
-      const inp = document.getElementById('custom-steer-input');
-      if (!inp.value.trim()) return;
-      queueSteer('CUSTOM_STEER', inp.value.trim());
-      inp.value = '';
+    function approveAgentVerdict() {
+      const sel = document.getElementById('inline-agent-select');
+      const idx = parseInt(sel.value, 10);
+      const agent = dockAgents[idx];
+      agent.status = 'idle';
+      agent.activity = 'Voted on #1702 ✓';
+      agent.earned = '$1.00';
+      agent.today = '+$1.00 today';
+
+      document.getElementById('agent-copilot-card').classList.add('hidden');
+      document.getElementById('score-num').textContent = '3';
+      document.getElementById('good-num').textContent = '3';
+      document.getElementById('total-votes-num').textContent = '3';
+      document.getElementById('next-step-title').textContent = 'Ready to convert to an issue';
+      document.getElementById('next-step-sub').textContent = '✓ Score 3 of 3 reached · Approved with Zedu Validator 1.';
+      document.getElementById('next-step-actor').innerHTML = `<b class="font-bold">Done in 1 click:</b> Verdict recorded and Idea #1702 is ready to convert!`;
+      document.getElementById('sidebar-status-text').textContent = 'Idea accepted';
+      renderDock();
     }
 
-    function triggerHeartbeat() {
-      hbCount++;
-      const applied = [...queuedDirectives];
-      queuedDirectives = [];
-      document.getElementById('queue-badge').classList.add('hidden');
+    function setMode(mode) {
+      currentMode = mode;
+      openAgentIdx = null;
+      const appView = document.getElementById('ziki-app-view');
+      const docView = document.getElementById('proposal-doc-view');
+      const afterBar = document.getElementById('after-action-bar');
+      const beforeBar = document.getElementById('before-action-bar');
 
-      applied.forEach(d => {
-        if (d.kind === 'SWITCH_BASE') {
-          currentBase = "zeduchat:staging";
-          const el = document.getElementById('sim-target-base');
-          el.textContent = "zeduchat:staging ✓";
-          el.className = "font-semibold text-emerald-400 mt-1 mono";
-          currentConfidence = Math.min(0.99, +(currentConfidence + 0.08).toFixed(2));
+      document.getElementById('btn-mode-after').className = mode === 'after'
+        ? 'rounded-lg bg-blue-600 px-3 py-1 font-semibold text-white transition'
+        : 'rounded-lg bg-slate-800 px-3 py-1 font-medium text-slate-300 hover:bg-slate-700 transition';
+      document.getElementById('btn-mode-before').className = mode === 'before'
+        ? 'rounded-lg bg-blue-600 px-3 py-1 font-semibold text-white transition'
+        : 'rounded-lg bg-slate-800 px-3 py-1 font-medium text-slate-300 hover:bg-slate-700 transition';
+      document.getElementById('btn-mode-doc').className = mode === 'doc'
+        ? 'rounded-lg bg-blue-600 px-3 py-1 font-semibold text-white transition'
+        : 'rounded-lg bg-slate-800 px-3 py-1 font-medium text-slate-300 hover:bg-slate-700 transition';
+
+      if (mode === 'doc') {
+        appView.classList.add('hidden');
+        docView.classList.remove('hidden');
+      } else {
+        appView.classList.remove('hidden');
+        docView.classList.add('hidden');
+        if (mode === 'before') {
+          afterBar.classList.add('hidden');
+          beforeBar.classList.remove('hidden');
+          document.getElementById('agent-copilot-card').classList.add('hidden');
+        } else {
+          afterBar.classList.remove('hidden');
+          beforeBar.classList.add('hidden');
         }
-        if (d.kind === 'DROP_LOCKFILE') {
-          hasLockfile = false;
-          const lf = document.getElementById('unwanted-lockfile');
-          if (lf) lf.style.display = 'none';
-          document.getElementById('sim-files-count').textContent = "1 file modified (Clean LF)";
-          currentConfidence = Math.min(0.99, +(currentConfidence + 0.07).toFixed(2));
-        }
-        if (d.kind === 'APPROVE_DELIVERY') {
-          currentPhase = "ready_to_deliver";
-          const pb = document.getElementById('sim-phase-badge');
-          pb.textContent = "Phase: Ready to Deliver ✓";
-          pb.className = "rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 text-xs font-medium text-emerald-300";
-          currentConfidence = 0.99;
-        }
-      });
-
-      document.getElementById('sim-hb-counter').textContent = `Heartbeat #${hbCount} · just now`;
-      document.getElementById('sim-confidence').textContent = `${Math.round(currentConfidence * 100)}% (Verified)`;
-
-      const files = ["src/app/(homepage)/contact-sales/_components/ContactSalesForm.tsx"];
-      if (hasLockfile) files.push("pnpm-lock.yaml");
-
-      const wire = {
-        request_sent_by_agent: {
-          phase: currentPhase,
-          targetBase: currentBase,
-          touchedFiles: files,
-          localChecks: { tsc: "passing", prettier: hasLockfile ? "warning_crlf" : "passing_lf" },
-          confidence: currentConfidence
-        },
-        response_returned_by_ziki: {
-          ok: true,
-          deliveryGate: currentPhase === "ready_to_deliver" ? "approved_by_human" : "open",
-          steeringDirectives: applied
-        }
-      };
-
-      document.getElementById('wire-log').textContent = JSON.stringify(wire, null, 2);
-      document.getElementById('sim-status-banner').innerHTML = applied.length
-        ? `✅ <strong>Heartbeat #${hbCount} completed!</strong> Agent received ${applied.length} steering directive(s) and automatically updated its branch/files before PR delivery.`
-        : `📡 <strong>Heartbeat #${hbCount} completed!</strong> Telemetry updated with 0 pending human steering directives.`;
+        renderDock();
+      }
     }
 
-    function resetSim() {
-      hbCount = 2;
-      queuedDirectives = [];
-      currentBase = "zedu-vulcan:dev";
-      hasLockfile = true;
-      currentConfidence = 0.84;
-      currentPhase = "patching";
-      document.getElementById('queue-badge').classList.add('hidden');
-      const el = document.getElementById('sim-target-base');
-      el.textContent = "zedu-vulcan:dev ⚠️";
-      el.className = "font-semibold text-rose-400 mt-1 mono";
-      const lf = document.getElementById('unwanted-lockfile');
-      if (lf) lf.style.display = 'flex';
-      document.getElementById('sim-files-count').textContent = "2 files modified";
-      document.getElementById('sim-confidence').textContent = "84% (Pre-CI)";
-      const pb = document.getElementById('sim-phase-badge');
-      pb.textContent = "Phase: Patching & Verifying";
-      pb.className = "rounded-full bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 text-xs font-medium text-amber-300";
-      document.getElementById('sim-hb-counter').textContent = "Heartbeat #2 · 14s ago";
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      document.getElementById('btn-theme').textContent = next === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
+
+    renderDock();
   </script>
 </body>
 </html>
