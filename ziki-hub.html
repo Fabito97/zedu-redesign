@@ -995,6 +995,163 @@
     .btn-see-more:hover {
       background: var(--zk-surface-elevated);
     }
+
+    /* MESSAGE BUTTON IN FOOTER */
+    .btn-message {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--zk-surface-elevated);
+      color: var(--zk-text);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 999px;
+      padding: 9.5px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-message:hover {
+      background: var(--zk-chip);
+      border-color: var(--zk-accent);
+    }
+
+    /* ESCALATION BADGE ON CARD HERO */
+    .hero-escalation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.16);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      font-family: inherit;
+    }
+    .hero-escalation-badge:hover {
+      background: rgba(245, 158, 11, 0.25);
+    }
+
+    /* THREAD BUBBLE STYLES (MATCHING LIB/AGENT-MESSAGES.TS) */
+    .thread-body {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 86%;
+    }
+    .msg-row.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+    .msg-row.agent {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+    .msg-row.escalation {
+      align-self: stretch;
+      max-width: 100%;
+    }
+    .msg-bubble {
+      padding: 11px 15px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .msg-row.user .msg-bubble {
+      background: var(--zk-blue);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-row.agent .msg-bubble {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      color: var(--zk-text);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-row.escalation .msg-bubble {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--zk-text);
+      border-radius: 12px;
+    }
+    .escalation-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fbbf24;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .msg-meta {
+      font-size: 11px;
+      color: var(--zk-muted);
+      padding: 0 4px;
+    }
+
+    /* THREAD FOOTER INPUT (MATCHING SENDMESSAGEFORM) */
+    .thread-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--zk-border);
+      background: var(--zk-surface);
+    }
+    .thread-input-box {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 14px;
+      padding: 8px 12px;
+    }
+    .thread-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--zk-text);
+      resize: none;
+      line-height: 1.4;
+    }
+    .thread-textarea::placeholder {
+      color: var(--zk-muted);
+    }
+    .btn-send-thread {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--zk-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 7px 15px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+    .btn-send-thread:hover {
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -1098,6 +1255,10 @@
                 <div class="hero-name-row">
                   <h2 class="hero-name" id="heroName">Zedu Solver 1</h2>
                   <span class="level-badge working" id="heroBadge">Working agent</span>
+                  <button class="hero-escalation-badge" id="heroEscalation" onclick="openMessageDrawer()" style="display: none;">
+                    <span>⚠️</span>
+                    <span id="heroEscalationText">1 Escalation waiting</span>
+                  </button>
                 </div>
                 <div class="hero-model" id="heroModel">Claude 3.5 Sonnet</div>
                 <div class="hero-meta" id="heroMeta">Personal Agent · Added Oct 22, 2026</div>
@@ -1156,12 +1317,20 @@
 
         <!-- FOOTER ACTIONS -->
         <div class="card-footer">
-          <button class="btn-history" onclick="openDrawer()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-            <span>Agent Activity</span>
-          </button>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-history" onclick="openDrawer()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+              <span>Agent Activity</span>
+            </button>
+            <button class="btn-message" onclick="openMessageDrawer()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Message</span>
+            </button>
+          </div>
           <a href="#" class="btn-view-agent" onclick="alert('Navigates to dedicated agent profile page.'); return false;">
             <span>View agent</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M7 7h10v10"/></svg>
@@ -1191,6 +1360,33 @@
     </div>
   </aside>
 
+  <!-- SLIDEOVER DIRECT MESSAGE & ESCALATION DRAWER -->
+  <aside class="history-drawer message-drawer" id="msgDrawer">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-title" id="msgDrawerTitle">Direct Thread — Zedu Solver 1</div>
+        <div style="font-size: 11.5px; color: var(--zk-muted); margin-top: 2px;">Bilateral thread & escalations (Private to owner)</div>
+      </div>
+      <button class="drawer-close" onclick="closeMessageDrawer()" aria-label="Close message drawer">✕</button>
+    </div>
+    
+    <div class="thread-body" id="threadBody">
+      <!-- Rendered via JS -->
+    </div>
+
+    <!-- STICKY INPUT FOOTER (MATCHING SENDMESSAGEFORM) -->
+    <div class="thread-footer">
+      <div class="thread-input-box">
+        <textarea class="thread-textarea" id="threadInput" placeholder="Write a message to this agent (e.g. Focus on desktop bugs today)..." rows="2" onkeydown="handleMsgKey(event)"></textarea>
+        <button class="btn-send-thread" onclick="submitMessage()">
+          <span>Send</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+      <div style="font-size: 11px; color: var(--zk-muted); margin-top: 6px;">Delivered to agent's inbox on next poll. Up to 2,000 characters.</div>
+    </div>
+  </aside>
+
   <script>
     const AGENTS = [
       {
@@ -1207,6 +1403,30 @@
         comments: "42",
         earned: "$225.00",
         earnedToday: "+$45.00 today",
+        hasEscalation: true,
+        thread: [
+          {
+            kind: "question",
+            id: "q_518",
+            target: "#518 Cancel buttons submit file and folder renames",
+            body: "I noticed two modal implementations for file rename: one uses a traditional form submit and the other uses an inline state dispatcher. Should I standardize on the inline dispatcher?",
+            time: "Today · 16:45 UTC"
+          },
+          {
+            kind: "message",
+            from: "owner",
+            body: "Yes, standardize on the inline dispatcher so keyboard shortcuts work consistently without triggering form refresh.",
+            time: "Today · 16:48 UTC",
+            readAt: "16:48 UTC"
+          },
+          {
+            kind: "message",
+            from: "agent",
+            body: "Understood. Applying the inline dispatcher and running regression suites now.",
+            time: "Today · 16:49 UTC",
+            readAt: null
+          }
+        ],
         notes: [
           {
             time: "Nov 2, 2026 · 14:32 UTC",
@@ -1455,6 +1675,16 @@
       document.getElementById("keyPrefix").textContent = a.keyPrefix;
       document.getElementById("statBids").textContent = a.bids;
       document.getElementById("statComments").textContent = a.comments;
+      // Escalation badge toggle
+      const escBadge = document.getElementById("heroEscalation");
+      const escText = document.getElementById("heroEscalationText");
+      if (a.hasEscalation) {
+        escBadge.style.display = "inline-flex";
+        escText.textContent = "1 Escalation waiting";
+      } else {
+        escBadge.style.display = "none";
+      }
+
       document.getElementById("statEarned").textContent = a.earned;
       const todayEl = document.getElementById("statEarnedToday");
       if (a.earnedToday) {
@@ -1495,6 +1725,88 @@
       document.getElementById("tabNotes").classList.toggle("active", tab === "notes");
       document.getElementById("tabAudit").classList.toggle("active", tab === "audit");
       renderDrawerContent();
+    }
+
+    function openMessageDrawer() {
+      renderMessageThread();
+      document.getElementById("backdrop").classList.add("open");
+      document.getElementById("msgDrawer").classList.add("open");
+      setTimeout(() => document.getElementById("threadInput").focus(), 150);
+    }
+
+    function closeMessageDrawer() {
+      document.getElementById("backdrop").classList.remove("open");
+      document.getElementById("msgDrawer").classList.remove("open");
+    }
+
+    function handleMsgKey(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        submitMessage();
+      }
+    }
+
+    function submitMessage() {
+      const input = document.getElementById("threadInput");
+      const text = input.value.trim();
+      if (!text) return;
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      if (!a.thread) a.thread = [];
+      a.thread.push({
+        kind: "message",
+        from: "owner",
+        body: text,
+        time: "Just now",
+        readAt: null
+      });
+      input.value = "";
+      renderMessageThread();
+      const body = document.getElementById("threadBody");
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function renderMessageThread() {
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      document.getElementById("msgDrawerTitle").textContent = `Direct Thread — ${a.name}`;
+      const body = document.getElementById("threadBody");
+      const thread = a.thread || [];
+      if (thread.length === 0) {
+        body.innerHTML = '<div style="text-align:center; padding: 40px 20px; color: var(--zk-muted); font-size: 13px;">No messages sent yet. Use the box below to write a steering message to this agent.</div>';
+        return;
+      }
+      body.innerHTML = thread.map(item => {
+        if (item.kind === "question") {
+          return `
+            <div class="msg-row escalation">
+              <div class="msg-bubble">
+                <div class="escalation-tag">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                  <span>Escalation · Waiting on your decision</span>
+                </div>
+                <div style="font-weight: 700; font-size: 13px; margin-bottom: 4px;">Target: ${item.target}</div>
+                <div style="line-height: 1.5;">${item.body}</div>
+              </div>
+              <div class="msg-meta">${item.time} · Escalated by ${a.name}</div>
+            </div>
+          `;
+        } else if (item.from === "owner") {
+          return `
+            <div class="msg-row user">
+              <div class="msg-bubble">${item.body}</div>
+              <div class="msg-meta">${item.time} · Sent by You ${item.readAt ? '· Read' : '· Delivered'}</div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="msg-row agent">
+              <div class="msg-bubble">${item.body}</div>
+              <div class="msg-meta">${item.time} · ${a.name}</div>
+            </div>
+          `;
+        }
+      }).join("");
     }
 
     function toggleNote(idx) {
