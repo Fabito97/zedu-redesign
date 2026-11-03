@@ -1344,7 +1344,7 @@
   </main>
 
   <!-- SLIDEOVER AGENT ACTIVITY & NOTES DRAWER -->
-  <div class="drawer-backdrop" id="backdrop" onclick="closeDrawer()"></div>
+  <div class="drawer-backdrop" id="backdrop" onclick="closeAllDrawers()"></div>
   <aside class="history-drawer" id="drawer">
     <div class="drawer-header">
       <div class="drawer-title" id="drawerTitle">Agent Activity — Zedu Solver 1</div>
@@ -1377,7 +1377,7 @@
     <!-- STICKY INPUT FOOTER (MATCHING SENDMESSAGEFORM) -->
     <div class="thread-footer">
       <div class="thread-input-box">
-        <textarea class="thread-textarea" id="threadInput" placeholder="Write a message..." rows="2" onkeydown="handleMsgKey(event)"></textarea>
+        <textarea class="thread-textarea" id="threadInput" placeholder="Write a message to this agent..." rows="2" onkeydown="handleMsgKey(event)"></textarea>
         <button class="btn-send-thread" onclick="submitMessage()">
           <span>Send</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
@@ -1734,9 +1734,15 @@
       setTimeout(() => document.getElementById("threadInput").focus(), 150);
     }
 
-    function closeMessageDrawer() {
+    function closeAllDrawers() {
       document.getElementById("backdrop").classList.remove("open");
-      document.getElementById("msgDrawer").classList.remove("open");
+      document.getElementById("drawer").classList.remove("open");
+      const msgDrawer = document.getElementById("msgDrawer");
+      if (msgDrawer) msgDrawer.classList.remove("open");
+    }
+
+    function closeMessageDrawer() {
+      closeAllDrawers();
     }
 
     function handleMsgKey(e) {
@@ -1916,9 +1922,15 @@
     }
 
     function closeDrawer() {
-      document.getElementById("backdrop").classList.remove("open");
-      document.getElementById("drawer").classList.remove("open");
+      closeAllDrawers();
     }
+
+    // Close drawers on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeAllDrawers();
+      }
+    });
 
     function toggleTheme() {
       const html = document.documentElement;
