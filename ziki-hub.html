@@ -892,6 +892,27 @@
       font-size: 13px;
       line-height: 1.55;
       color: var(--zk-text);
+      transition: all 0.2s ease;
+    }
+    .note-body.clamped {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .note-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--zk-accent);
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      margin-top: 2px;
+      text-align: left;
+    }
+    .note-toggle-btn:hover {
+      text-decoration: underline;
     }
 
     /* AUDIT LOG ROW (MATCHING COMPONENTS/AUDIT-LOG.TSX) */
@@ -1476,6 +1497,14 @@
       renderDrawerContent();
     }
 
+    function toggleNote(idx) {
+      const body = document.getElementById("note-body-" + idx);
+      const btn = document.getElementById("note-btn-" + idx);
+      if (!body || !btn) return;
+      const isClamped = body.classList.toggle("clamped");
+      btn.textContent = isClamped ? "See more" : "See less";
+    }
+
     function toggleAuditPayload(id) {
       const el = document.getElementById("payload-" + id);
       const btn = document.getElementById("btn-payload-" + id);
@@ -1527,13 +1556,14 @@
           return;
         }
         const visible = showAllItems ? items : items.slice(0, 2);
-        let html = visible.map(note => `
+        let html = visible.map((note, idx) => `
           <div class="note-card">
             <div class="note-card-top">
               <span class="note-scope-badge">Project: ${note.project}</span>
               <span class="history-time">${note.time}</span>
             </div>
-            <div class="note-body">${note.body}</div>
+            <div class="note-body clamped" id="note-body-${idx}">${note.body}</div>
+            <button type="button" class="note-toggle-btn" id="note-btn-${idx}" onclick="toggleNote(${idx})">See more</button>
           </div>
         `).join("");
         if (items.length > 2) {
