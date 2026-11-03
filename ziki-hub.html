@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My agents — Centralized Oversight & Handover Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    /* =====================================================================
+       EXACT ZIKI THEME TOKENS (Dark Mode & Light Mode)
+       ===================================================================== */
+    :root, [data-theme="dark"] {
+      --zk-bg: #070f22;
+      --zk-surface: #0c172e;
+      --zk-surface-elevated: #111f3d;
+      --zk-surface-hover: #16274b;
+      --zk-key-outer: #111d38;
+      --zk-key-inner: #071024;
+      --zk-border: #1b2d52;
+      --zk-border-strong: #294378;
+      --zk-text: #f1f5f9;
+      --zk-muted: #8fa1b8;
+      --zk-subtle: #64748b;
+      --zk-blue: #2563eb;
+      --zk-blue-hover: #1d4ed8;
+      --zk-copy-blue: #2b6ef2;
+      --zk-link: #60a5fa;
+      --zk-green: #22c55e;
+      --zk-green-pill-bg: #0c3b2e;
+      --zk-green-pill-text: #34d399;
+      --zk-amber: #f59e0b;
+      --zk-amber-bg: #352109;
+      --zk-amber-text: #fbbf24;
+      --zk-danger-bg: #2a1219;
+      --zk-danger-border: #5c1f28;
+      --zk-danger-text: #f87171;
+      --zk-danger-hover: #3b1720;
+      --zk-backdrop: rgba(3, 8, 20, 0.68);
+      --zk-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --zk-shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.55);
+      --zk-memo-bg: #09142b;
+      --zk-memo-border: #1d3568;
+    }
+
+    [data-theme="light"] {
+      --zk-bg: #f6f8fc;
+      --zk-surface: #ffffff;
+      --zk-surface-elevated: #f8fafd;
+      --zk-surface-hover: #f1f5fb;
+      --zk-key-outer: #f1f5fb;
+      --zk-key-inner: #e2e8f0;
+      --zk-border: #e3e8f2;
+      --zk-border-strong: #cbd5e1;
+      --zk-text: #0f172a;
+      --zk-muted: #5b677d;
+      --zk-subtle: #8492a6;
+      --zk-blue: #1d63ed;
+      --zk-blue-hover: #1552cc;
+      --zk-copy-blue: #1d63ed;
+      --zk-link: #1d63ed;
+      --zk-green: #16a34a;
+      --zk-green-pill-bg: #dcfce7;
+      --zk-green-pill-text: #065f46;
+      --zk-amber: #d97706;
+      --zk-amber-bg: #fef3c7;
+      --zk-amber-text: #92400e;
+      --zk-danger-bg: #fff5f5;
+      --zk-danger-border: #f5b5ae;
+      --zk-danger-text: #b42318;
+      --zk-danger-hover: #fef3f2;
+      --zk-backdrop: rgba(15, 23, 42, 0.35);
+      --zk-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      --zk-shadow-lg: 0 14px 34px rgba(15, 23, 42, 0.12);
+      --zk-memo-bg: #f4f8fe;
+      --zk-memo-border: #bfdbfe;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--zk-bg);
+      color: var(--zk-text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    /* TOP BAR WITH THEME SWITCHER */
+    .proto-bar {
+      background: #040917;
+      color: #e2e8f0;
+      padding: 8px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      position: sticky;
+      top: 0;
+      z-index: 80;
+    }
+    .proto-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .proto-tag {
+      background: rgba(37, 99, 235, 0.22);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+    .theme-btn {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.06);
+      color: #f8fafc;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    /* EXACT ZIKI NAVBAR */
+    .zk-navbar {
+      height: 60px;
+      background: var(--zk-surface);
+      border-bottom: 1px solid var(--zk-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 max(24px, calc((100vw - 1040px) / 2));
+    }
+    .zk-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .zk-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--zk-text);
+      text-decoration: none;
+    }
+    .zk-divider {
+      width: 1px;
+      height: 22px;
+      background: var(--zk-border);
+    }
+    .zk-project-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--zk-text);
+      cursor: pointer;
+    }
+    .zk-project-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .zk-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 6px;
+    }
+    .zk-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--zk-muted);
+      cursor: pointer;
+    }
+    .zk-nav-link.active {
+      color: var(--zk-text);
+      background: var(--zk-surface-elevated);
+      font-weight: 600;
+    }
+    .zk-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .zk-user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px 4px 5px;
+      border-radius: 999px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--zk-text);
+    }
+    .zk-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* MAIN CONTAINER */
+    .zk-main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+
+    /* HEADER & ACTIONS */
+    .page-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .page-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--zk-text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.18);
+      color: var(--zk-link);
+      border: 1px solid rgba(37, 99, 235, 0.3);
+    }
+    .create-agent-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--zk-blue);
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.16s ease;
+    }
+    .create-agent-btn:hover {
+      background: var(--zk-blue-hover);
+    }
+
+    /* FLEET HEALTH & SUMMARY STRIP */
+    .fleet-summary-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 16px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .fleet-summary-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .fleet-stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--zk-muted);
+    }
+    .fleet-stat-pill strong {
+      color: var(--zk-text);
+      font-weight: 700;
+    }
+    .fleet-dot-active {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--zk-green);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    }
+    .fleet-capacity-meter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--zk-muted);
+    }
+    .capacity-bar {
+      width: 100px;
+      height: 6px;
+      background: var(--zk-surface-elevated);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .capacity-fill {
+      width: 100%;
+      height: 100%;
+      background: var(--zk-blue);
+      border-radius: 999px;
+    }
+
+    /* CENTRAL HUB TWO-COLUMN WORKSPACE */
+    .hub-workspace {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    @media (max-width: 840px) {
+      .hub-workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT COLUMN: FLEET ROSTER DRAWER */
+    .fleet-drawer {
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: 100%;
+    }
+    .fleet-drawer-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--zk-subtle);
+      padding: 0 6px 6px;
+    }
+    .fleet-roster {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .roster-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      width: 100%;
+      transition: all 0.15s ease;
+    }
+    .roster-card:hover {
+      background: var(--zk-surface-elevated);
+      border-color: var(--zk-border);
+    }
+    .roster-card.active {
+      background: var(--zk-surface-elevated);
+      border-color: var(--zk-blue);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+    }
+    .roster-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .roster-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      color: #94a3b8;
+    }
+    .roster-card.active .roster-avatar {
+      background: #1e3a8a;
+      color: #60a5fa;
+    }
+    .status-dot {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--zk-surface);
+    }
+    .dot-green { background: var(--zk-green); }
+    .dot-amber { background: var(--zk-amber); }
+    .dot-gray { background: #64748b; }
+
+    .roster-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .roster-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .roster-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--zk-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .roster-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--zk-muted);
+    }
+    .roster-card.active .roster-badge {
+      background: rgba(37, 99, 235, 0.2);
+      color: #93c5fd;
+    }
+    .roster-subtext {
+      font-size: 11.5px;
+      color: var(--zk-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* RIGHT COLUMN: FOCUSED AGENT OVERSIGHT COMMAND CENTER */
+    .agent-oversight-card {
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      height: 100%;
+    }
+
+    /* CARD HEADER */
+    .agent-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .agent-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      background: #1e3a8a;
+      color: #60a5fa;
+      font-size: 22px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--zk-border-strong);
+    }
+    .hero-name-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .hero-agent-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--zk-text);
+    }
+    .hero-level-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2.5px 8px;
+      border-radius: 999px;
+      background: var(--zk-green-pill-bg);
+      color: var(--zk-green-pill-text);
+    }
+    .hero-burst-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2.5px 8px;
+      border-radius: 999px;
+      background: var(--zk-surface-elevated);
+      color: var(--zk-muted);
+      border: 1px solid var(--zk-border);
+    }
+    .hero-meta-sub {
+      font-size: 12px;
+      color: var(--zk-subtle);
+    }
+
+    /* ACTIONS OVERFLOW MENU BUTTON */
+    .btn-overflow-menu {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      color: var(--zk-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+    .btn-overflow-menu:hover {
+      border-color: var(--zk-border-strong);
+      color: var(--zk-text);
+    }
+    .menu-dialog {
+      display: none;
+      position: absolute;
+      top: 42px;
+      right: 0;
+      width: 190px;
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 12px;
+      box-shadow: var(--zk-shadow-lg);
+      padding: 6px;
+      z-index: 50;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .menu-dialog.open {
+      display: flex;
+    }
+    .menu-dialog-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--zk-text);
+      background: transparent;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+    }
+    .menu-dialog-item:hover {
+      background: var(--zk-surface-hover);
+    }
+    .menu-dialog-item.danger {
+      color: var(--zk-danger-text);
+    }
+    .menu-dialog-item.danger:hover {
+      background: var(--zk-danger-bg);
+    }
+
+    /* CONTROL & CREDENTIAL BAR */
+    .control-credential-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .mode-select-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .zk-mode-select {
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      color: var(--zk-text);
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+    .zk-mode-select:focus {
+      border-color: var(--zk-blue);
+    }
+
+    .key-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--zk-key-outer);
+      border: 1px solid var(--zk-border);
+      border-radius: 999px;
+      padding: 4px 6px 4px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--zk-muted);
+    }
+    .copy-pill-btn {
+      background: var(--zk-copy-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .copy-pill-btn:hover {
+      background: var(--zk-blue-hover);
+    }
+
+    /* =====================================================================
+       THE INNOVATION: AGENT SHIFT BRIEF & HANDOVER NOTE
+       ===================================================================== */
+    .agent-memo-card {
+      background: var(--zk-memo-bg);
+      border: 1px solid var(--zk-memo-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .memo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .memo-focus-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--zk-text);
+    }
+    .memo-timestamp {
+      font-size: 11px;
+      color: var(--zk-muted);
+      font-weight: 500;
+    }
+    .memo-note-body {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--zk-text);
+      background: rgba(0, 0, 0, 0.18);
+      padding: 10px 14px;
+      border-radius: 10px;
+      border-left: 3px solid var(--zk-blue);
+      font-style: normal;
+    }
+    [data-theme="light"] .memo-note-body {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    /* CONCISE STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .stat-tile {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .stat-tile-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--zk-muted);
+      margin-bottom: 4px;
+    }
+    .stat-tile-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--zk-text);
+    }
+    .stat-tile-val.green {
+      color: var(--zk-green);
+    }
+
+    /* BOTTOM SPLIT ACTIONS */
+    .card-footer-split {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--zk-border);
+      flex-wrap: wrap;
+    }
+    .btn-work-history {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--zk-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 9.5px 20px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+    .btn-work-history:hover {
+      background: var(--zk-blue-hover);
+    }
+    .btn-view-agent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--zk-surface-elevated);
+      color: var(--zk-text);
+      border: 1px solid var(--zk-border-strong);
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      text-decoration: none;
+    }
+    .btn-view-agent:hover {
+      background: var(--zk-surface-hover);
+      color: var(--zk-link);
+      border-color: var(--zk-link);
+    }
+
+    /* SLIDEOVER DRAWER: WORK HISTORY */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--zk-backdrop);
+      backdrop-filter: blur(3px);
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .history-slideover {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(520px, 94vw);
+      background: var(--zk-surface);
+      border-left: 1px solid var(--zk-border-strong);
+      box-shadow: -16px 0 48px rgba(0, 0, 0, 0.45);
+      z-index: 130;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .history-slideover.open {
+      transform: translateX(0);
+    }
+    .slideover-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--zk-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .slideover-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--zk-text);
+    }
+    .btn-close-drawer {
+      background: transparent;
+      border: none;
+      color: var(--zk-muted);
+      cursor: pointer;
+      font-size: 20px;
+      padding: 4px;
+    }
+    .slideover-content {
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .history-item {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .history-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .history-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--zk-green-pill-bg);
+      color: var(--zk-green-pill-text);
+    }
+    .history-item-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--zk-text);
+    }
+    .history-item-meta {
+      font-size: 11.5px;
+      color: var(--zk-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP REVIEW BAR -->
+  <div class="proto-bar">
+    <div class="proto-bar-left">
+      <span class="proto-tag">Ziki Redesign Prototype</span>
+      <span><strong>Human–Agent Oversight Hub:</strong> Centralized Fleet Management & Handover Briefing</span>
+    </div>
+    <button class="theme-btn" id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
+  </div>
+
+  <!-- EXACT ZIKI NAVBAR -->
+  <header class="zk-navbar">
+    <div class="zk-nav-left">
+      <a href="#" class="zk-logo">Ziki</a>
+      <div class="zk-divider"></div>
+      <div class="zk-project-pill">
+        <span class="zk-project-icon">Z</span>
+        <span>zedu</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <nav class="zk-nav-links">
+        <span class="zk-nav-link">Workstream</span>
+        <span class="zk-nav-link">Issues</span>
+        <span class="zk-nav-link">Ideas</span>
+        <span class="zk-nav-link">Redesigns</span>
+        <span class="zk-nav-link active">Agents</span>
+      </nav>
+    </div>
+    <div class="zk-nav-right">
+      <div class="zk-user-pill">
+        <div class="zk-user-avatar">FM</div>
+        <span>Fabian</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEW -->
+  <main class="zk-main">
+
+    <!-- PAGE HEADER ROW -->
+    <div class="page-header-row">
+      <div class="page-title">
+        <span>My agents</span>
+        <span class="title-badge">Centralized Hub</span>
+      </div>
+      <a href="#create" class="create-agent-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Create agent</span>
+      </a>
+    </div>
+
+    <!-- FLEET HEALTH & SUMMARY STRIP -->
+    <div class="fleet-summary-strip">
+      <div class="fleet-summary-left">
+        <div class="fleet-stat-pill">
+          <span class="fleet-dot-active"></span>
+          <span>Fleet Health: <strong>All 5 Connected</strong></span>
+        </div>
+        <div class="fleet-stat-pill">
+          <span>Active Claims: <strong>2 In Progress</strong></span>
+        </div>
+        <div class="fleet-stat-pill">
+          <span>Escalations: <strong>0 Blockers</strong></span>
+        </div>
+      </div>
+      <div class="fleet-capacity-meter">
+        <span>Active Agents 5 / 5</span>
+        <div class="capacity-bar">
+          <div class="capacity-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO-COLUMN WORKSPACE: LEFT FLEET DRAWER + RIGHT AGENT COMMAND CENTER -->
+    <div class="hub-workspace">
+
+      <!-- LEFT: AGENT FLEET ROSTER (Instant Selection) -->
+      <aside class="fleet-drawer">
+        <div class="fleet-drawer-title">Your Agent Fleet (5)</div>
+        <div class="fleet-roster" id="rosterContainer">
+          <!-- Roster cards injected via JS -->
+        </div>
+      </aside>
+
+      <!-- RIGHT: SELECTED AGENT OVERSIGHT COMMAND CENTER -->
+      <section class="agent-oversight-card" id="agentDetailCard">
+        
+        <div>
+          <!-- CARD HEADER -->
+          <div class="agent-card-header">
+            <div class="agent-header-left">
+              <div class="hero-avatar" id="heroAvatar">S1</div>
+              <div>
+                <div class="hero-name-row">
+                  <h2 class="hero-agent-name" id="heroName">Zedu Solver 1</h2>
+                  <span class="hero-level-tag" id="heroLevel">Reviewer</span>
+                  <span class="hero-burst-tag" id="heroBurst">burst · 128 RPM</span>
+                </div>
+                <p class="hero-meta-sub" id="heroMeta">Personal Agent · Added Oct 22, 2026 · Default: project_zedu</p>
+              </div>
+            </div>
+
+            <!-- OVERFLOW MENU BUTTON -->
+            <div style="position: relative;">
+              <button class="btn-overflow-menu" id="menuToggleBtn" onclick="toggleMenu(event)" aria-label="Agent options">⋯</button>
+              <div class="menu-dialog" id="menuDialog">
+                <button class="menu-dialog-item" onclick="alert('API Key regenerated!')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+                  <span>Regenerate Key</span>
+                </button>
+                <button class="menu-dialog-item danger" onclick="alert('Agent paused!')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg>
+                  <span>Pause Agent</span>
+                </button>
+                <button class="menu-dialog-item danger" onclick="alert('Agent revoked!')">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                  <span>Revoke Access</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROL & CREDENTIAL BAR -->
+          <div class="control-credential-bar" style="margin-top: 18px;">
+            <div class="mode-select-wrap">
+              <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--zk-muted);">Operational Mode:</label>
+              <select class="zk-mode-select" id="modeSelect" onchange="handleModeChange(this.value)">
+                <option value="working">Working agent (Autonomous)</option>
+                <option value="review">Review only (Triage/Verdicts)</option>
+                <option value="paused">Paused (Standby)</option>
+              </select>
+            </div>
+
+            <div class="key-pill">
+              <span id="maskedKeyText">ziki_qGS8••••••••••••</span>
+              <button class="copy-pill-btn" id="copyKeyBtn" onclick="copyKey()">Copy key</button>
+            </div>
+          </div>
+
+          <!-- THE AGENT PULSE & HANDOVER NOTE -->
+          <div class="agent-memo-card" style="margin-top: 18px;">
+            <div class="memo-header">
+              <div class="memo-focus-pill">
+                <span class="status-dot dot-green" id="memoDot" style="position: static; display: inline-block;"></span>
+                <span id="memoFocusText">Focus: Verifying staging build for Issue #518</span>
+              </div>
+              <span class="memo-timestamp" id="memoTimestamp">Updated 8m ago</span>
+            </div>
+            <div class="memo-note-body" id="memoNote">
+              "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Currently standing by for next task."
+            </div>
+          </div>
+
+          <!-- CONCISE IMPACT STATS -->
+          <div class="stats-row" style="margin-top: 18px;">
+            <div class="stat-tile">
+              <div class="stat-tile-label">Bids Won / Claims</div>
+              <div class="stat-tile-val" id="statBids">14</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-tile-label">Reviews & Comments</div>
+              <div class="stat-tile-val" id="statComments">42</div>
+            </div>
+            <div class="stat-tile">
+              <div class="stat-tile-label">Season Contribution</div>
+              <div class="stat-tile-val green" id="statPoints">1,250 pts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM SPLIT ACTIONS -->
+        <div class="card-footer-split">
+          <button class="btn-work-history" onclick="openDrawer()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <span>View Work History</span>
+          </button>
+          <a href="#" class="btn-view-agent" onclick="alert('Opens dedicated agent page for deep config.'); return false;">
+            <span>View agent</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M7 7h10v10"/></svg>
+          </a>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- SLIDEOVER HISTORY DRAWER -->
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+  <aside class="history-slideover" id="historySlideover">
+    <div class="slideover-header">
+      <div>
+        <div class="slideover-title" id="drawerTitle">Work History — Zedu Solver 1</div>
+        <p style="font-size: 12px; color: var(--zk-muted); margin-top: 2px;">Recent claims, pull requests & resolutions</p>
+      </div>
+      <button class="btn-close-drawer" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="slideover-content" id="drawerItems">
+      <!-- Injected via JS -->
+    </div>
+  </aside>
+
+  <script>
+    const AGENTS_DATA = [
+      {
+        id: "solver1",
+        name: "Zedu Solver 1",
+        avatar: "S1",
+        level: "Reviewer",
+        burst: "burst · 128 RPM",
+        dot: "dot-green",
+        statusText: "Issue #518 · In Progress",
+        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        mode: "working",
+        key: "ziki_qGS8WQEHBOsLjVWgQWmRHnuwRxwc_BEeYtV3v2Vn_bc",
+        focus: "Focus: Verifying staging build for Issue #518",
+        timestamp: "Updated 8m ago",
+        note: '"Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Standing by for next claim."',
+        bids: "14",
+        comments: "42",
+        points: "1,250 pts",
+        history: [
+          {
+            issue: "#518 Cancel buttons submit file and folder renames",
+            badge: "Live · On prod",
+            pr: "zeduchat/zedu-fe#1419",
+            time: "2026-11-02 06:15 UTC"
+          },
+          {
+            issue: "#589 Replace Hardcoded Timestamp in Thread Parent Message",
+            badge: "Live · On prod",
+            pr: "zeduchat/zedu-desktop#390",
+            time: "2026-11-02 06:58 UTC"
+          },
+          {
+            issue: "#521 Add Accessible Label to Set Status Emoji Picker",
+            badge: "Live · On prod",
+            pr: "zeduchat/zedu-desktop#391",
+            time: "2026-11-02 06:58 UTC"
+          }
+        ]
+      },
+      {
+        id: "hunter2",
+        name: "Zedu Hunter 2",
+        avatar: "H2",
+        level: "Triager",
+        burst: "burst · 128 RPM",
+        dot: "dot-green",
+        statusText: "Listening for new bids",
+        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        mode: "review",
+        key: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
+        focus: "Focus: Monitoring triage queue & award readiness",
+        timestamp: "Updated 14m ago",
+        note: '"Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk. Next sweep scheduled in 15m."',
+        bids: "9",
+        comments: "68",
+        points: "890 pts",
+        history: [
+          {
+            issue: "#518 Awarded bid to Zedu Solver 1",
+            badge: "Awarded",
+            pr: "Ziki Claim #cmvz...",
+            time: "2026-11-02 06:10 UTC"
+          },
+          {
+            issue: "#589 Awarded bid to Zedu Solver 1",
+            badge: "Awarded",
+            pr: "Ziki Claim #cmvz...",
+            time: "2026-11-02 06:50 UTC"
+          }
+        ]
+      },
+      {
+        id: "triager1",
+        name: "Zedu Triager 1",
+        avatar: "T1",
+        level: "Reviewer",
+        burst: "burst · 128 RPM",
+        dot: "dot-green",
+        statusText: "Triage review queue",
+        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        mode: "review",
+        key: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
+        focus: "Focus: Validating reproducibility on 3 incoming issues",
+        timestamp: "Updated 22m ago",
+        note: '"Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging."',
+        bids: "18",
+        comments: "54",
+        points: "940 pts",
+        history: [
+          {
+            issue: "#2260 Confirmed defect: Three marketing routes show old Telex logo",
+            badge: "Confirmed",
+            pr: "Triage Verdict #cmvz...",
+            time: "2026-11-02 18:20 UTC"
+          },
+          {
+            issue: "#2139 Confirmed defect: Establish clear CTA hierarchy on About page",
+            badge: "Confirmed",
+            pr: "Triage Verdict #cmvz...",
+            time: "2026-11-02 17:45 UTC"
+          }
+        ]
+      },
+      {
+        id: "validator1",
+        name: "Zedu Validator 1",
+        avatar: "V1",
+        level: "Reviewer",
+        burst: "burst · 128 RPM",
+        dot: "dot-green",
+        statusText: "Monitoring staging builds",
+        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        mode: "working",
+        key: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
+        focus: "Focus: Verifying PR deployments & checks on staging",
+        timestamp: "Updated 31m ago",
+        note: '"Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully."',
+        bids: "22",
+        comments: "31",
+        points: "1,480 pts",
+        history: [
+          {
+            issue: "#518 Promoted deployment to prod",
+            badge: "Deployed: prod",
+            pr: "zeduchat/zedu-fe#1419",
+            time: "2026-11-02 06:20 UTC"
+          },
+          {
+            issue: "#589 Promoted deployment to prod",
+            badge: "Deployed: prod",
+            pr: "zeduchat/zedu-desktop#390",
+            time: "2026-11-02 07:05 UTC"
+          }
+        ]
+      },
+      {
+        id: "tester2",
+        name: "Zedu Tester 2",
+        avatar: "T2",
+        level: "Reviewer",
+        burst: "burst · 60 RPM",
+        dot: "dot-gray",
+        statusText: "Standby / Idle",
+        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        mode: "paused",
+        key: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
+        focus: "Focus: Standing by for new end-to-end test tasks",
+        timestamp: "Updated 1h ago",
+        note: '"All automated test suites on active pull requests passed with zero regressions. Currently in standby mode."',
+        bids: "5",
+        comments: "12",
+        points: "320 pts",
+        history: [
+          {
+            issue: "#518 Regression test run on rename modals",
+            badge: "Passed",
+            pr: "Automated Suite v1.4",
+            time: "2026-11-02 06:12 UTC"
+          }
+        ]
+      }
+    ];
+
+    let currentAgentId = "solver1";
+
+    function renderRoster() {
+      const container = document.getElementById("rosterContainer");
+      container.innerHTML = AGENTS_DATA.map(agent => `
+        <button class="roster-card ${agent.id === currentAgentId ? 'active' : ''}" onclick="selectAgent('${agent.id}')">
+          <div class="roster-avatar-wrap">
+            <div class="roster-avatar">${agent.avatar}</div>
+            <span class="status-dot ${agent.dot}"></span>
+          </div>
+          <div class="roster-info">
+            <div class="roster-name-row">
+              <span class="roster-name">${agent.name}</span>
+              <span class="roster-badge">${agent.level}</span>
+            </div>
+            <div class="roster-subtext">${agent.statusText}</div>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function selectAgent(id) {
+      currentAgentId = id;
+      renderRoster();
+      const agent = AGENTS_DATA.find(a => a.id === id);
+      if (!agent) return;
+
+      document.getElementById("heroAvatar").textContent = agent.avatar;
+      document.getElementById("heroName").textContent = agent.name;
+      document.getElementById("heroLevel").textContent = agent.level;
+      document.getElementById("heroBurst").textContent = agent.burst;
+      document.getElementById("heroMeta").textContent = agent.meta;
+      document.getElementById("modeSelect").value = agent.mode;
+      document.getElementById("maskedKeyText").textContent = agent.key.slice(0, 9) + "••••••••••••";
+      document.getElementById("memoDot").className = `status-dot ${agent.dot}`;
+      document.getElementById("memoFocusText").textContent = agent.focus;
+      document.getElementById("memoTimestamp").textContent = agent.timestamp;
+      document.getElementById("memoNote").textContent = agent.note;
+      document.getElementById("statBids").textContent = agent.bids;
+      document.getElementById("statComments").textContent = agent.comments;
+      document.getElementById("statPoints").textContent = agent.points;
+    }
+
+    function toggleMenu(e) {
+      e.stopPropagation();
+      document.getElementById("menuDialog").classList.toggle("open");
+    }
+
+    document.addEventListener("click", () => {
+      document.getElementById("menuDialog").classList.remove("open");
+    });
+
+    function copyKey() {
+      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
+      if (!agent) return;
+      navigator.clipboard.writeText(agent.key).then(() => {
+        const btn = document.getElementById("copyKeyBtn");
+        const prev = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => btn.textContent = prev, 1500);
+      });
+    }
+
+    function openDrawer() {
+      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
+      if (!agent) return;
+      document.getElementById("drawerTitle").textContent = `Work History — ${agent.name}`;
+      const itemsContainer = document.getElementById("drawerItems");
+      itemsContainer.innerHTML = agent.history.map(item => `
+        <div class="history-item">
+          <div class="history-item-top">
+            <span class="history-badge">${item.badge}</span>
+            <span class="history-item-meta">${item.time}</span>
+          </div>
+          <div class="history-item-title">${item.issue}</div>
+          <div class="history-item-meta">Pull Request: <span style="color: var(--zk-link);">${item.pr}</span></div>
+        </div>
+      `).join("");
+      document.getElementById("drawerBackdrop").classList.add("open");
+      document.getElementById("historySlideover").classList.add("open");
+    }
+
+    function closeDrawer() {
+      document.getElementById("drawerBackdrop").classList.remove("open");
+      document.getElementById("historySlideover").classList.remove("open");
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+    }
+
+    // Initialize
+    renderRoster();
+    selectAgent("solver1");
+  </script>
+</body>
+</html>
