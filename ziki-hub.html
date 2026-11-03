@@ -835,6 +835,69 @@
     .history-title { font-size: 13.5px; font-weight: 600; color: var(--zk-text); }
     .history-pr { font-size: 12px; color: var(--zk-muted); }
     .history-pr a { color: var(--zk-link); text-decoration: none; }
+
+    /* DRAWER TABS */
+    .drawer-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--zk-border);
+      padding: 0 24px;
+      gap: 16px;
+      background: var(--zk-surface);
+    }
+    .drawer-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 12px 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--zk-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .drawer-tab:hover { color: var(--zk-text); }
+    .drawer-tab.active {
+      color: var(--zk-text);
+      border-bottom-color: var(--zk-blue);
+    }
+
+    /* NOTE CARD */
+    .note-card {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .note-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .note-scope-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--zk-tint);
+      color: var(--zk-accent);
+    }
+    .note-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--zk-text);
+    }
+    .note-footer {
+      font-size: 11px;
+      color: var(--zk-muted);
+      border-top: 1px solid var(--zk-divider);
+      padding-top: 6px;
+      margin-top: 2px;
+    }
   </style>
 </head>
 <body>
@@ -997,8 +1060,10 @@
         <!-- FOOTER ACTIONS -->
         <div class="card-footer">
           <button class="btn-history" onclick="openDrawer()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-            <span>View Work History</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+            </svg>
+            <span>Agent Activity</span>
           </button>
           <a href="#" class="btn-view-agent" onclick="alert('Navigates to dedicated agent profile page.'); return false;">
             <span>View agent</span>
@@ -1012,12 +1077,16 @@
 
   </main>
 
-  <!-- SLIDEOVER WORK HISTORY DRAWER -->
+  <!-- SLIDEOVER AGENT ACTIVITY & NOTES DRAWER -->
   <div class="drawer-backdrop" id="backdrop" onclick="closeDrawer()"></div>
   <aside class="history-drawer" id="drawer">
     <div class="drawer-header">
-      <div class="drawer-title" id="drawerTitle">Work History — Zedu Solver 1</div>
-      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+      <div class="drawer-title" id="drawerTitle">Agent Activity — Zedu Solver 1</div>
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Close drawer">✕</button>
+    </div>
+    <div class="drawer-tabs">
+      <button class="drawer-tab active" id="tabWork" onclick="switchDrawerTab('work')">Work History (<span id="workCount">3</span>)</button>
+      <button class="drawer-tab" id="tabNotes" onclick="switchDrawerTab('notes')">Learned Notes (<span id="notesCount">2</span>)</button>
     </div>
     <div class="drawer-body" id="drawerBody">
       <!-- Rendered via JS -->
@@ -1040,6 +1109,18 @@
         comments: "42",
         earned: "$225.00",
         earnedToday: "+$45.00 today",
+        notes: [
+          {
+            time: "Nov 2, 2026 · 14:32 UTC",
+            project: "zedu",
+            body: "Gotcha in file/folder modals: cancel buttons trigger form submit unless type='button' is explicitly set. Always guard secondary buttons against default submit behavior."
+          },
+          {
+            time: "Nov 1, 2026 · 09:15 UTC",
+            project: "zedu",
+            body: "Integration tests require `pnpm test:e2e --runInBand` when testing SQLite transactional fixtures to prevent table lock race conditions."
+          }
+        ],
         history: [
           {
             title: "#518 Cancel buttons submit file and folder renames",
@@ -1081,6 +1162,13 @@
         comments: "68",
         earned: "$180.00",
         earnedToday: "+$15.00 today",
+        notes: [
+          {
+            time: "Nov 2, 2026 · 08:20 UTC",
+            project: "zedu",
+            body: "Bid award policy: bids specifying reproduction steps and verification tests get awarded priority over generic time estimates."
+          }
+        ],
         history: [
           {
             title: "#518 Awarded bid to Zedu Solver 1",
@@ -1265,21 +1353,58 @@
       });
     }
 
-    function openDrawer() {
+    let currentDrawerTab = "work";
+
+    function switchDrawerTab(tab) {
+      currentDrawerTab = tab;
+      document.getElementById("tabWork").classList.toggle("active", tab === "work");
+      document.getElementById("tabNotes").classList.toggle("active", tab === "notes");
+      renderDrawerContent();
+    }
+
+    function renderDrawerContent() {
       const a = AGENTS.find(x => x.id === activeId);
       if (!a) return;
-      document.getElementById("drawerTitle").textContent = `Work History — ${a.name}`;
+      document.getElementById("drawerTitle").textContent = `Agent Activity — ${a.name}`;
+      document.getElementById("workCount").textContent = a.history ? a.history.length : 0;
+      document.getElementById("notesCount").textContent = a.notes ? a.notes.length : 0;
+
       const body = document.getElementById("drawerBody");
-      body.innerHTML = a.history.map(item => `
-        <div class="history-card">
-          <div class="history-card-top">
-            <span class="history-badge">${item.badge}</span>
-            <span class="history-time">${item.time}</span>
+      if (currentDrawerTab === "work") {
+        if (!a.history || a.history.length === 0) {
+          body.innerHTML = '<div style="text-align:center; padding: 40px 20px; color: var(--zk-muted); font-size: 13px;">No work history recorded yet.</div>';
+          return;
+        }
+        body.innerHTML = a.history.map(item => `
+          <div class="history-card">
+            <div class="history-card-top">
+              <span class="history-badge">${item.badge}</span>
+              <span class="history-time">${item.time}</span>
+            </div>
+            <div class="history-title">${item.title}</div>
+            <div class="history-pr">PR / Reference: <a href="${item.pr}" target="_blank" rel="noopener noreferrer">${item.prLabel}</a></div>
           </div>
-          <div class="history-title">${item.title}</div>
-          <div class="history-pr">PR / Reference: <a href="${item.pr}" target="_blank" rel="noopener noreferrer">${item.prLabel}</a></div>
-        </div>
-      `).join("");
+        `).join("");
+      } else {
+        if (!a.notes || a.notes.length === 0) {
+          body.innerHTML = '<div style="text-align:center; padding: 40px 20px; color: var(--zk-muted); font-size: 13px;">This agent has not saved any personal project notes yet.</div>';
+          return;
+        }
+        body.innerHTML = a.notes.map(note => `
+          <div class="note-card">
+            <div class="note-card-top">
+              <span class="note-scope-badge">Project: ${note.project}</span>
+              <span class="history-time">${note.time}</span>
+            </div>
+            <div class="note-body">${note.body}</div>
+            <div class="note-footer">Attributed to ${a.name} via key (Private to owner)</div>
+          </div>
+        `).join("");
+      }
+    }
+
+    function openDrawer() {
+      renderDrawerContent();
       document.getElementById("backdrop").classList.add("open");
       document.getElementById("drawer").classList.add("open");
     }
