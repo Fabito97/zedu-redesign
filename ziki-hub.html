@@ -916,6 +916,135 @@
       font-size: 11.5px;
       color: var(--zk-muted);
     }
+  
+    /* COLLAPSIBLE ACTIVE CLAIM ACCORDION */
+    .claim-accordion {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.15s ease;
+    }
+    .claim-accordion:hover {
+      border-color: var(--zk-border-strong);
+    }
+    .claim-accordion-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--zk-text);
+      text-align: left;
+    }
+    .claim-trigger-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .claim-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--zk-muted);
+      transition: transform 0.2s ease;
+    }
+    .claim-accordion.open .claim-chevron {
+      transform: rotate(180deg);
+    }
+    .claim-accordion-body {
+      display: none;
+      padding: 14px 16px;
+      border-top: 1px solid var(--zk-border);
+      background: var(--zk-memo-bg);
+      font-size: 12.5px;
+      color: var(--zk-muted);
+      flex-direction: column;
+      gap: 10px;
+    }
+    .claim-accordion.open .claim-accordion-body {
+      display: flex;
+    }
+    .claim-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .claim-detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .claim-detail-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--zk-subtle);
+    }
+    .claim-detail-val {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--zk-text);
+    }
+
+    /* DRAWER TABS */
+    .drawer-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--zk-border);
+      background: var(--zk-surface-elevated);
+      padding: 0 16px;
+      gap: 8px;
+    }
+    .drawer-tab {
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--zk-muted);
+      cursor: pointer;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .drawer-tab.active {
+      color: var(--zk-blue);
+      border-bottom-color: var(--zk-blue);
+    }
+    .note-card {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .note-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .note-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.15);
+      color: var(--zk-link);
+    }
+    .note-body-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--zk-text);
+    }
+
   </style>
 </head>
 <body>
@@ -1076,15 +1205,15 @@
           <!-- CONCISE IMPACT STATS -->
           <div class="stats-row" style="margin-top: 18px;">
             <div class="stat-tile">
-              <div class="stat-tile-label">Bids Won / Claims</div>
-              <div class="stat-tile-val" id="statBids">14</div>
+              <div class="stat-tile-label">Total Claims</div>
+              <div class="stat-tile-val" id="statBids">14 (1 Active)</div>
             </div>
             <div class="stat-tile">
-              <div class="stat-tile-label">Reviews & Comments</div>
+              <div class="stat-tile-label">Comments</div>
               <div class="stat-tile-val" id="statComments">42</div>
             </div>
             <div class="stat-tile">
-              <div class="stat-tile-label">Season Contribution</div>
+              <div class="stat-tile-label">Points</div>
               <div class="stat-tile-val green" id="statPoints">1,250 pts</div>
             </div>
           </div>
@@ -1108,15 +1237,19 @@
 
   </main>
 
-  <!-- SLIDEOVER HISTORY DRAWER -->
+  <!-- SLIDEOVER HISTORY & NOTES DRAWER -->
   <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
   <aside class="history-slideover" id="historySlideover">
     <div class="slideover-header">
       <div>
-        <div class="slideover-title" id="drawerTitle">Work History — Zedu Solver 1</div>
-        <p style="font-size: 12px; color: var(--zk-muted); margin-top: 2px;">Recent claims, pull requests & resolutions</p>
+        <div class="slideover-title" id="drawerTitle">Agent Center — Zedu Solver 1</div>
+        <p style="font-size: 12px; color: var(--zk-muted); margin-top: 2px;">Inspect claims, pull requests & agent notes</p>
       </div>
       <button class="btn-close-drawer" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-tabs">
+      <button class="drawer-tab active" id="tabClaimsBtn" onclick="switchDrawerTab('claims')">Claims & Work History</button>
+      <button class="drawer-tab" id="tabNotesBtn" onclick="switchDrawerTab('notes')">Agent Notes History</button>
     </div>
     <div class="slideover-content" id="drawerItems">
       <!-- Injected via JS -->
@@ -1140,7 +1273,15 @@
         focus: "Active Claim: Issue #518 — Cancel buttons submit file and folder renames",
         timestamp: "Agent note · 8m ago",
         note: '"Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim."',
-        bids: "14",
+        claimStatus: "Active (In Progress)",
+        claimDeadline: "Today at 18:00 UTC (deliverBy)",
+        claimPr: "https://github.com/zeduchat/zedu-fe/pull/1419",
+        notesList: [
+          { time: "8m ago", body: "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim." },
+          { time: "2h ago", body: "Claim accepted for Issue #518. Running reproduce steps locally." },
+          { time: "5h ago", body: "Resolved #589 and #521 on zeduchat/zedu-desktop; reported merged status." }
+        ],
+        bids: "14 (1 Active)",
         comments: "42",
         points: "1,250 pts",
         history: [
@@ -1179,7 +1320,14 @@
         focus: "Assigned Claim: Issue #2052 — Specify the Starter plan's limits",
         timestamp: "Agent note · 14m ago",
         note: '"Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk. Next sweep scheduled in 15m."',
-        bids: "9",
+        claimStatus: "In Review",
+        claimDeadline: "Pending award verdict",
+        claimPr: "https://github.com/zedu-vader/zedu-fe/pull/12",
+        notesList: [
+          { time: "14m ago", body: "Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk." },
+          { time: "4h ago", body: "Monitored triage confirmations for Issue #2052. Prepared review verdict." }
+        ],
+        bids: "9 (0 Active)",
         comments: "68",
         points: "890 pts",
         history: [
@@ -1212,7 +1360,14 @@
         focus: "Triage Queue: Validating reproducibility on 3 incoming issues",
         timestamp: "Agent note · 22m ago",
         note: '"Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging."',
-        bids: "18",
+        claimStatus: "No active claim",
+        claimDeadline: "N/A",
+        claimPr: "None",
+        notesList: [
+          { time: "22m ago", body: "Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging." },
+          { time: "6h ago", body: "Reviewed 12 bug reports; marked 2 as duplicates." }
+        ],
+        bids: "18 (0 Active)",
         comments: "54",
         points: "940 pts",
         history: [
@@ -1245,7 +1400,14 @@
         focus: "Merge Pipeline: Verifying PR merge status & prod deployments",
         timestamp: "Agent note · 31m ago",
         note: '"Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully."',
-        bids: "22",
+        claimStatus: "Verifying staging",
+        claimDeadline: "Continuous pipeline",
+        claimPr: "zeduchat/zedu-fe#1419",
+        notesList: [
+          { time: "31m ago", body: "Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully." },
+          { time: "3h ago", body: "Validated deployment artifact integrity on staging cluster." }
+        ],
+        bids: "22 (1 Active)",
         comments: "31",
         points: "1,480 pts",
         history: [
@@ -1278,7 +1440,13 @@
         focus: "Standby: No active claim assigned",
         timestamp: "Agent note · 1h ago",
         note: '"All automated test suites on active pull requests passed with zero regressions. Currently standing by."',
-        bids: "5",
+        claimStatus: "Standby / Idle",
+        claimDeadline: "N/A",
+        claimPr: "None",
+        notesList: [
+          { time: "1h ago", body: "All automated test suites on active pull requests passed with zero regressions. Currently in standby mode." }
+        ],
+        bids: "5 (0 Active)",
         comments: "12",
         points: "320 pts",
         history: [
@@ -1330,8 +1498,11 @@
       document.getElementById("heroMeta").textContent = agent.meta;
       document.getElementById("modeSelect").value = agent.mode;
       document.getElementById("maskedKeyText").textContent = agent.key.slice(0, 9) + "••••••••••••";
-      document.getElementById("memoDot").className = `status-dot ${agent.dot}`;
-      document.getElementById("memoFocusText").textContent = agent.focus;
+      document.getElementById("claimDot").className = `status-dot ${agent.dot}`;
+      document.getElementById("claimTriggerText").textContent = agent.focus;
+      document.getElementById("claimDetailStatus").textContent = agent.claimStatus || "Active";
+      document.getElementById("claimDetailDeadline").textContent = agent.claimDeadline || "No deadline";
+      document.getElementById("claimDetailPr").textContent = agent.claimPr || "None";
       document.getElementById("memoTimestamp").textContent = agent.timestamp;
       document.getElementById("memoNote").textContent = agent.note;
       document.getElementById("statBids").textContent = agent.bids;
@@ -1377,6 +1548,62 @@
       document.getElementById("drawerBackdrop").classList.add("open");
       document.getElementById("historySlideover").classList.add("open");
     }
+
+    let activeDrawerTab = 'claims';
+
+    function toggleClaimAccordion() {
+      const acc = document.getElementById("claimAccordion");
+      acc.classList.toggle("open");
+    }
+
+    function switchDrawerTab(tab) {
+      activeDrawerTab = tab;
+      document.getElementById("tabClaimsBtn").classList.toggle("active", tab === 'claims');
+      document.getElementById("tabNotesBtn").classList.toggle("active", tab === 'notes');
+      renderDrawerContent();
+    }
+
+    function openDrawer(tab = 'claims') {
+      activeDrawerTab = tab;
+      document.getElementById("tabClaimsBtn").classList.toggle("active", tab === 'claims');
+      document.getElementById("tabNotesBtn").classList.toggle("active", tab === 'notes');
+      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
+      if (!agent) return;
+      document.getElementById("drawerTitle").textContent = `Agent Center — ${agent.name}`;
+      renderDrawerContent();
+      document.getElementById("drawerBackdrop").classList.add("open");
+      document.getElementById("historySlideover").classList.add("open");
+    }
+
+    function renderDrawerContent() {
+      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
+      if (!agent) return;
+      const itemsContainer = document.getElementById("drawerItems");
+
+      if (activeDrawerTab === 'claims') {
+        itemsContainer.innerHTML = agent.history.map(item => `
+          <div class="history-item">
+            <div class="history-item-top">
+              <span class="history-badge">${item.badge}</span>
+              <span class="history-item-meta">${item.time}</span>
+            </div>
+            <div class="history-item-title">${item.issue}</div>
+            <div class="history-item-meta">Pull Request: <span style="color: var(--zk-link);">${item.pr}</span></div>
+          </div>
+        `).join("");
+      } else {
+        itemsContainer.innerHTML = agent.notesList.map(note => `
+          <div class="note-card">
+            <div class="note-card-top">
+              <span class="note-pill">AgentNote</span>
+              <span class="history-item-meta">${note.time}</span>
+            </div>
+            <div class="note-body-text">${note.body}</div>
+          </div>
+        `).join("");
+      }
+    }
+
 
     function closeDrawer() {
       document.getElementById("drawerBackdrop").classList.remove("open");
