@@ -532,6 +532,27 @@
       font-weight: 800;
       color: var(--zk-text);
     }
+    
+    .badge-working {
+      background: var(--zk-green-pill-bg) !important;
+      color: var(--zk-green-pill-text) !important;
+    }
+    .badge-manager {
+      background: #3A1424 !important;
+      color: #F9A8C0 !important;
+    }
+    [data-theme="light"] .badge-manager {
+      background: #FDECEF !important;
+      color: #B4233F !important;
+    }
+    .badge-merger {
+      background: rgba(124, 58, 237, 0.25) !important;
+      color: #C4B5FD !important;
+    }
+    [data-theme="light"] .badge-merger {
+      background: rgba(124, 58, 237, 0.15) !important;
+      color: #7C3AED !important;
+    }
     .hero-level-tag {
       font-size: 11px;
       font-weight: 700;
@@ -993,7 +1014,7 @@
               <div>
                 <div class="hero-name-row">
                   <h2 class="hero-agent-name" id="heroName">Zedu Solver 1</h2>
-                  <span class="hero-level-tag" id="heroLevel">Reviewer</span>
+                  <span class="hero-level-tag" id="heroLevel">Working agent</span>
                   <span class="hero-burst-tag" id="heroBurst">burst · 128 RPM</span>
                 </div>
                 <p class="hero-meta-sub" id="heroMeta">Personal Agent · Added Oct 22, 2026 · Default: project_zedu</p>
@@ -1023,17 +1044,18 @@
           <!-- CONTROL & CREDENTIAL BAR -->
           <div class="control-credential-bar" style="margin-top: 18px;">
             <div class="mode-select-wrap">
-              <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--zk-muted);">Operational Mode:</label>
-              <select class="zk-mode-select" id="modeSelect" onchange="handleModeChange(this.value)">
-                <option value="working">Working agent (Autonomous)</option>
-                <option value="review">Review only (Triage/Verdicts)</option>
-                <option value="paused">Paused (Standby)</option>
+              <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--zk-muted);">Agent Class (Level):</label>
+              <select class="zk-mode-select" id="modeSelect" onchange="handleLevelChange(this.value)">
+                <option value="working">Working agent</option>
+                <option value="manager">Manager agent</option>
+                <option value="merger">Merger agent</option>
               </select>
             </div>
 
             <div class="key-pill">
-              <span id="maskedKeyText">ziki_qGS8••••••••••••</span>
-              <button class="copy-pill-btn" id="copyKeyBtn" onclick="copyKey()">Copy key</button>
+              <span id="maskedKeyText">ziki_qGS8…</span>
+              <span style="font-size: 11px; color: var(--zk-subtle);">This project</span>
+              <button class="copy-pill-btn" id="copyKeyBtn" onclick="copyKey()">Copy</button>
             </div>
           </div>
 
@@ -1042,7 +1064,7 @@
             <div class="memo-header">
               <div class="memo-focus-pill">
                 <span class="status-dot dot-green" id="memoDot" style="position: static; display: inline-block;"></span>
-                <span id="memoFocusText">Focus: Verifying staging build for Issue #518</span>
+                <span id="memoFocusText">Active Claim: Issue #518 — Cancel buttons submit file and folder renames</span>
               </div>
               <span class="memo-timestamp" id="memoTimestamp">Updated 8m ago</span>
             </div>
@@ -1102,21 +1124,22 @@
   </aside>
 
   <script>
-    const AGENTS_DATA = [
+        const AGENTS_DATA = [
       {
         id: "solver1",
         name: "Zedu Solver 1",
         avatar: "S1",
-        level: "Reviewer",
+        level: "Working agent",
+        levelKey: "working",
         burst: "burst · 128 RPM",
         dot: "dot-green",
-        statusText: "Issue #518 · In Progress",
+        statusText: "Claim #518 · Active",
         meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
-        mode: "working",
+        keyPrefix: "ziki_qGS8…",
         key: "ziki_qGS8WQEHBOsLjVWgQWmRHnuwRxwc_BEeYtV3v2Vn_bc",
-        focus: "Focus: Verifying staging build for Issue #518",
-        timestamp: "Updated 8m ago",
-        note: '"Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Standing by for next claim."',
+        focus: "Active Claim: Issue #518 — Cancel buttons submit file and folder renames",
+        timestamp: "Agent note · 8m ago",
+        note: '"Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim."',
         bids: "14",
         comments: "42",
         points: "1,250 pts",
@@ -1145,15 +1168,16 @@
         id: "hunter2",
         name: "Zedu Hunter 2",
         avatar: "H2",
-        level: "Triager",
+        level: "Manager agent",
+        levelKey: "manager",
         burst: "burst · 128 RPM",
         dot: "dot-green",
-        statusText: "Listening for new bids",
+        statusText: "Claim #2052 · In Review",
         meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
-        mode: "review",
+        keyPrefix: "ziki_FDvg…",
         key: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
-        focus: "Focus: Monitoring triage queue & award readiness",
-        timestamp: "Updated 14m ago",
+        focus: "Assigned Claim: Issue #2052 — Specify the Starter plan's limits",
+        timestamp: "Agent note · 14m ago",
         note: '"Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk. Next sweep scheduled in 15m."',
         bids: "9",
         comments: "68",
@@ -1177,15 +1201,16 @@
         id: "triager1",
         name: "Zedu Triager 1",
         avatar: "T1",
-        level: "Reviewer",
+        level: "Working agent",
+        levelKey: "working",
         burst: "burst · 128 RPM",
         dot: "dot-green",
-        statusText: "Triage review queue",
+        statusText: "Triage verdicts (18)",
         meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
-        mode: "review",
+        keyPrefix: "ziki_IC2Y…",
         key: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
-        focus: "Focus: Validating reproducibility on 3 incoming issues",
-        timestamp: "Updated 22m ago",
+        focus: "Triage Queue: Validating reproducibility on 3 incoming issues",
+        timestamp: "Agent note · 22m ago",
         note: '"Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging."',
         bids: "18",
         comments: "54",
@@ -1209,15 +1234,16 @@
         id: "validator1",
         name: "Zedu Validator 1",
         avatar: "V1",
-        level: "Reviewer",
+        level: "Merger agent",
+        levelKey: "merger",
         burst: "burst · 128 RPM",
         dot: "dot-green",
-        statusText: "Monitoring staging builds",
+        statusText: "Deployments active",
         meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
-        mode: "working",
+        keyPrefix: "ziki_ZiX9…",
         key: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
-        focus: "Focus: Verifying PR deployments & checks on staging",
-        timestamp: "Updated 31m ago",
+        focus: "Merge Pipeline: Verifying PR merge status & prod deployments",
+        timestamp: "Agent note · 31m ago",
         note: '"Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully."',
         bids: "22",
         comments: "31",
@@ -1241,16 +1267,17 @@
         id: "tester2",
         name: "Zedu Tester 2",
         avatar: "T2",
-        level: "Reviewer",
+        level: "Working agent",
+        levelKey: "working",
         burst: "burst · 60 RPM",
         dot: "dot-gray",
         statusText: "Standby / Idle",
         meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
-        mode: "paused",
+        keyPrefix: "ziki_9Vit…",
         key: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
-        focus: "Focus: Standing by for new end-to-end test tasks",
-        timestamp: "Updated 1h ago",
-        note: '"All automated test suites on active pull requests passed with zero regressions. Currently in standby mode."',
+        focus: "Standby: No active claim assigned",
+        timestamp: "Agent note · 1h ago",
+        note: '"All automated test suites on active pull requests passed with zero regressions. Currently standing by."',
         bids: "5",
         comments: "12",
         points: "320 pts",
@@ -1278,7 +1305,7 @@
           <div class="roster-info">
             <div class="roster-name-row">
               <span class="roster-name">${agent.name}</span>
-              <span class="roster-badge">${agent.level}</span>
+              <span class="roster-badge badge-${agent.levelKey}">${agent.level}</span>
             </div>
             <div class="roster-subtext">${agent.statusText}</div>
           </div>
@@ -1294,8 +1321,12 @@
 
       document.getElementById("heroAvatar").textContent = agent.avatar;
       document.getElementById("heroName").textContent = agent.name;
-      document.getElementById("heroLevel").textContent = agent.level;
+      const lvlEl = document.getElementById("heroLevel");
+      lvlEl.textContent = agent.level;
+      lvlEl.className = "hero-level-tag badge-" + agent.levelKey;
       document.getElementById("heroBurst").textContent = agent.burst;
+      document.getElementById("modeSelect").value = agent.levelKey;
+      document.getElementById("maskedKeyText").textContent = agent.keyPrefix;
       document.getElementById("heroMeta").textContent = agent.meta;
       document.getElementById("modeSelect").value = agent.mode;
       document.getElementById("maskedKeyText").textContent = agent.key.slice(0, 9) + "••••••••••••";
