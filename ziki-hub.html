@@ -108,9 +108,9 @@
       cursor: pointer;
     }
 
-    /* EXACT ZIKI NAVBAR */
+    /* EXACT ZIKI APP HEADER (components/app-header.tsx) */
     .zk-navbar {
-      height: 60px;
+      height: 56px;
       background: var(--zk-surface);
       border-bottom: 1px solid var(--zk-border);
       display: flex;
@@ -118,63 +118,108 @@
       justify-content: space-between;
       padding: 0 max(24px, calc((100vw - 1040px) / 2));
     }
-    .zk-nav-left { display: flex; align-items: center; gap: 18px; }
-    .zk-logo {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      font-size: 22px;
+    .zk-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .zk-mark-link {
+      display: inline-flex;
+      align-items: center;
       color: var(--zk-text);
       text-decoration: none;
+      padding: 2px;
+      border-radius: 999px;
     }
-    .zk-divider { width: 1px; height: 22px; background: var(--zk-border); }
-    .zk-project-pill {
+    .zk-mark-svg {
+      width: 28px;
+      height: 28px;
+    }
+    .zk-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--zk-border);
+    }
+    .zk-ws-btn {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      font-size: 13.5px;
-      font-weight: 600;
+      padding: 4px 8px 4px 4px;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px solid transparent;
       color: var(--zk-text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
     }
-    .zk-project-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(59, 130, 246, 0.2);
+    .zk-ws-btn:hover {
+      background: var(--zk-chip);
+    }
+    .zk-ws-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: rgba(59, 130, 246, 0.16);
       color: #60a5fa;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .zk-nav-links { display: flex; align-items: center; gap: 6px; margin-left: 6px; }
-    .zk-nav-link {
+    .zk-top-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 12px;
+    }
+    .zk-top-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
+      gap: 7px;
+      height: 36px;
+      padding: 0 12px;
       border-radius: 999px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--zk-muted);
+      color: var(--zk-text2);
+      text-decoration: none;
+      transition: background 0.15s ease, color 0.15s ease;
     }
-    .zk-nav-link.active {
+    .zk-top-link:hover {
+      background: var(--zk-chip);
       color: var(--zk-text);
-      background: var(--zk-surface-elevated);
+    }
+    .zk-top-link.active {
+      color: var(--zk-accent);
+      background: var(--zk-tint);
       font-weight: 600;
     }
-    .zk-nav-right { display: flex; align-items: center; gap: 14px; }
-    .zk-user-pill {
+    .zk-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .zk-user-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      height: 40px;
       padding: 4px 12px 4px 5px;
       border-radius: 999px;
       border: 1px solid var(--zk-border);
-      background: var(--zk-surface-elevated);
-      font-size: 13px;
-      font-weight: 600;
+      background: var(--zk-surface);
       color: var(--zk-text);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      transition: background 0.15s ease;
+    }
+    .zk-user-btn:hover {
+      background: var(--zk-chip);
     }
     .zk-user-avatar {
       width: 28px;
@@ -183,10 +228,26 @@
       background: #10b981;
       color: #ffffff;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .zk-inbox-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--zk-text);
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .zk-inbox-btn:hover {
+      background: var(--zk-chip);
     }
 
     /* MAIN CONTAINER */
@@ -253,6 +314,20 @@
     .summary-sub {
       font-size: 12px;
       color: var(--zk-muted);
+    }
+    .summary-meter-wrap {
+      margin-top: 8px;
+      width: 140px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--zk-seg);
+      overflow: hidden;
+    }
+    .summary-meter-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #10b981;
+      transition: width 0.3s ease;
     }
 
     /* TWO-COLUMN HUB LAYOUT */
@@ -711,28 +786,49 @@
     <button class="theme-btn" onclick="toggleTheme()">Toggle Theme</button>
   </div>
 
-  <!-- EXACT ZIKI NAVBAR -->
+  <!-- EXACT ZIKI APP HEADER (components/app-header.tsx) -->
   <header class="zk-navbar">
     <div class="zk-nav-left">
-      <a href="#" class="zk-logo">Ziki</a>
+      <a href="#" aria-label="Ziki" class="zk-mark-link" title="Ziki">
+        <svg viewBox="0 0 100 100" fill="none" class="zk-mark-svg" aria-hidden="true">
+          <path d="M22 22H78L22 78H78M30 50H70" stroke="currentColor" stroke-width="11" stroke-linejoin="miter" stroke-miterlimit="10"/>
+        </svg>
+      </a>
       <div class="zk-divider"></div>
-      <div class="zk-project-pill">
-        <span class="zk-project-icon">Z</span>
+      <button type="button" class="zk-ws-btn" title="Switch workspace">
+        <span class="zk-ws-icon">Z</span>
         <span>zedu</span>
-      </div>
-      <nav class="zk-nav-links">
-        <span class="zk-nav-link">Workstream</span>
-        <span class="zk-nav-link">Issues</span>
-        <span class="zk-nav-link">Ideas</span>
-        <span class="zk-nav-link">Redesigns</span>
-        <span class="zk-nav-link active">Agents</span>
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: var(--zk-muted); margin-left: -2px;">
+          <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+      <nav class="zk-top-nav">
+        <a href="#" class="zk-top-link active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /></svg>
+          <span>Your App</span>
+        </a>
+        <a href="#" class="zk-top-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></svg>
+          <span>Marketing</span>
+        </a>
+        <a href="#" class="zk-top-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>
+          <span>Security</span>
+        </a>
       </nav>
     </div>
     <div class="zk-nav-right">
-      <div class="zk-user-pill">
+      <button type="button" class="zk-user-btn" title="Account menu">
         <div class="zk-user-avatar">FM</div>
         <span>Fabian</span>
-      </div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--zk-muted);"><path d="m6 9 6 6 6-6" /></svg>
+      </button>
+      <button type="button" class="zk-inbox-btn" aria-label="Inbox" title="Inbox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -751,8 +847,11 @@
         <div class="summary-title">Active agents</div>
         <div class="summary-val">5 <span style="font-size: 15px; color: var(--zk-muted); font-weight: 600;">/ 5</span></div>
         <div class="summary-sub">limit 5</div>
+        <div class="summary-meter-wrap" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="5" aria-label="Active agents capacity">
+          <div class="summary-meter-fill" style="width: 100%;"></div>
+        </div>
       </div>
-      <div style="font-size: 13px; color: var(--zk-muted);">
+      <div style="font-size: 13px; color: var(--zk-muted); max-width: 440px; line-height: 1.5;">
         Each agent has its own key. Copy sends that key and this site to that agent only.
       </div>
     </div>
