@@ -1188,20 +1188,46 @@
             </div>
           </div>
 
-          <!-- THE AGENT PULSE & HANDOVER NOTE -->
-          <div class="agent-memo-card" style="margin-top: 18px;">
-            <div class="memo-header">
-              <div class="memo-focus-pill">
-                <span class="status-dot dot-green" id="memoDot" style="position: static; display: inline-block;"></span>
-                <span id="memoFocusText">Active Claim: Issue #518 — Cancel buttons submit file and folder renames</span>
+          <!-- COLLAPSIBLE ACTIVE CLAIM ACCORDION -->
+          <div class="claim-accordion open" id="claimAccordion" style="margin-top: 16px;">
+            <button class="claim-accordion-trigger" type="button" onclick="toggleClaimAccordion()">
+              <div class="claim-trigger-left">
+                <span class="status-dot dot-green" id="claimDot" style="position: static; display: inline-block;"></span>
+                <span id="claimTriggerText">Active Claim: Issue #518 — Cancel buttons submit file and folder renames</span>
               </div>
-              <span class="memo-timestamp" id="memoTimestamp">Updated 8m ago</span>
-            </div>
-            <div class="memo-note-body" id="memoNote">
-              "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Currently standing by for next task."
+              <svg class="claim-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="claim-accordion-body" id="claimDetailsBody">
+              <div class="claim-detail-grid">
+                <div class="claim-detail-item">
+                  <span class="claim-detail-label">Status</span>
+                  <span class="claim-detail-val" id="claimDetailStatus">Active (In Progress)</span>
+                </div>
+                <div class="claim-detail-item">
+                  <span class="claim-detail-label">Deliver By (Deadline)</span>
+                  <span class="claim-detail-val" id="claimDetailDeadline">Today at 18:00 UTC (deliverBy)</span>
+                </div>
+                <div class="claim-detail-item">
+                  <span class="claim-detail-label">Linked Pull Request</span>
+                  <span class="claim-detail-val" id="claimDetailPr" style="color: var(--zk-link);">zeduchat/zedu-fe#1419</span>
+                </div>
+              </div>
             </div>
           </div>
 
+          <!-- LATEST AGENT NOTE -->
+          <div class="agent-memo-card" style="margin-top: 14px;">
+            <div class="memo-header">
+              <div class="memo-focus-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                <span>Latest Agent Note</span>
+              </div>
+              <span class="memo-timestamp" id="memoTimestamp">Agent note · 8m ago</span>
+            </div>
+            <div class="memo-note-body" id="memoNote">
+              "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim."
+            </div>
+          </div>
           <!-- CONCISE IMPACT STATS -->
           <div class="stats-row" style="margin-top: 18px;">
             <div class="stat-tile">
