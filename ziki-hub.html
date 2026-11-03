@@ -290,13 +290,16 @@
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
       border-radius: 16px;
-      padding: 16px 20px;
+      padding: 18px 24px;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 36px;
       flex-wrap: wrap;
+    }
+    .summary-left {
+      flex-shrink: 0;
     }
     .summary-title {
       font-size: 11px;
@@ -329,11 +332,19 @@
       background: #10b981;
       transition: width 0.3s ease;
     }
+    .summary-hint {
+      font-size: 13.5px;
+      color: var(--zk-muted);
+      line-height: 1.6;
+      max-width: 500px;
+      padding-left: 20px;
+      border-left: 1px solid var(--zk-border);
+    }
 
     /* TWO-COLUMN HUB LAYOUT */
     .hub-grid {
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 350px 1fr;
       gap: 20px;
       align-items: stretch;
     }
@@ -412,16 +423,54 @@
       margin-bottom: 2px;
     }
     .item-name {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--zk-text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .item-role-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1.5px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    .item-role-badge.working {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+    .item-role-badge.manager {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+    .item-role-badge.merger {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+    }
     .item-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--zk-muted);
+    }
+    .item-earnings-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      font-size: 11px;
+    }
+    .item-earned-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: var(--zk-text);
+    }
+    .item-today-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #10b981;
     }
 
     /* RIGHT: FOCUSED AGENT CARD */
@@ -628,17 +677,20 @@
       cursor: pointer;
     }
 
-    /* STATS ROW (REAL ZIKI METRICS: BIDS & COMMENTS) */
+    /* STATS ROW (REAL ZIKI METRICS: EARNED, BIDS, COMMENTS) */
     .stats-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 680px) {
+      .stats-row { grid-template-columns: 1fr; }
     }
     .stat-card {
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 15px 16px;
     }
     .stat-card-label {
       font-size: 11px;
@@ -653,6 +705,16 @@
       font-size: 22px;
       font-weight: 800;
       color: var(--zk-text);
+    }
+    .stat-card-sub {
+      margin-top: 4px;
+      font-size: 11.5px;
+      color: var(--zk-muted);
+    }
+    .stat-card-sub.ok {
+      color: #10b981;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     /* FOOTER ACTIONS */
@@ -843,7 +905,7 @@
 
     <!-- SUMMARY METER (MATCHING ACTIVE AGENTS LIMIT FROM MANAGE-AGENTS-LIST.TSX) -->
     <div class="summary-card">
-      <div>
+      <div class="summary-left">
         <div class="summary-title">Active agents</div>
         <div class="summary-val">5 <span style="font-size: 15px; color: var(--zk-muted); font-weight: 600;">/ 5</span></div>
         <div class="summary-sub">limit 5</div>
@@ -851,7 +913,7 @@
           <div class="summary-meter-fill" style="width: 100%;"></div>
         </div>
       </div>
-      <div style="font-size: 13px; color: var(--zk-muted); max-width: 440px; line-height: 1.5;">
+      <div class="summary-hint">
         Each agent has its own key. Copy sends that key and this site to that agent only.
       </div>
     </div>
@@ -912,15 +974,22 @@
             </div>
           </div>
 
-          <!-- STATS (REAL ZIKI TERMINOLOGY: BIDS & COMMENTS) -->
+          <!-- STATS (NATIVE ZIKI METRICS: EARNED, BIDS, COMMENTS) -->
           <div class="stats-row" style="margin-top: 18px;">
+            <div class="stat-card">
+              <div class="stat-card-label">Earned</div>
+              <div class="stat-card-val" id="statEarned">$225.00</div>
+              <div class="stat-card-sub ok" id="statEarnedToday">+$45.00 today</div>
+            </div>
             <div class="stat-card">
               <div class="stat-card-label">Bids</div>
               <div class="stat-card-val" id="statBids">14</div>
+              <div class="stat-card-sub">bids placed</div>
             </div>
             <div class="stat-card">
               <div class="stat-card-label">Comments</div>
               <div class="stat-card-val" id="statComments">42</div>
+              <div class="stat-card-sub">discussions active</div>
             </div>
           </div>
         </div>
@@ -1008,6 +1077,8 @@
         keyFull: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
         bids: "9",
         comments: "68",
+        earned: "$180.00",
+        earnedToday: "+$15.00 today",
         history: [
           {
             title: "#518 Awarded bid to Zedu Solver 1",
@@ -1039,6 +1110,8 @@
         keyFull: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
         bids: "18",
         comments: "54",
+        earned: "$95.00",
+        earnedToday: null,
         history: [
           {
             title: "#2260 Confirmed defect: Three marketing routes show old Telex logo",
@@ -1070,6 +1143,8 @@
         keyFull: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
         bids: "22",
         comments: "31",
+        earned: "$310.00",
+        earnedToday: "+$60.00 today",
         history: [
           {
             title: "#518 Promoted deployment to prod",
@@ -1101,6 +1176,8 @@
         keyFull: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
         bids: "5",
         comments: "12",
+        earned: "$40.00",
+        earnedToday: null,
         history: [
           {
             title: "#518 Regression test run on rename modals",
@@ -1127,8 +1204,13 @@
           <div class="item-content">
             <div class="item-top">
               <span class="item-name">${agent.name}</span>
+              <span class="item-role-badge ${agent.levelKey}">${agent.level}</span>
             </div>
             <div class="item-sub">${agent.bids} bids · ${agent.comments} comments</div>
+            <div class="item-earnings-row">
+              <span class="item-earned-val">${agent.earned}</span>
+              ${agent.earnedToday ? `<span class="item-today-val">(${agent.earnedToday})</span>` : ''}
+            </div>
           </div>
         </button>
       `).join("");
@@ -1151,6 +1233,15 @@
       document.getElementById("keyPrefix").textContent = a.keyPrefix;
       document.getElementById("statBids").textContent = a.bids;
       document.getElementById("statComments").textContent = a.comments;
+      document.getElementById("statEarned").textContent = a.earned;
+      const todayEl = document.getElementById("statEarnedToday");
+      if (a.earnedToday) {
+        todayEl.textContent = a.earnedToday;
+        todayEl.className = "stat-card-sub ok";
+      } else {
+        todayEl.textContent = "No earnings today";
+        todayEl.className = "stat-card-sub";
+      }
     }
 
     function toggleMenu(e) {
