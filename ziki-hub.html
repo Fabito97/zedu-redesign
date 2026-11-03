@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My agents — Centralized Oversight & Handover Hub</title>
+  <title>My agents — Ziki</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <style>
     /* =====================================================================
-       EXACT ZIKI THEME TOKENS (Dark Mode & Light Mode)
+       EXACT ZIKI THEME TOKENS
        ===================================================================== */
     :root, [data-theme="dark"] {
       --zk-bg: #070f22;
@@ -30,18 +30,11 @@
       --zk-green: #22c55e;
       --zk-green-pill-bg: #0c3b2e;
       --zk-green-pill-text: #34d399;
-      --zk-amber: #f59e0b;
-      --zk-amber-bg: #352109;
-      --zk-amber-text: #fbbf24;
       --zk-danger-bg: #2a1219;
       --zk-danger-border: #5c1f28;
       --zk-danger-text: #f87171;
-      --zk-danger-hover: #3b1720;
       --zk-backdrop: rgba(3, 8, 20, 0.68);
-      --zk-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       --zk-shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.55);
-      --zk-memo-bg: #09142b;
-      --zk-memo-border: #1d3568;
     }
 
     [data-theme="light"] {
@@ -63,26 +56,14 @@
       --zk-green: #16a34a;
       --zk-green-pill-bg: #dcfce7;
       --zk-green-pill-text: #065f46;
-      --zk-amber: #d97706;
-      --zk-amber-bg: #fef3c7;
-      --zk-amber-text: #92400e;
       --zk-danger-bg: #fff5f5;
       --zk-danger-border: #f5b5ae;
       --zk-danger-text: #b42318;
-      --zk-danger-hover: #fef3f2;
       --zk-backdrop: rgba(15, 23, 42, 0.35);
-      --zk-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
       --zk-shadow-lg: 0 14px 34px rgba(15, 23, 42, 0.12);
-      --zk-memo-bg: #f4f8fe;
-      --zk-memo-border: #bfdbfe;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       min-height: 100%;
       background: var(--zk-bg);
@@ -92,13 +73,12 @@
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    /* TOP BAR WITH THEME SWITCHER */
+    /* TOP REVIEW BAR */
     .proto-bar {
       background: #040917;
       color: #e2e8f0;
       padding: 8px 24px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
@@ -107,11 +87,6 @@
       position: sticky;
       top: 0;
       z-index: 80;
-    }
-    .proto-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     .proto-tag {
       background: rgba(37, 99, 235, 0.22);
@@ -126,7 +101,6 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.06);
       color: #f8fafc;
-      font-family: inherit;
       font-size: 12px;
       font-weight: 500;
       padding: 5px 12px;
@@ -144,11 +118,7 @@
       justify-content: space-between;
       padding: 0 max(24px, calc((100vw - 1040px) / 2));
     }
-    .zk-nav-left {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+    .zk-nav-left { display: flex; align-items: center; gap: 18px; }
     .zk-logo {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
@@ -156,11 +126,7 @@
       color: var(--zk-text);
       text-decoration: none;
     }
-    .zk-divider {
-      width: 1px;
-      height: 22px;
-      background: var(--zk-border);
-    }
+    .zk-divider { width: 1px; height: 22px; background: var(--zk-border); }
     .zk-project-pill {
       display: inline-flex;
       align-items: center;
@@ -168,7 +134,6 @@
       font-size: 13.5px;
       font-weight: 600;
       color: var(--zk-text);
-      cursor: pointer;
     }
     .zk-project-icon {
       width: 22px;
@@ -182,12 +147,7 @@
       align-items: center;
       justify-content: center;
     }
-    .zk-nav-links {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: 6px;
-    }
+    .zk-nav-links { display: flex; align-items: center; gap: 6px; margin-left: 6px; }
     .zk-nav-link {
       display: inline-flex;
       align-items: center;
@@ -197,18 +157,13 @@
       font-size: 13px;
       font-weight: 500;
       color: var(--zk-muted);
-      cursor: pointer;
     }
     .zk-nav-link.active {
       color: var(--zk-text);
       background: var(--zk-surface-elevated);
       font-weight: 600;
     }
-    .zk-nav-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .zk-nav-right { display: flex; align-items: center; gap: 14px; }
     .zk-user-pill {
       display: inline-flex;
       align-items: center;
@@ -241,7 +196,6 @@
       padding: 32px 24px 64px;
     }
 
-    /* HEADER & ACTIONS */
     .page-header-row {
       display: flex;
       align-items: center;
@@ -255,20 +209,6 @@
       font-size: 28px;
       font-weight: 800;
       color: var(--zk-text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .title-badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.18);
-      color: var(--zk-link);
-      border: 1px solid rgba(37, 99, 235, 0.3);
     }
     .create-agent-btn {
       display: inline-flex;
@@ -281,115 +221,67 @@
       padding: 9px 18px;
       border-radius: 999px;
       border: none;
-      cursor: pointer;
       text-decoration: none;
-      transition: background 0.16s ease;
-    }
-    .create-agent-btn:hover {
-      background: var(--zk-blue-hover);
     }
 
-    /* FLEET HEALTH & SUMMARY STRIP */
-    .fleet-summary-strip {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* SUMMARY METER */
+    .summary-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
       border-radius: 16px;
-      padding: 14px 20px;
+      padding: 16px 20px;
       margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
     }
-    .fleet-summary-left {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-    .fleet-stat-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--zk-muted);
-    }
-    .fleet-stat-pill strong {
-      color: var(--zk-text);
-      font-weight: 700;
-    }
-    .fleet-dot-active {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--zk-green);
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
-    }
-    .fleet-capacity-meter {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--zk-muted);
-    }
-    .capacity-bar {
-      width: 100px;
-      height: 6px;
-      background: var(--zk-surface-elevated);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .capacity-fill {
-      width: 100%;
-      height: 100%;
-      background: var(--zk-blue);
-      border-radius: 999px;
-    }
-
-    /* CENTRAL HUB TWO-COLUMN WORKSPACE */
-    .hub-workspace {
-      display: grid;
-      grid-template-columns: 310px 1fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-    @media (max-width: 840px) {
-      .hub-workspace {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* LEFT COLUMN: FLEET ROSTER DRAWER */
-    .fleet-drawer {
-      background: var(--zk-surface);
-      border: 1px solid var(--zk-border);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      height: 100%;
-    }
-    .fleet-drawer-title {
+    .summary-title {
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--zk-subtle);
-      padding: 0 6px 6px;
+      letter-spacing: 0.06em;
+      color: var(--zk-muted);
     }
-    .fleet-roster {
+    .summary-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--zk-text);
+      margin-top: 2px;
+    }
+    .summary-sub {
+      font-size: 12px;
+      color: var(--zk-muted);
+    }
+
+    /* TWO-COLUMN HUB LAYOUT */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+    @media (max-width: 820px) {
+      .hub-grid { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT LIST: ALL AGENTS */
+    .agent-list-panel {
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 18px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      height: 100%;
     }
-    .roster-card {
+    .agent-list-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 11px 12px;
+      padding: 12px 14px;
       border-radius: 12px;
       border: 1px solid transparent;
       background: transparent;
@@ -399,22 +291,18 @@
       width: 100%;
       transition: all 0.15s ease;
     }
-    .roster-card:hover {
+    .agent-list-item:hover {
       background: var(--zk-surface-elevated);
       border-color: var(--zk-border);
     }
-    .roster-card.active {
+    .agent-list-item.active {
       background: var(--zk-surface-elevated);
       border-color: var(--zk-blue);
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
     }
-    .roster-avatar-wrap {
-      position: relative;
-      flex-shrink: 0;
-    }
-    .roster-avatar {
-      width: 40px;
-      height: 40px;
+    .agent-avatar-box {
+      width: 42px;
+      height: 42px;
       border-radius: 10px;
       background: #1e293b;
       display: flex;
@@ -423,12 +311,14 @@
       font-weight: 800;
       font-size: 15px;
       color: #94a3b8;
+      flex-shrink: 0;
+      position: relative;
     }
-    .roster-card.active .roster-avatar {
+    .agent-list-item.active .agent-avatar-box {
       background: #1e3a8a;
       color: #60a5fa;
     }
-    .status-dot {
+    .live-dot {
       position: absolute;
       bottom: -2px;
       right: -2px;
@@ -436,53 +326,31 @@
       height: 10px;
       border-radius: 50%;
       border: 2px solid var(--zk-surface);
+      background: var(--zk-green);
     }
-    .dot-green { background: var(--zk-green); }
-    .dot-amber { background: var(--zk-amber); }
-    .dot-gray { background: #64748b; }
-
-    .roster-info {
-      flex: 1;
-      min-width: 0;
-    }
-    .roster-name-row {
+    .item-content { flex: 1; min-width: 0; }
+    .item-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
       margin-bottom: 2px;
     }
-    .roster-name {
-      font-size: 13.5px;
+    .item-name {
+      font-size: 14px;
       font-weight: 700;
       color: var(--zk-text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .roster-badge {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 1px 6px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
+    .item-sub {
+      font-size: 12px;
       color: var(--zk-muted);
-    }
-    .roster-card.active .roster-badge {
-      background: rgba(37, 99, 235, 0.2);
-      color: #93c5fd;
-    }
-    .roster-subtext {
-      font-size: 11.5px;
-      color: var(--zk-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    /* RIGHT COLUMN: FOCUSED AGENT OVERSIGHT COMMAND CENTER */
-    .agent-oversight-card {
+    /* RIGHT: FOCUSED AGENT CARD */
+    .agent-detail-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
       border-radius: 18px;
@@ -490,25 +358,25 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 20px;
+      gap: 22px;
       height: 100%;
     }
 
     /* CARD HEADER */
-    .agent-card-header {
+    .detail-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
     }
-    .agent-header-left {
+    .detail-header-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
     .hero-avatar {
-      width: 54px;
-      height: 54px;
+      width: 56px;
+      height: 56px;
       border-radius: 14px;
       background: #1e3a8a;
       color: #60a5fa;
@@ -522,62 +390,57 @@
     .hero-name-row {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       flex-wrap: wrap;
       margin-bottom: 4px;
     }
-    .hero-agent-name {
+    .hero-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 20px;
       font-weight: 800;
       color: var(--zk-text);
     }
     
-    .badge-working {
-      background: var(--zk-green-pill-bg) !important;
-      color: var(--zk-green-pill-text) !important;
-    }
-    .badge-manager {
-      background: #3A1424 !important;
-      color: #F9A8C0 !important;
-    }
-    [data-theme="light"] .badge-manager {
-      background: #FDECEF !important;
-      color: #B4233F !important;
-    }
-    .badge-merger {
-      background: rgba(124, 58, 237, 0.25) !important;
-      color: #C4B5FD !important;
-    }
-    [data-theme="light"] .badge-merger {
-      background: rgba(124, 58, 237, 0.15) !important;
-      color: #7C3AED !important;
-    }
-    .hero-level-tag {
+    /* EXACT ZIKI LEVEL BADGES FROM AGENTS-UI.TSX */
+    .level-badge {
       font-size: 11px;
       font-weight: 700;
-      text-transform: uppercase;
-      padding: 2.5px 8px;
+      padding: 2.5px 8.5px;
       border-radius: 999px;
+    }
+    .level-badge.working {
       background: var(--zk-green-pill-bg);
       color: var(--zk-green-pill-text);
     }
-    .hero-burst-tag {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2.5px 8px;
-      border-radius: 999px;
-      background: var(--zk-surface-elevated);
-      color: var(--zk-muted);
-      border: 1px solid var(--zk-border);
+    .level-badge.manager {
+      background: #3A1424;
+      color: #F9A8C0;
     }
-    .hero-meta-sub {
-      font-size: 12px;
-      color: var(--zk-subtle);
+    [data-theme="light"] .level-badge.manager {
+      background: #FDECEF;
+      color: #B4233F;
+    }
+    .level-badge.merger {
+      background: rgba(124, 58, 237, 0.25);
+      color: #C4B5FD;
+    }
+    [data-theme="light"] .level-badge.merger {
+      background: rgba(124, 58, 237, 0.15);
+      color: #7C3AED;
     }
 
-    /* ACTIONS OVERFLOW MENU BUTTON */
-    .btn-overflow-menu {
+    .hero-model {
+      font-size: 12.5px;
+      color: var(--zk-muted);
+    }
+    .hero-meta {
+      font-size: 12px;
+      color: var(--zk-subtle);
+      margin-top: 2px;
+    }
+
+    /* MENU */
+    .btn-menu {
       width: 34px;
       height: 34px;
       border-radius: 999px;
@@ -589,19 +452,14 @@
       justify-content: center;
       cursor: pointer;
       font-size: 18px;
-      transition: all 0.15s ease;
       position: relative;
-    }
-    .btn-overflow-menu:hover {
-      border-color: var(--zk-border-strong);
-      color: var(--zk-text);
     }
     .menu-dialog {
       display: none;
       position: absolute;
-      top: 42px;
+      top: 40px;
       right: 0;
-      width: 190px;
+      width: 180px;
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border-strong);
       border-radius: 12px;
@@ -611,13 +469,8 @@
       flex-direction: column;
       gap: 2px;
     }
-    .menu-dialog.open {
-      display: flex;
-    }
-    .menu-dialog-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .menu-dialog.open { display: flex; }
+    .menu-item {
       padding: 8px 12px;
       border-radius: 8px;
       font-size: 12.5px;
@@ -629,30 +482,32 @@
       cursor: pointer;
       width: 100%;
     }
-    .menu-dialog-item:hover {
-      background: var(--zk-surface-hover);
-    }
-    .menu-dialog-item.danger {
-      color: var(--zk-danger-text);
-    }
-    .menu-dialog-item.danger:hover {
-      background: var(--zk-danger-bg);
-    }
+    .menu-item:hover { background: var(--zk-surface-hover); }
+    .menu-item.danger { color: var(--zk-danger-text); }
 
-    /* CONTROL & CREDENTIAL BAR */
-    .control-credential-bar {
+    /* CONTROLS & KEY ROW (MATCHING AGENT-ROW-KEY & AGENT-CONTROLS) */
+    .controls-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
       flex-wrap: wrap;
+      padding: 16px 0;
+      border-top: 1px solid var(--zk-border);
+      border-bottom: 1px solid var(--zk-border);
     }
-    .mode-select-wrap {
+    .level-select-wrap {
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .zk-mode-select {
+    .level-select-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--zk-muted);
+    }
+    .zk-select {
       height: 38px;
       border-radius: 999px;
       border: 1px solid var(--zk-border);
@@ -665,96 +520,52 @@
       outline: none;
       cursor: pointer;
     }
-    .zk-mode-select:focus {
-      border-color: var(--zk-blue);
-    }
 
-    .key-pill {
+    /* EXACT AGENT ROW KEY PILL */
+    .key-box {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       background: var(--zk-key-outer);
       border: 1px solid var(--zk-border);
       border-radius: 999px;
-      padding: 4px 6px 4px 14px;
+      padding: 4px 6px 4px 12px;
+    }
+    .key-prefix {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12.5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--zk-text);
+    }
+    .key-scope {
+      font-size: 11.5px;
       color: var(--zk-muted);
     }
-    .copy-pill-btn {
-      background: var(--zk-copy-blue);
+    .btn-copy-key {
+      background: var(--zk-blue);
       color: #ffffff;
       border: none;
       border-radius: 999px;
       padding: 5px 12px;
       font-size: 11.5px;
       font-weight: 700;
-      font-family: 'Inter', sans-serif;
+      font-family: inherit;
       cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .copy-pill-btn:hover {
-      background: var(--zk-blue-hover);
     }
 
-    /* =====================================================================
-       THE INNOVATION: AGENT SHIFT BRIEF & HANDOVER NOTE
-       ===================================================================== */
-    .agent-memo-card {
-      background: var(--zk-memo-bg);
-      border: 1px solid var(--zk-memo-border);
-      border-radius: 14px;
-      padding: 16px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .memo-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .memo-focus-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12.5px;
-      font-weight: 700;
-      color: var(--zk-text);
-    }
-    .memo-timestamp {
-      font-size: 11px;
-      color: var(--zk-muted);
-      font-weight: 500;
-    }
-    .memo-note-body {
-      font-size: 13.5px;
-      line-height: 1.55;
-      color: var(--zk-text);
-      background: rgba(0, 0, 0, 0.18);
-      padding: 10px 14px;
-      border-radius: 10px;
-      border-left: 3px solid var(--zk-blue);
-      font-style: normal;
-    }
-    [data-theme="light"] .memo-note-body {
-      background: rgba(255, 255, 255, 0.7);
-    }
-
-    /* CONCISE STATS ROW */
+    /* STATS ROW (REAL ZIKI METRICS: BIDS & COMMENTS) */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
-    .stat-tile {
+    .stat-card {
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border);
       border-radius: 14px;
-      padding: 14px 16px;
+      padding: 16px 18px;
     }
-    .stat-tile-label {
+    .stat-card-label {
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
@@ -762,27 +573,24 @@
       color: var(--zk-muted);
       margin-bottom: 4px;
     }
-    .stat-tile-val {
+    .stat-card-val {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: var(--zk-text);
     }
-    .stat-tile-val.green {
-      color: var(--zk-green);
-    }
 
-    /* BOTTOM SPLIT ACTIONS */
-    .card-footer-split {
+    /* FOOTER ACTIONS */
+    .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 16px;
+      padding-top: 14px;
       border-top: 1px solid var(--zk-border);
       flex-wrap: wrap;
     }
-    .btn-work-history {
+    .btn-history {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -790,15 +598,11 @@
       color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 9.5px 20px;
+      padding: 10px 20px;
       font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: background 0.16s ease;
-    }
-    .btn-work-history:hover {
-      background: var(--zk-blue-hover);
     }
     .btn-view-agent {
       display: inline-flex;
@@ -808,21 +612,15 @@
       color: var(--zk-text);
       border: 1px solid var(--zk-border-strong);
       border-radius: 999px;
-      padding: 9px 18px;
+      padding: 9.5px 18px;
       font-size: 13.5px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: all 0.16s ease;
       text-decoration: none;
     }
-    .btn-view-agent:hover {
-      background: var(--zk-surface-hover);
-      color: var(--zk-link);
-      border-color: var(--zk-link);
-    }
 
-    /* SLIDEOVER DRAWER: WORK HISTORY */
+    /* SLIDEOVER WORK HISTORY DRAWER */
     .drawer-backdrop {
       position: fixed;
       inset: 0;
@@ -833,16 +631,13 @@
       pointer-events: none;
       transition: opacity 0.25s ease;
     }
-    .drawer-backdrop.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .history-slideover {
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .history-drawer {
       position: fixed;
       top: 0;
       right: 0;
       bottom: 0;
-      width: min(520px, 94vw);
+      width: min(500px, 92vw);
       background: var(--zk-surface);
       border-left: 1px solid var(--zk-border-strong);
       box-shadow: -16px 0 48px rgba(0, 0, 0, 0.45);
@@ -852,39 +647,31 @@
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .history-slideover.open {
-      transform: translateX(0);
-    }
-    .slideover-header {
+    .history-drawer.open { transform: translateX(0); }
+    .drawer-header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--zk-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
     }
-    .slideover-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--zk-text);
-    }
-    .btn-close-drawer {
+    .drawer-title { font-size: 16px; font-weight: 700; color: var(--zk-text); }
+    .drawer-close {
       background: transparent;
       border: none;
       color: var(--zk-muted);
       cursor: pointer;
-      font-size: 20px;
-      padding: 4px;
+      font-size: 18px;
     }
-    .slideover-content {
-      padding: 24px;
+    .drawer-body {
+      padding: 20px 24px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       flex: 1;
     }
-    .history-item {
+    .history-card {
       background: var(--zk-surface-elevated);
       border: 1px solid var(--zk-border);
       border-radius: 12px;
@@ -893,169 +680,35 @@
       flex-direction: column;
       gap: 6px;
     }
-    .history-item-top {
+    .history-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
     }
     .history-badge {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 2px 8px;
       border-radius: 999px;
       background: var(--zk-green-pill-bg);
       color: var(--zk-green-pill-text);
     }
-    .history-item-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--zk-text);
-    }
-    .history-item-meta {
-      font-size: 11.5px;
-      color: var(--zk-muted);
-    }
-  
-    /* COLLAPSIBLE ACTIVE CLAIM ACCORDION */
-    .claim-accordion {
-      background: var(--zk-surface-elevated);
-      border: 1px solid var(--zk-border);
-      border-radius: 14px;
-      overflow: hidden;
-      transition: border-color 0.15s ease;
-    }
-    .claim-accordion:hover {
-      border-color: var(--zk-border-strong);
-    }
-    .claim-accordion-trigger {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      background: transparent;
-      border: none;
-      width: 100%;
-      cursor: pointer;
-      font-family: inherit;
-      color: var(--zk-text);
-      text-align: left;
-    }
-    .claim-trigger-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .claim-chevron {
-      width: 16px;
-      height: 16px;
-      color: var(--zk-muted);
-      transition: transform 0.2s ease;
-    }
-    .claim-accordion.open .claim-chevron {
-      transform: rotate(180deg);
-    }
-    .claim-accordion-body {
-      display: none;
-      padding: 14px 16px;
-      border-top: 1px solid var(--zk-border);
-      background: var(--zk-memo-bg);
-      font-size: 12.5px;
-      color: var(--zk-muted);
-      flex-direction: column;
-      gap: 10px;
-    }
-    .claim-accordion.open .claim-accordion-body {
-      display: flex;
-    }
-    .claim-detail-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 10px;
-    }
-    .claim-detail-item {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .claim-detail-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--zk-subtle);
-    }
-    .claim-detail-val {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--zk-text);
-    }
-
-    /* DRAWER TABS */
-    .drawer-tabs {
-      display: flex;
-      border-bottom: 1px solid var(--zk-border);
-      background: var(--zk-surface-elevated);
-      padding: 0 16px;
-      gap: 8px;
-    }
-    .drawer-tab {
-      padding: 12px 16px;
-      border: none;
-      background: transparent;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--zk-muted);
-      cursor: pointer;
-      font-family: inherit;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s ease;
-    }
-    .drawer-tab.active {
-      color: var(--zk-blue);
-      border-bottom-color: var(--zk-blue);
-    }
-    .note-card {
-      background: var(--zk-surface-elevated);
-      border: 1px solid var(--zk-border);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .note-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .note-pill {
-      font-size: 10.5px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: rgba(37, 99, 235, 0.15);
-      color: var(--zk-link);
-    }
-    .note-body-text {
-      font-size: 13px;
-      line-height: 1.5;
-      color: var(--zk-text);
-    }
-
+    .history-time { font-size: 11.5px; color: var(--zk-muted); }
+    .history-title { font-size: 13.5px; font-weight: 600; color: var(--zk-text); }
+    .history-pr { font-size: 12px; color: var(--zk-muted); }
+    .history-pr a { color: var(--zk-link); text-decoration: none; }
   </style>
 </head>
 <body>
 
-  <!-- TOP REVIEW BAR -->
+  <!-- REVIEWER TOP BAR -->
   <div class="proto-bar">
-    <div class="proto-bar-left">
+    <div>
       <span class="proto-tag">Ziki Redesign Prototype</span>
-      <span><strong>Human–Agent Oversight Hub:</strong> Centralized Fleet Management & Handover Briefing</span>
+      <span style="margin-left: 8px;"><strong>My Agents:</strong> Centralized Management & Oversight Hub</span>
     </div>
-    <button class="theme-btn" id="themeToggleBtn" onclick="toggleTheme()">Toggle Theme</button>
+    <button class="theme-btn" onclick="toggleTheme()">Toggle Theme</button>
   </div>
 
   <!-- EXACT ZIKI NAVBAR -->
@@ -1066,7 +719,6 @@
       <div class="zk-project-pill">
         <span class="zk-project-icon">Z</span>
         <span>zedu</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </div>
       <nav class="zk-nav-links">
         <span class="zk-nav-link">Workstream</span>
@@ -1084,174 +736,103 @@
     </div>
   </header>
 
-  <!-- MAIN VIEW -->
+  <!-- MAIN -->
   <main class="zk-main">
 
-    <!-- PAGE HEADER ROW -->
+    <!-- PAGE HEADER -->
     <div class="page-header-row">
-      <div class="page-title">
-        <span>My agents</span>
-        <span class="title-badge">Centralized Hub</span>
-      </div>
-      <a href="#create" class="create-agent-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-        <span>Create agent</span>
-      </a>
+      <h1 class="page-title">My agents</h1>
+      <a href="#create" class="create-agent-btn">+ Create agent</a>
     </div>
 
-    <!-- FLEET HEALTH & SUMMARY STRIP -->
-    <div class="fleet-summary-strip">
-      <div class="fleet-summary-left">
-        <div class="fleet-stat-pill">
-          <span class="fleet-dot-active"></span>
-          <span>Fleet Health: <strong>All 5 Connected</strong></span>
-        </div>
-        <div class="fleet-stat-pill">
-          <span>Active Claims: <strong>2 In Progress</strong></span>
-        </div>
-        <div class="fleet-stat-pill">
-          <span>Escalations: <strong>0 Blockers</strong></span>
-        </div>
+    <!-- SUMMARY METER (MATCHING ACTIVE AGENTS LIMIT FROM MANAGE-AGENTS-LIST.TSX) -->
+    <div class="summary-card">
+      <div>
+        <div class="summary-title">Active agents</div>
+        <div class="summary-val">5 <span style="font-size: 15px; color: var(--zk-muted); font-weight: 600;">/ 5</span></div>
+        <div class="summary-sub">limit 5</div>
       </div>
-      <div class="fleet-capacity-meter">
-        <span>Active Agents 5 / 5</span>
-        <div class="capacity-bar">
-          <div class="capacity-fill"></div>
-        </div>
+      <div style="font-size: 13px; color: var(--zk-muted);">
+        Each agent has its own key. Copy sends that key and this site to that agent only.
       </div>
     </div>
 
-    <!-- TWO-COLUMN WORKSPACE: LEFT FLEET DRAWER + RIGHT AGENT COMMAND CENTER -->
-    <div class="hub-workspace">
+    <!-- TWO-COLUMN HUB -->
+    <div class="hub-grid">
 
-      <!-- LEFT: AGENT FLEET ROSTER (Instant Selection) -->
-      <aside class="fleet-drawer">
-        <div class="fleet-drawer-title">Your Agent Fleet (5)</div>
-        <div class="fleet-roster" id="rosterContainer">
-          <!-- Roster cards injected via JS -->
-        </div>
+      <!-- LEFT: AGENT ROSTER LIST -->
+      <aside class="agent-list-panel" id="agentRoster">
+        <!-- Rendered via JS -->
       </aside>
 
-      <!-- RIGHT: SELECTED AGENT OVERSIGHT COMMAND CENTER -->
-      <section class="agent-oversight-card" id="agentDetailCard">
-        
+      <!-- RIGHT: FOCUSED AGENT CARD -->
+      <section class="agent-detail-card" id="agentCard">
+
         <div>
-          <!-- CARD HEADER -->
-          <div class="agent-card-header">
-            <div class="agent-header-left">
+          <!-- DETAIL HEADER -->
+          <div class="detail-header">
+            <div class="detail-header-left">
               <div class="hero-avatar" id="heroAvatar">S1</div>
               <div>
                 <div class="hero-name-row">
-                  <h2 class="hero-agent-name" id="heroName">Zedu Solver 1</h2>
-                  <span class="hero-level-tag" id="heroLevel">Working agent</span>
-                  <span class="hero-burst-tag" id="heroBurst">burst · 128 RPM</span>
+                  <h2 class="hero-name" id="heroName">Zedu Solver 1</h2>
+                  <span class="level-badge working" id="heroBadge">Working agent</span>
                 </div>
-                <p class="hero-meta-sub" id="heroMeta">Personal Agent · Added Oct 22, 2026 · Default: project_zedu</p>
+                <div class="hero-model" id="heroModel">Claude 3.5 Sonnet</div>
+                <div class="hero-meta" id="heroMeta">Personal Agent · Added Oct 22, 2026</div>
               </div>
             </div>
 
-            <!-- OVERFLOW MENU BUTTON -->
+            <!-- OVERFLOW MENU -->
             <div style="position: relative;">
-              <button class="btn-overflow-menu" id="menuToggleBtn" onclick="toggleMenu(event)" aria-label="Agent options">⋯</button>
+              <button class="btn-menu" onclick="toggleMenu(event)" aria-label="Agent options">⋯</button>
               <div class="menu-dialog" id="menuDialog">
-                <button class="menu-dialog-item" onclick="alert('API Key regenerated!')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
-                  <span>Regenerate Key</span>
-                </button>
-                <button class="menu-dialog-item danger" onclick="alert('Agent paused!')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg>
-                  <span>Pause Agent</span>
-                </button>
-                <button class="menu-dialog-item danger" onclick="alert('Agent revoked!')">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                  <span>Revoke Access</span>
-                </button>
+                <button class="menu-item" onclick="alert('Key regenerated!')">Regenerate Key</button>
+                <button class="menu-item danger" onclick="alert('Agent access revoked!')">Revoke Access</button>
+                <button class="menu-item danger" onclick="alert('Agent deleted!')">Delete Agent</button>
               </div>
             </div>
           </div>
 
-          <!-- CONTROL & CREDENTIAL BAR -->
-          <div class="control-credential-bar" style="margin-top: 18px;">
-            <div class="mode-select-wrap">
-              <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--zk-muted);">Agent Class (Level):</label>
-              <select class="zk-mode-select" id="modeSelect" onchange="handleLevelChange(this.value)">
+          <!-- CONTROLS & ROW KEY (MATCHING AGENT-ROW-KEY & AGENT-CONTROLS) -->
+          <div class="controls-row" style="margin-top: 18px;">
+            <div class="level-select-wrap">
+              <span class="level-select-label">Agent Level:</span>
+              <select class="zk-select" id="levelSelect" onchange="changeLevel(this.value)">
                 <option value="working">Working agent</option>
                 <option value="manager">Manager agent</option>
                 <option value="merger">Merger agent</option>
               </select>
             </div>
 
-            <div class="key-pill">
-              <span id="maskedKeyText">ziki_qGS8…</span>
-              <span style="font-size: 11px; color: var(--zk-subtle);">This project</span>
-              <button class="copy-pill-btn" id="copyKeyBtn" onclick="copyKey()">Copy</button>
+            <!-- EXACT ZIKI AGENT-ROW-KEY PILL -->
+            <div class="key-box">
+              <span class="key-prefix" id="keyPrefix">ziki_qGS8…</span>
+              <span class="key-scope">This project</span>
+              <button class="btn-copy-key" id="btnCopy" onclick="copyKey()">Copy</button>
             </div>
           </div>
 
-          <!-- COLLAPSIBLE ACTIVE CLAIM ACCORDION -->
-          <div class="claim-accordion open" id="claimAccordion" style="margin-top: 16px;">
-            <button class="claim-accordion-trigger" type="button" onclick="toggleClaimAccordion()">
-              <div class="claim-trigger-left">
-                <span class="status-dot dot-green" id="claimDot" style="position: static; display: inline-block;"></span>
-                <span id="claimTriggerText">Active Claim: Issue #518 — Cancel buttons submit file and folder renames</span>
-              </div>
-              <svg class="claim-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <div class="claim-accordion-body" id="claimDetailsBody">
-              <div class="claim-detail-grid">
-                <div class="claim-detail-item">
-                  <span class="claim-detail-label">Status</span>
-                  <span class="claim-detail-val" id="claimDetailStatus">Active (In Progress)</span>
-                </div>
-                <div class="claim-detail-item">
-                  <span class="claim-detail-label">Deliver By (Deadline)</span>
-                  <span class="claim-detail-val" id="claimDetailDeadline">Today at 18:00 UTC (deliverBy)</span>
-                </div>
-                <div class="claim-detail-item">
-                  <span class="claim-detail-label">Linked Pull Request</span>
-                  <span class="claim-detail-val" id="claimDetailPr" style="color: var(--zk-link);">zeduchat/zedu-fe#1419</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- LATEST AGENT NOTE -->
-          <div class="agent-memo-card" style="margin-top: 14px;">
-            <div class="memo-header">
-              <div class="memo-focus-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
-                <span>Latest Agent Note</span>
-              </div>
-              <span class="memo-timestamp" id="memoTimestamp">Agent note · 8m ago</span>
-            </div>
-            <div class="memo-note-body" id="memoNote">
-              "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim."
-            </div>
-          </div>
-          <!-- CONCISE IMPACT STATS -->
+          <!-- STATS (REAL ZIKI TERMINOLOGY: BIDS & COMMENTS) -->
           <div class="stats-row" style="margin-top: 18px;">
-            <div class="stat-tile">
-              <div class="stat-tile-label">Total Claims</div>
-              <div class="stat-tile-val" id="statBids">14 (1 Active)</div>
+            <div class="stat-card">
+              <div class="stat-card-label">Bids</div>
+              <div class="stat-card-val" id="statBids">14</div>
             </div>
-            <div class="stat-tile">
-              <div class="stat-tile-label">Comments</div>
-              <div class="stat-tile-val" id="statComments">42</div>
-            </div>
-            <div class="stat-tile">
-              <div class="stat-tile-label">Points</div>
-              <div class="stat-tile-val green" id="statPoints">1,250 pts</div>
+            <div class="stat-card">
+              <div class="stat-card-label">Comments</div>
+              <div class="stat-card-val" id="statComments">42</div>
             </div>
           </div>
         </div>
 
-        <!-- BOTTOM SPLIT ACTIONS -->
-        <div class="card-footer-split">
-          <button class="btn-work-history" onclick="openDrawer()">
+        <!-- FOOTER ACTIONS -->
+        <div class="card-footer">
+          <button class="btn-history" onclick="openDrawer()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
             <span>View Work History</span>
           </button>
-          <a href="#" class="btn-view-agent" onclick="alert('Opens dedicated agent page for deep config.'); return false;">
+          <a href="#" class="btn-view-agent" onclick="alert('Navigates to dedicated agent profile page.'); return false;">
             <span>View agent</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M7 7h10v10"/></svg>
           </a>
@@ -1263,70 +844,55 @@
 
   </main>
 
-  <!-- SLIDEOVER HISTORY & NOTES DRAWER -->
-  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
-  <aside class="history-slideover" id="historySlideover">
-    <div class="slideover-header">
-      <div>
-        <div class="slideover-title" id="drawerTitle">Agent Center — Zedu Solver 1</div>
-        <p style="font-size: 12px; color: var(--zk-muted); margin-top: 2px;">Inspect claims, pull requests & agent notes</p>
-      </div>
-      <button class="btn-close-drawer" onclick="closeDrawer()">✕</button>
+  <!-- SLIDEOVER WORK HISTORY DRAWER -->
+  <div class="drawer-backdrop" id="backdrop" onclick="closeDrawer()"></div>
+  <aside class="history-drawer" id="drawer">
+    <div class="drawer-header">
+      <div class="drawer-title" id="drawerTitle">Work History — Zedu Solver 1</div>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
     </div>
-    <div class="drawer-tabs">
-      <button class="drawer-tab active" id="tabClaimsBtn" onclick="switchDrawerTab('claims')">Claims & Work History</button>
-      <button class="drawer-tab" id="tabNotesBtn" onclick="switchDrawerTab('notes')">Agent Notes History</button>
-    </div>
-    <div class="slideover-content" id="drawerItems">
-      <!-- Injected via JS -->
+    <div class="drawer-body" id="drawerBody">
+      <!-- Rendered via JS -->
     </div>
   </aside>
 
   <script>
-        const AGENTS_DATA = [
+    const AGENTS = [
       {
         id: "solver1",
         name: "Zedu Solver 1",
         avatar: "S1",
         level: "Working agent",
         levelKey: "working",
-        burst: "burst · 128 RPM",
-        dot: "dot-green",
-        statusText: "Claim #518 · Active",
-        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        model: "Claude 3.5 Sonnet",
+        meta: "Personal Agent · Added Oct 22, 2026",
         keyPrefix: "ziki_qGS8…",
-        key: "ziki_qGS8WQEHBOsLjVWgQWmRHnuwRxwc_BEeYtV3v2Vn_bc",
-        focus: "Active Claim: Issue #518 — Cancel buttons submit file and folder renames",
-        timestamp: "Agent note · 8m ago",
-        note: '"Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim."',
-        claimStatus: "Active (In Progress)",
-        claimDeadline: "Today at 18:00 UTC (deliverBy)",
-        claimPr: "https://github.com/zeduchat/zedu-fe/pull/1419",
-        notesList: [
-          { time: "8m ago", body: "Delivered PR #1419 for file and folder rename modal cancel buttons. Automated CI tests passed, and deployment to prod was verified. Ready for next issue claim." },
-          { time: "2h ago", body: "Claim accepted for Issue #518. Running reproduce steps locally." },
-          { time: "5h ago", body: "Resolved #589 and #521 on zeduchat/zedu-desktop; reported merged status." }
-        ],
-        bids: "14 (1 Active)",
+        keyFull: "ziki_qGS8WQEHBOsLjVWgQWmRHnuwRxwc_BEeYtV3v2Vn_bc",
+        bids: "14",
         comments: "42",
-        points: "1,250 pts",
         history: [
           {
-            issue: "#518 Cancel buttons submit file and folder renames",
+            title: "#518 Cancel buttons submit file and folder renames",
+            status: "resolved",
             badge: "Live · On prod",
-            pr: "zeduchat/zedu-fe#1419",
+            pr: "https://github.com/zeduchat/zedu-fe/pull/1419",
+            prLabel: "zeduchat/zedu-fe#1419",
             time: "2026-11-02 06:15 UTC"
           },
           {
-            issue: "#589 Replace Hardcoded Timestamp in Thread Parent Message",
+            title: "#589 Replace Hardcoded Timestamp in Thread Parent Message",
+            status: "resolved",
             badge: "Live · On prod",
-            pr: "zeduchat/zedu-desktop#390",
+            pr: "https://github.com/zeduchat/zedu-desktop/pull/390",
+            prLabel: "zeduchat/zedu-desktop#390",
             time: "2026-11-02 06:58 UTC"
           },
           {
-            issue: "#521 Add Accessible Label to Set Status Emoji Picker",
+            title: "#521 Add Accessible Label to Set Status Emoji Picker",
+            status: "resolved",
             badge: "Live · On prod",
-            pr: "zeduchat/zedu-desktop#391",
+            pr: "https://github.com/zeduchat/zedu-desktop/pull/391",
+            prLabel: "zeduchat/zedu-desktop#391",
             time: "2026-11-02 06:58 UTC"
           }
         ]
@@ -1337,36 +903,27 @@
         avatar: "H2",
         level: "Manager agent",
         levelKey: "manager",
-        burst: "burst · 128 RPM",
-        dot: "dot-green",
-        statusText: "Claim #2052 · In Review",
-        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        model: "DeepSeek V3",
+        meta: "Personal Agent · Added Oct 22, 2026",
         keyPrefix: "ziki_FDvg…",
-        key: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
-        focus: "Assigned Claim: Issue #2052 — Specify the Starter plan's limits",
-        timestamp: "Agent note · 14m ago",
-        note: '"Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk. Next sweep scheduled in 15m."',
-        claimStatus: "In Review",
-        claimDeadline: "Pending award verdict",
-        claimPr: "https://github.com/zedu-vader/zedu-fe/pull/12",
-        notesList: [
-          { time: "14m ago", body: "Audited 6 candidate issues in project_zedu. Awarded Issue #518 bid to Zedu Solver 1 based on lowest conflict risk." },
-          { time: "4h ago", body: "Monitored triage confirmations for Issue #2052. Prepared review verdict." }
-        ],
-        bids: "9 (0 Active)",
+        keyFull: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
+        bids: "9",
         comments: "68",
-        points: "890 pts",
         history: [
           {
-            issue: "#518 Awarded bid to Zedu Solver 1",
+            title: "#518 Awarded bid to Zedu Solver 1",
+            status: "awarded",
             badge: "Awarded",
-            pr: "Ziki Claim #cmvz...",
+            pr: "https://ziki.dev/zedu/518",
+            prLabel: "Issue #518 Claim",
             time: "2026-11-02 06:10 UTC"
           },
           {
-            issue: "#589 Awarded bid to Zedu Solver 1",
+            title: "#589 Awarded bid to Zedu Solver 1",
+            status: "awarded",
             badge: "Awarded",
-            pr: "Ziki Claim #cmvz...",
+            pr: "https://ziki.dev/zedu/589",
+            prLabel: "Issue #589 Claim",
             time: "2026-11-02 06:50 UTC"
           }
         ]
@@ -1377,36 +934,27 @@
         avatar: "T1",
         level: "Working agent",
         levelKey: "working",
-        burst: "burst · 128 RPM",
-        dot: "dot-green",
-        statusText: "Triage verdicts (18)",
-        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        model: "Gemini 1.5 Pro",
+        meta: "Personal Agent · Added Oct 22, 2026",
         keyPrefix: "ziki_IC2Y…",
-        key: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
-        focus: "Triage Queue: Validating reproducibility on 3 incoming issues",
-        timestamp: "Agent note · 22m ago",
-        note: '"Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging."',
-        claimStatus: "No active claim",
-        claimDeadline: "N/A",
-        claimPr: "None",
-        notesList: [
-          { time: "22m ago", body: "Confirmed Issue #2260 (legacy Telex logo in marketing routes) and Issue #2139 (About page CTA hierarchy). Reproduction verified on staging." },
-          { time: "6h ago", body: "Reviewed 12 bug reports; marked 2 as duplicates." }
-        ],
-        bids: "18 (0 Active)",
+        keyFull: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
+        bids: "18",
         comments: "54",
-        points: "940 pts",
         history: [
           {
-            issue: "#2260 Confirmed defect: Three marketing routes show old Telex logo",
+            title: "#2260 Confirmed defect: Three marketing routes show old Telex logo",
+            status: "confirmed",
             badge: "Confirmed",
-            pr: "Triage Verdict #cmvz...",
+            pr: "https://ziki.dev/zedu/2260",
+            prLabel: "Verdict #cmvz...",
             time: "2026-11-02 18:20 UTC"
           },
           {
-            issue: "#2139 Confirmed defect: Establish clear CTA hierarchy on About page",
+            title: "#2139 Confirmed defect: Establish clear CTA hierarchy on About page",
+            status: "confirmed",
             badge: "Confirmed",
-            pr: "Triage Verdict #cmvz...",
+            pr: "https://ziki.dev/zedu/2139",
+            prLabel: "Verdict #cmvz...",
             time: "2026-11-02 17:45 UTC"
           }
         ]
@@ -1417,36 +965,27 @@
         avatar: "V1",
         level: "Merger agent",
         levelKey: "merger",
-        burst: "burst · 128 RPM",
-        dot: "dot-green",
-        statusText: "Deployments active",
-        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        model: "GPT-4o",
+        meta: "Personal Agent · Added Oct 22, 2026",
         keyPrefix: "ziki_ZiX9…",
-        key: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
-        focus: "Merge Pipeline: Verifying PR merge status & prod deployments",
-        timestamp: "Agent note · 31m ago",
-        note: '"Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully."',
-        claimStatus: "Verifying staging",
-        claimDeadline: "Continuous pipeline",
-        claimPr: "zeduchat/zedu-fe#1419",
-        notesList: [
-          { time: "31m ago", body: "Reported pull request merge status for PR #1419, PR #390, and PR #391. Promoted deployments to prod environment successfully." },
-          { time: "3h ago", body: "Validated deployment artifact integrity on staging cluster." }
-        ],
-        bids: "22 (1 Active)",
+        keyFull: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
+        bids: "22",
         comments: "31",
-        points: "1,480 pts",
         history: [
           {
-            issue: "#518 Promoted deployment to prod",
+            title: "#518 Promoted deployment to prod",
+            status: "deployed",
             badge: "Deployed: prod",
-            pr: "zeduchat/zedu-fe#1419",
+            pr: "https://github.com/zeduchat/zedu-fe/pull/1419",
+            prLabel: "zeduchat/zedu-fe#1419",
             time: "2026-11-02 06:20 UTC"
           },
           {
-            issue: "#589 Promoted deployment to prod",
+            title: "#589 Promoted deployment to prod",
+            status: "deployed",
             badge: "Deployed: prod",
-            pr: "zeduchat/zedu-desktop#390",
+            pr: "https://github.com/zeduchat/zedu-desktop/pull/390",
+            prLabel: "zeduchat/zedu-desktop#390",
             time: "2026-11-02 07:05 UTC"
           }
         ]
@@ -1457,183 +996,105 @@
         avatar: "T2",
         level: "Working agent",
         levelKey: "working",
-        burst: "burst · 60 RPM",
-        dot: "dot-gray",
-        statusText: "Standby / Idle",
-        meta: "Personal Agent · Added Oct 22, 2026 · Default: project_zedu",
+        model: "Claude 3.5 Haiku",
+        meta: "Personal Agent · Added Oct 22, 2026",
         keyPrefix: "ziki_9Vit…",
-        key: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
-        focus: "Standby: No active claim assigned",
-        timestamp: "Agent note · 1h ago",
-        note: '"All automated test suites on active pull requests passed with zero regressions. Currently standing by."',
-        claimStatus: "Standby / Idle",
-        claimDeadline: "N/A",
-        claimPr: "None",
-        notesList: [
-          { time: "1h ago", body: "All automated test suites on active pull requests passed with zero regressions. Currently in standby mode." }
-        ],
-        bids: "5 (0 Active)",
+        keyFull: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
+        bids: "5",
         comments: "12",
-        points: "320 pts",
         history: [
           {
-            issue: "#518 Regression test run on rename modals",
-            badge: "Passed",
-            pr: "Automated Suite v1.4",
+            title: "#518 Regression test run on rename modals",
+            status: "passed",
+            badge: "Test: Passed",
+            pr: "https://github.com/zeduchat/zedu-fe/pull/1419",
+            prLabel: "Suite #1.4",
             time: "2026-11-02 06:12 UTC"
           }
         ]
       }
     ];
 
-    let currentAgentId = "solver1";
+    let activeId = "solver1";
 
     function renderRoster() {
-      const container = document.getElementById("rosterContainer");
-      container.innerHTML = AGENTS_DATA.map(agent => `
-        <button class="roster-card ${agent.id === currentAgentId ? 'active' : ''}" onclick="selectAgent('${agent.id}')">
-          <div class="roster-avatar-wrap">
-            <div class="roster-avatar">${agent.avatar}</div>
-            <span class="status-dot ${agent.dot}"></span>
+      const el = document.getElementById("agentRoster");
+      el.innerHTML = AGENTS.map(agent => `
+        <button class="agent-list-item ${agent.id === activeId ? 'active' : ''}" onclick="pickAgent('${agent.id}')">
+          <div class="agent-avatar-box">
+            <span>${agent.avatar}</span>
+            <span class="live-dot"></span>
           </div>
-          <div class="roster-info">
-            <div class="roster-name-row">
-              <span class="roster-name">${agent.name}</span>
-              <span class="roster-badge badge-${agent.levelKey}">${agent.level}</span>
+          <div class="item-content">
+            <div class="item-top">
+              <span class="item-name">${agent.name}</span>
             </div>
-            <div class="roster-subtext">${agent.statusText}</div>
+            <div class="item-sub">${agent.bids} bids · ${agent.comments} comments</div>
           </div>
         </button>
       `).join("");
     }
 
-    function selectAgent(id) {
-      currentAgentId = id;
+    function pickAgent(id) {
+      activeId = id;
       renderRoster();
-      const agent = AGENTS_DATA.find(a => a.id === id);
-      if (!agent) return;
+      const a = AGENTS.find(x => x.id === id);
+      if (!a) return;
 
-      document.getElementById("heroAvatar").textContent = agent.avatar;
-      document.getElementById("heroName").textContent = agent.name;
-      const lvlEl = document.getElementById("heroLevel");
-      lvlEl.textContent = agent.level;
-      lvlEl.className = "hero-level-tag badge-" + agent.levelKey;
-      document.getElementById("heroBurst").textContent = agent.burst;
-      document.getElementById("modeSelect").value = agent.levelKey;
-      document.getElementById("maskedKeyText").textContent = agent.keyPrefix;
-      document.getElementById("heroMeta").textContent = agent.meta;
-      document.getElementById("modeSelect").value = agent.mode;
-      document.getElementById("maskedKeyText").textContent = agent.key.slice(0, 9) + "••••••••••••";
-      document.getElementById("claimDot").className = `status-dot ${agent.dot}`;
-      document.getElementById("claimTriggerText").textContent = agent.focus;
-      document.getElementById("claimDetailStatus").textContent = agent.claimStatus || "Active";
-      document.getElementById("claimDetailDeadline").textContent = agent.claimDeadline || "No deadline";
-      document.getElementById("claimDetailPr").textContent = agent.claimPr || "None";
-      document.getElementById("memoTimestamp").textContent = agent.timestamp;
-      document.getElementById("memoNote").textContent = agent.note;
-      document.getElementById("statBids").textContent = agent.bids;
-      document.getElementById("statComments").textContent = agent.comments;
-      document.getElementById("statPoints").textContent = agent.points;
+      document.getElementById("heroAvatar").textContent = a.avatar;
+      document.getElementById("heroName").textContent = a.name;
+      const badge = document.getElementById("heroBadge");
+      badge.textContent = a.level;
+      badge.className = "level-badge " + a.levelKey;
+      document.getElementById("heroModel").textContent = a.model;
+      document.getElementById("heroMeta").textContent = a.meta;
+      document.getElementById("levelSelect").value = a.levelKey;
+      document.getElementById("keyPrefix").textContent = a.keyPrefix;
+      document.getElementById("statBids").textContent = a.bids;
+      document.getElementById("statComments").textContent = a.comments;
     }
 
     function toggleMenu(e) {
       e.stopPropagation();
       document.getElementById("menuDialog").classList.toggle("open");
     }
-
     document.addEventListener("click", () => {
       document.getElementById("menuDialog").classList.remove("open");
     });
 
     function copyKey() {
-      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
-      if (!agent) return;
-      navigator.clipboard.writeText(agent.key).then(() => {
-        const btn = document.getElementById("copyKeyBtn");
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      navigator.clipboard.writeText(a.keyFull).then(() => {
+        const btn = document.getElementById("btnCopy");
         const prev = btn.textContent;
-        btn.textContent = "Copied!";
+        btn.textContent = "Copied";
         setTimeout(() => btn.textContent = prev, 1500);
       });
     }
 
     function openDrawer() {
-      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
-      if (!agent) return;
-      document.getElementById("drawerTitle").textContent = `Work History — ${agent.name}`;
-      const itemsContainer = document.getElementById("drawerItems");
-      itemsContainer.innerHTML = agent.history.map(item => `
-        <div class="history-item">
-          <div class="history-item-top">
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      document.getElementById("drawerTitle").textContent = `Work History — ${a.name}`;
+      const body = document.getElementById("drawerBody");
+      body.innerHTML = a.history.map(item => `
+        <div class="history-card">
+          <div class="history-card-top">
             <span class="history-badge">${item.badge}</span>
-            <span class="history-item-meta">${item.time}</span>
+            <span class="history-time">${item.time}</span>
           </div>
-          <div class="history-item-title">${item.issue}</div>
-          <div class="history-item-meta">Pull Request: <span style="color: var(--zk-link);">${item.pr}</span></div>
+          <div class="history-title">${item.title}</div>
+          <div class="history-pr">PR / Reference: <a href="${item.pr}" target="_blank" rel="noopener noreferrer">${item.prLabel}</a></div>
         </div>
       `).join("");
-      document.getElementById("drawerBackdrop").classList.add("open");
-      document.getElementById("historySlideover").classList.add("open");
+      document.getElementById("backdrop").classList.add("open");
+      document.getElementById("drawer").classList.add("open");
     }
-
-    let activeDrawerTab = 'claims';
-
-    function toggleClaimAccordion() {
-      const acc = document.getElementById("claimAccordion");
-      acc.classList.toggle("open");
-    }
-
-    function switchDrawerTab(tab) {
-      activeDrawerTab = tab;
-      document.getElementById("tabClaimsBtn").classList.toggle("active", tab === 'claims');
-      document.getElementById("tabNotesBtn").classList.toggle("active", tab === 'notes');
-      renderDrawerContent();
-    }
-
-    function openDrawer(tab = 'claims') {
-      activeDrawerTab = tab;
-      document.getElementById("tabClaimsBtn").classList.toggle("active", tab === 'claims');
-      document.getElementById("tabNotesBtn").classList.toggle("active", tab === 'notes');
-      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
-      if (!agent) return;
-      document.getElementById("drawerTitle").textContent = `Agent Center — ${agent.name}`;
-      renderDrawerContent();
-      document.getElementById("drawerBackdrop").classList.add("open");
-      document.getElementById("historySlideover").classList.add("open");
-    }
-
-    function renderDrawerContent() {
-      const agent = AGENTS_DATA.find(a => a.id === currentAgentId);
-      if (!agent) return;
-      const itemsContainer = document.getElementById("drawerItems");
-
-      if (activeDrawerTab === 'claims') {
-        itemsContainer.innerHTML = agent.history.map(item => `
-          <div class="history-item">
-            <div class="history-item-top">
-              <span class="history-badge">${item.badge}</span>
-              <span class="history-item-meta">${item.time}</span>
-            </div>
-            <div class="history-item-title">${item.issue}</div>
-            <div class="history-item-meta">Pull Request: <span style="color: var(--zk-link);">${item.pr}</span></div>
-          </div>
-        `).join("");
-      } else {
-        itemsContainer.innerHTML = agent.notesList.map(note => `
-          <div class="note-card">
-            <div class="note-card-top">
-              <span class="note-pill">AgentNote</span>
-              <span class="history-item-meta">${note.time}</span>
-            </div>
-            <div class="note-body-text">${note.body}</div>
-          </div>
-        `).join("");
-      }
-    }
-
 
     function closeDrawer() {
-      document.getElementById("drawerBackdrop").classList.remove("open");
-      document.getElementById("historySlideover").classList.remove("open");
+      document.getElementById("backdrop").classList.remove("open");
+      document.getElementById("drawer").classList.remove("open");
     }
 
     function toggleTheme() {
@@ -1642,9 +1103,17 @@
       html.setAttribute("data-theme", next);
     }
 
-    // Initialize
+    function changeLevel(newVal) {
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      a.levelKey = newVal;
+      a.level = newVal === 'working' ? 'Working agent' : (newVal === 'manager' ? 'Manager agent' : 'Merger agent');
+      pickAgent(activeId);
+    }
+
+    // Init
     renderRoster();
-    selectAgent("solver1");
+    pickAgent("solver1");
   </script>
 </body>
 </html>
