@@ -2054,7 +2054,7 @@
           esc.status = "resolved"; // answering resolves the blocker
           input.value = "";
           renderMessageDrawer();
-          renderHero(activeId); // refresh hero badge
+          pickAgent(activeId); // refresh hero badge and open count
           const body = document.getElementById("threadBody");
           body.scrollTop = body.scrollHeight;
         }
