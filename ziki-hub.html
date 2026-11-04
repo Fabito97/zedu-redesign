@@ -386,22 +386,24 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
     }
     .agent-avatar-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      background: #1e293b;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 15px;
-      color: #94a3b8;
       flex-shrink: 0;
       position: relative;
     }
-    .agent-list-item.active .agent-avatar-box {
-      background: #1e3a8a;
-      color: #60a5fa;
+    .agent-avatar-box svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    .agent-list-item:hover .agent-avatar-box svg g.robot-face {
+      transform: rotate(-6deg);
+      transform-origin: center;
+      transition: transform 0.3s ease;
     }
     .live-dot {
       position: absolute;
@@ -498,17 +500,40 @@
       gap: 16px;
     }
     .hero-avatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      background: #1e3a8a;
-      color: #60a5fa;
-      font-size: 22px;
-      font-weight: 800;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid var(--zk-border-strong);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .hero-avatar svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    .hero-avatar:hover svg g.robot-face {
+      transform: rotate(-6deg);
+      transform-origin: center;
+      transition: transform 0.3s ease;
+    }
+    .hero-avatar-edit-badge {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--zk-surface-elevated);
+      background: var(--zk-blue);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      pointer-events: none;
     }
     .hero-name-row {
       display: flex;
@@ -1632,7 +1657,7 @@
           <!-- DETAIL HEADER -->
           <div class="detail-header">
             <div class="detail-header-left">
-              <div class="hero-avatar" id="heroAvatar">S1</div>
+              <div class="hero-avatar" id="heroAvatar"></div>
               <div>
                 <div class="hero-name-row">
                   <h2 class="hero-name" id="heroName">Zedu Solver 1</h2>
@@ -1782,11 +1807,128 @@
   </aside>
 
   <script>
+    /* =====================================================================
+       AUTHENTIC ZIKI AGENT AVATAR SYSTEM (components/agent-avatar.tsx)
+       ===================================================================== */
+    const AGENT_PALETTES = [
+      { bg: "#DCE8FF", head: "#2E6FEF" }, // 0: Sky
+      { bg: "#D7F5EA", head: "#0F8A6A" }, // 1: Mint
+      { bg: "#EDE4FF", head: "#7C3AED" }, // 2: Grape
+      { bg: "#FFE8D6", head: "#E8590C" }, // 3: Tangerine
+      { bg: "#FFE3EC", head: "#D6336C" }, // 4: Rose
+      { bg: "#DFF3FF", head: "#1C7ED6" }, // 5: Ocean
+    ];
+
+    const AGENT_SCREEN = "#0B1733";
+    const AGENT_GLOW = "#5EEAD4";
+
+    const AGENT_LOOKS = {
+      sky:       { palette: 0, antenna: 0, eyes: 0, mouth: 0, cheeks: true },
+      mint:      { palette: 1, antenna: 1, eyes: 2, mouth: 0, cheeks: true },
+      grape:     { palette: 2, antenna: 2, eyes: 1, mouth: 1, cheeks: false },
+      tangerine: { palette: 3, antenna: 0, eyes: 3, mouth: 2, cheeks: false },
+      rose:      { palette: 4, antenna: 1, eyes: 4, mouth: 0, cheeks: true },
+      ocean:     { palette: 5, antenna: 3, eyes: 0, mouth: 3, cheeks: false },
+      spark:     { palette: 0, antenna: 2, eyes: 2, mouth: 1, cheeks: false },
+      leaf:      { palette: 1, antenna: 3, eyes: 3, mouth: 0, cheeks: true },
+      cosmo:     { palette: 2, antenna: 0, eyes: 4, mouth: 3, cheeks: true },
+      ember:     { palette: 3, antenna: 1, eyes: 1, mouth: 0, cheeks: true },
+      bubble:    { palette: 4, antenna: 3, eyes: 2, mouth: 2, cheeks: false },
+      breeze:    { palette: 5, antenna: 2, eyes: 0, mouth: 1, cheeks: true },
+    };
+
+    function seedOf(id) {
+      let hash = 2166136261;
+      for (let i = 0; i < id.length; i++) {
+        hash ^= id.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    }
+
+    function getAgentLook(agentId, avatarKey) {
+      if (avatarKey && AGENT_LOOKS[avatarKey]) {
+        return AGENT_LOOKS[avatarKey];
+      }
+      const seed = seedOf(agentId || "agent");
+      return {
+        palette: seed % AGENT_PALETTES.length,
+        antenna: (seed >>> 3) % 4,
+        eyes: (seed >>> 6) % 5,
+        mouth: (seed >>> 9) % 4,
+        cheeks: ((seed >>> 12) & 1) === 1,
+      };
+    }
+
+    function renderAgentAvatarSvg(agentId, avatarKey, size = 48) {
+      const look = getAgentLook(agentId, avatarKey);
+      const { bg, head } = AGENT_PALETTES[look.palette];
+
+      // Antenna
+      let antennaSvg = '';
+      if (look.antenna === 0) {
+        antennaSvg = `<line x1="24" y1="11" x2="24" y2="6" stroke="${head}" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="5" r="2.6" fill="${AGENT_GLOW}"/>`;
+      } else if (look.antenna === 1) {
+        antennaSvg = `<line x1="19" y1="11" x2="16.5" y2="6.5" stroke="${head}" stroke-width="2" stroke-linecap="round"/><line x1="29" y1="11" x2="31.5" y2="6.5" stroke="${head}" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="5.6" r="2.1" fill="${AGENT_GLOW}"/><circle cx="32" cy="5.6" r="2.1" fill="${AGENT_GLOW}"/>`;
+      } else if (look.antenna === 2) {
+        antennaSvg = `<polyline points="24,11 22,8 26,6.5 23.5,3.5" fill="none" stroke="${head}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+      } else {
+        antennaSvg = `<rect x="20" y="7" width="8" height="4.5" rx="2.2" fill="${head}"/>`;
+      }
+
+      // Eyes
+      let eyesSvg = '';
+      if (look.eyes === 0) {
+        eyesSvg = `<circle cx="19.5" cy="21" r="2.6" fill="${AGENT_GLOW}"/><circle cx="28.5" cy="21" r="2.6" fill="${AGENT_GLOW}"/>`;
+      } else if (look.eyes === 1) {
+        eyesSvg = `<rect x="17.5" y="18" width="4" height="6" rx="2" fill="${AGENT_GLOW}"/><rect x="26.5" y="18" width="4" height="6" rx="2" fill="${AGENT_GLOW}"/>`;
+      } else if (look.eyes === 2) {
+        eyesSvg = `<path d="M16.8 22.2q2.7-3.4 5.4 0M25.8 22.2q2.7-3.4 5.4 0" fill="none" stroke="${AGENT_GLOW}" stroke-width="2" stroke-linecap="round"/>`;
+      } else if (look.eyes === 3) {
+        eyesSvg = `<circle cx="24" cy="21" r="4.2" fill="${AGENT_GLOW}"/><circle cx="25.3" cy="19.8" r="1.3" fill="${AGENT_SCREEN}"/>`;
+      } else {
+        eyesSvg = `<circle cx="19.5" cy="21" r="2.6" fill="${AGENT_GLOW}"/><path d="M26 21.2h5" stroke="${AGENT_GLOW}" stroke-width="2" stroke-linecap="round"/>`;
+      }
+
+      // Mouth
+      let mouthSvg = '';
+      if (look.mouth === 0) {
+        mouthSvg = `<path d="M20.5 26.5q3.5 3 7 0" fill="none" stroke="${AGENT_GLOW}" stroke-width="1.8" stroke-linecap="round"/>`;
+      } else if (look.mouth === 1) {
+        mouthSvg = `<rect x="19.5" y="25.5" width="9" height="3.6" rx="1.8" fill="${AGENT_GLOW}"/><path d="M22.5 25.5v3.6M25.5 25.5v3.6" stroke="${AGENT_SCREEN}" stroke-width="0.9"/>`;
+      } else if (look.mouth === 2) {
+        mouthSvg = `<circle cx="24" cy="27.3" r="1.7" fill="${AGENT_GLOW}"/>`;
+      } else {
+        mouthSvg = `<path d="M20.5 27.2q1.75-1.4 3.5 0t3.5 0" fill="none" stroke="${AGENT_GLOW}" stroke-width="1.6" stroke-linecap="round"/>`;
+      }
+
+      // Cheeks
+      let cheeksSvg = '';
+      if (look.cheeks) {
+        cheeksSvg = `<circle cx="16.6" cy="27" r="1.4" fill="#F9A8C0" opacity="0.8"/><circle cx="31.4" cy="27" r="1.4" fill="#F9A8C0" opacity="0.8"/>`;
+      }
+
+      return `<svg viewBox="0 0 48 48" width="${size}" height="${size}" aria-hidden="true" style="display:block; border-radius:50%; flex-shrink:0;">
+        <circle cx="24" cy="24" r="24" fill="${bg}"/>
+        <g class="robot-face">
+          ${antennaSvg}
+          <rect x="9" y="17" width="4" height="9" rx="2" fill="${head}"/>
+          <rect x="35" y="17" width="4" height="9" rx="2" fill="${head}"/>
+          <rect x="11" y="11" width="26" height="23" rx="8" fill="${head}"/>
+          <rect x="14" y="14.5" width="20" height="16.5" rx="5.5" fill="${AGENT_SCREEN}"/>
+          ${eyesSvg}
+          ${mouthSvg}
+          ${cheeksSvg}
+          <rect x="18" y="36" width="12" height="8" rx="3" fill="${head}" opacity="0.9"/>
+        </g>
+      </svg>`;
+    }
+
     const AGENTS = [
       {
         id: "solver1",
         name: "Zedu Solver 1",
-        avatar: "S1",
+        avatar: "sky",
         level: "Working agent",
         levelKey: "working",
         model: "Claude 3.5 Sonnet",
@@ -1941,7 +2083,7 @@
       {
         id: "hunter2",
         name: "Zedu Hunter 2",
-        avatar: "H2",
+        avatar: "mint",
         level: "Manager agent",
         levelKey: "manager",
         model: "DeepSeek V3",
@@ -1994,7 +2136,7 @@
       {
         id: "triager1",
         name: "Zedu Triager 1",
-        avatar: "T1",
+        avatar: "tangerine",
         level: "Working agent",
         levelKey: "working",
         model: "Gemini 1.5 Pro",
@@ -2029,7 +2171,7 @@
       {
         id: "validator1",
         name: "Zedu Validator 1",
-        avatar: "V1",
+        avatar: "grape",
         level: "Merger agent",
         levelKey: "merger",
         model: "GPT-4o",
@@ -2064,7 +2206,7 @@
       {
         id: "tester2",
         name: "Zedu Tester 2",
-        avatar: "T2",
+        avatar: "rose",
         level: "Working agent",
         levelKey: "working",
         model: "Claude 3.5 Haiku",
@@ -2097,7 +2239,7 @@
       el.innerHTML = AGENTS.map(agent => `
         <button class="agent-list-item ${agent.id === activeId ? 'active' : ''}" onclick="pickAgent('${agent.id}')">
           <div class="agent-avatar-box">
-            <span>${agent.avatar}</span>
+            ${renderAgentAvatarSvg(agent.id, agent.avatar, 44)}
             <span class="live-dot"></span>
           </div>
           <div class="item-content">
@@ -2121,7 +2263,14 @@
       const a = AGENTS.find(x => x.id === id);
       if (!a) return;
 
-      document.getElementById("heroAvatar").textContent = a.avatar;
+      document.getElementById("heroAvatar").innerHTML = `
+        ${renderAgentAvatarSvg(a.id, a.avatar, 64)}
+        <span class="hero-avatar-edit-badge" title="Change avatar">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+          </svg>
+        </span>
+      `;
       document.getElementById("heroName").textContent = a.name;
       const badge = document.getElementById("heroBadge");
       badge.textContent = a.level;
@@ -2281,7 +2430,12 @@
     function renderMessageDrawer() {
       const a = AGENTS.find(x => x.id === activeId);
       if (!a) return;
-      document.getElementById("msgDrawerTitle").textContent = `Agent Communication — ${a.name}`;
+      document.getElementById("msgDrawerTitle").innerHTML = `
+        <div style="display:inline-flex; align-items:center; gap:8px;">
+          ${renderAgentAvatarSvg(a.id, a.avatar, 24)}
+          <span>Agent Communication — ${a.name}</span>
+        </div>
+      `;
 
       // Update Subtabs
       const tabDirect = document.getElementById("tabMsgDirect");
@@ -2510,7 +2664,12 @@
     function renderDrawerContent() {
       const a = AGENTS.find(x => x.id === activeId);
       if (!a) return;
-      document.getElementById("drawerTitle").textContent = `Agent Activity — ${a.name}`;
+      document.getElementById("drawerTitle").innerHTML = `
+        <div style="display:inline-flex; align-items:center; gap:8px;">
+          ${renderAgentAvatarSvg(a.id, a.avatar, 24)}
+          <span>Agent Activity — ${a.name}</span>
+        </div>
+      `;
       document.getElementById("workCount").textContent = a.history ? a.history.length : 0;
       document.getElementById("notesCount").textContent = a.notes ? a.notes.length : 0;
       document.getElementById("auditCount").textContent = a.audit ? a.audit.length : 0;
