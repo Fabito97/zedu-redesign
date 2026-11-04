@@ -1210,90 +1210,122 @@
     }
 
 
-    /* ESCALATION DECISION GATE STYLES (ZIKI AGENTQUESTION SCHEMA) */
-    .esc-inquiry-box {
-      background: rgba(245, 158, 11, 0.08);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      border-radius: 12px;
-      padding: 14px 16px;
+        /* SINGLE UNIFIED ESCALATION CARD (CLEAN INLINE DESIGN) */
+    .esc-single-card {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 14px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .esc-single-card.open {
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+    .esc-single-card.resolved {
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+
+    /* CARD MAIN (QUESTION AT TOP + TARGET UNDERNEATH) */
+    .esc-single-main {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .esc-single-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 8px;
     }
-    .esc-inquiry-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #fbbf24;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .esc-single-question {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--zk-text);
+      line-height: 1.55;
+    }
+    .esc-single-target-row {
       display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--zk-border);
+      font-size: 12px;
+      color: var(--zk-muted);
+    }
+    .esc-target-chip {
+      display: inline-flex;
       align-items: center;
       gap: 5px;
-    }
-    .esc-inquiry-text {
-      font-size: 13.5px;
-      line-height: 1.55;
+      font-weight: 600;
       color: var(--zk-text);
-      font-weight: 500;
     }
-    .esc-inquiry-meta {
-      font-size: 11px;
-      color: var(--zk-muted);
-      display: flex;
+    .esc-target-link {
+      color: var(--zk-link);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding-top: 6px;
-      border-top: 1px solid rgba(245, 158, 11, 0.2);
+      gap: 3px;
     }
-    .esc-decision-section {
-      margin-top: 16px;
+    .esc-target-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ATTACHED DECISION SECTION (AT BOTTOM OF THE CARD) */
+    .esc-single-bottom {
+      border-top: 1px solid var(--zk-border);
+      background: rgba(0, 0, 0, 0.14);
+      padding: 14px 20px 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .esc-decision-title {
-      font-size: 12px;
+    .esc-single-bottom.resolved-bg {
+      background: rgba(34, 197, 94, 0.05);
+      border-top-color: rgba(34, 197, 94, 0.25);
+    }
+    .esc-bottom-label {
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--zk-text);
+      color: var(--zk-muted);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .esc-decision-form {
-      background: var(--zk-surface-elevated);
-      border: 1px solid var(--zk-border);
-      border-radius: 14px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .esc-decision-textarea {
+    .esc-single-textarea {
       width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
+      background: var(--zk-surface);
+      border: 1px solid var(--zk-border);
+      border-radius: 10px;
+      padding: 10px 12px;
       font-family: inherit;
-      font-size: 13.5px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.45;
       color: var(--zk-text);
       resize: vertical;
-      min-height: 80px;
+      min-height: 72px;
+      outline: none;
+      transition: border-color 0.15s ease;
     }
-    .esc-decision-textarea::placeholder {
+    .esc-single-textarea:focus {
+      border-color: #10b981;
+    }
+    .esc-single-textarea::placeholder {
       color: var(--zk-muted);
     }
-    .esc-decision-actions {
+    .esc-bottom-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 10px;
-      border-top: 1px solid var(--zk-border);
     }
-    .btn-resume-agent {
+    .btn-submit-decision {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -1306,45 +1338,37 @@
       font-weight: 700;
       font-family: inherit;
       cursor: pointer;
+      margin-left: auto;
       transition: background 0.15s ease, transform 0.1s ease;
     }
-    .btn-resume-agent:hover {
+    .btn-submit-decision:hover {
       background: #059669;
       transform: translateY(-1px);
     }
-    .esc-answered-card {
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      border-radius: 12px;
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .esc-answered-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #34d399;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .esc-answered-text {
+    .esc-resolved-decision-text {
       font-size: 13.5px;
-      line-height: 1.55;
+      font-weight: 600;
       color: var(--zk-text);
-      font-weight: 500;
+      line-height: 1.5;
     }
-    .esc-answered-meta {
+    .esc-resolved-meta {
       font-size: 11px;
       color: var(--zk-muted);
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding-top: 6px;
-      border-top: 1px solid rgba(16, 185, 129, 0.2);
+      gap: 6px;
+    }
+
+    /* SHORTENED LISTING SNIPPET */
+    .esc-snippet {
+      font-size: 12.5px;
+      color: var(--zk-muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* THREAD BUBBLE STYLES (MATCHING LIB/AGENT-MESSAGES.TS) */
@@ -1742,7 +1766,7 @@
             time: "Today · 14:20 UTC"
           }
         ],
-        // Exact Ziki AgentQuestion schema: one question taking exactly one answer to resume paused claim
+        // Exact Ziki AgentQuestion items: 2 open blockers awaiting decision + 1 resolved history
         escalations: [
           {
             id: "q_428",
@@ -1754,8 +1778,25 @@
             type: "Blocker · CI Formatting Failure",
             status: "open",
             createdAt: "14 mins ago",
-            pausedClaimTime: "14m (claim timer paused)",
+            pausedClaimTime: "Claim paused 14m ago",
             body: "Staging CI failed on 'dart format --output=none --set-exit-if-changed .' because this branch was based on older staging commit df6006c (25+ PRs ahead on staging). Should I rebase onto latest staging and format, or cherry-pick only the test commits?",
+            shortSummary: "CI failed 'dart format' check due to branch drift. Should I rebase onto latest staging or cherry-pick?",
+            answer: null,
+            answeredAt: null
+          },
+          {
+            id: "q_2116",
+            bug: {
+              number: 2116,
+              title: "Issue #2116: Missing workspace invite role permission",
+              url: "https://ziki.dev/zedu/2116"
+            },
+            type: "Work Authorization",
+            status: "open",
+            createdAt: "1 hour ago",
+            pausedClaimTime: "Claim paused 1h ago",
+            body: "Non-admin team members receive an unhandled 403 when triggering invite flow. Should I restrict the 'Invite teammates' button to workspace admins in desktop UI, or update the backend permission guard?",
+            shortSummary: "Unhandled 403 on guest invite: restrict UI button to workspace admins, or update backend permission guard?",
             answer: null,
             answeredAt: null
           },
@@ -1769,8 +1810,9 @@
             type: "Architecture Decision",
             status: "resolved",
             createdAt: "Yesterday · 16:45 UTC",
-            pausedClaimTime: "3m paused",
+            pausedClaimTime: "Paused for 3m",
             body: "I noticed two modal implementations for file rename: one uses a traditional form submit and the other uses an inline state dispatcher. Should I standardize on the inline dispatcher?",
+            shortSummary: "Standardized on inline dispatcher vs traditional form submit.",
             answer: "Yes, standardize on the inline dispatcher so keyboard shortcuts work consistently without triggering form refresh.",
             answeredAt: "Yesterday · 16:48 UTC"
           }
@@ -2238,11 +2280,11 @@
         return;
       }
 
-      // TAB 2: ESCALATIONS (ZIKI AGENTQUESTION INQUIRIES)
+      // TAB 2: ESCALATIONS (ZIKI AGENTQUESTION ITEMS)
       if (activeMsgTab === "escalations") {
-        footer.style.display = "none"; // Footer is hidden because decision forms live inside the decision view
+        footer.style.display = "none"; // Footer hidden: input is attached directly inside single card
 
-        // VIEW A: LIST OF ESCALATIONS
+        // VIEW A: LISTING SECTION (SHORTENED MESSAGES, EASY TO SCAN)
         if (!selectedEscalationId) {
           const escs = a.escalations || [];
 
@@ -2271,7 +2313,7 @@
                   <span style="font-size: 11px; color: #fbbf24; font-weight: 600;">${e.pausedClaimTime}</span>
                 </div>
                 <div class="esc-target">${e.bug.title}</div>
-                <div class="esc-snippet">${e.body}</div>
+                <div class="esc-snippet">${e.shortSummary || e.body}</div>
                 <div class="esc-card-footer">
                   <span>Type: <strong>${e.type}</strong></span>
                   <span class="esc-action-link">Provide Decision & Resume Agent →</span>
@@ -2285,13 +2327,11 @@
             html += resolvedEscs.map(e => `
               <div class="esc-card" onclick="selectEscalation('${e.id}')">
                 <div class="esc-card-top">
-                  <span class="esc-badge resolved">✓ Resolved & Resumed</span>
+                  <span class="esc-badge resolved">✓ Resolved</span>
                   <span style="font-size: 11px; color: var(--zk-muted);">${e.answeredAt}</span>
                 </div>
                 <div class="esc-target">${e.bug.title}</div>
-                <div class="esc-snippet" style="color: var(--zk-text); font-size: 12px; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 6px;">
-                  <span style="color: #34d399; font-weight: 700;">Your Decision:</span> "${e.answer}"
-                </div>
+                <div class="esc-snippet">${e.shortSummary || e.body}</div>
                 <div class="esc-card-footer">
                   <span>Type: <strong>${e.type}</strong></span>
                   <span class="esc-action-link">View Decision Record →</span>
@@ -2305,7 +2345,7 @@
           return;
         }
 
-        // VIEW B: DEDICATED DECISION GATE FOR SELECTED ESCALATION
+        // VIEW B: SINGLE ESCALATION (ALL INFORMATION IN ONE CLEAN UNIFIED BOX)
         const esc = (a.escalations || []).find(e => e.id === selectedEscalationId);
         if (!esc) {
           selectedEscalationId = null;
@@ -2321,81 +2361,70 @@
             <span>Back to all escalations</span>
           </button>
 
-          <!-- CONTEXT BANNER -->
-          <div class="esc-detail-banner ${isAnswered ? 'resolved' : ''}">
-            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-              <span class="esc-badge ${isAnswered ? 'resolved' : 'open'}">
-                ${isAnswered ? '✓ Resolved & Resumed' : '⚠️ Action Required · Claim Paused'}
-              </span>
-              <span style="font-size: 11px; color: var(--zk-muted);">Created: ${esc.createdAt}</span>
-            </div>
-            <div style="font-weight: 700; font-size: 14px; color: var(--zk-text); margin-top: 2px;">
-              ${esc.bug.title}
-            </div>
-            <div style="font-size: 11px; color: var(--zk-muted); display: flex; align-items: center; gap: 8px;">
-              <span>Type: <strong>${esc.type}</strong></span>
-              <span>·</span>
-              <a href="${esc.bug.url}" target="_blank" style="color: var(--zk-link); text-decoration: none; font-weight: 600;">View Ticket on GitHub ↗</a>
-            </div>
-          </div>
-
-          <!-- AGENT'S INQUIRY (AGENTQUESTION BODY) -->
-          <div class="esc-inquiry-box">
-            <div class="esc-inquiry-label">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-              <span>The Agent Asks:</span>
-            </div>
-            <div class="esc-inquiry-text">${esc.body}</div>
-            <div class="esc-inquiry-meta">
-              <span>Escalated by ${a.name}</span>
-              <span>·</span>
-              <span style="color: #fbbf24; font-weight: 600;">${esc.pausedClaimTime}</span>
-            </div>
-          </div>
-        `;
-
-        // DECISION GATE ACTION
-        if (!isAnswered) {
-          html += `
-            <div class="esc-decision-section">
-              <div class="esc-decision-title">
-                <span>Your Decision (Single Resolution)</span>
-                <span style="font-size: 11px; color: var(--zk-muted); text-transform: none; font-weight: normal;">Unpauses agent claim timer</span>
+          <!-- SINGLE UNIFIED CARD -->
+          <div class="esc-single-card ${isAnswered ? 'resolved' : 'open'}">
+            
+            <!-- TOP MAIN: QUESTION AS PRIMARY FOCUS -->
+            <div class="esc-single-main">
+              <div class="esc-single-status-row">
+                <span class="esc-badge ${isAnswered ? 'resolved' : 'open'}">
+                  ${isAnswered ? '✓ Resolved & Resumed' : '⚠️ Open Blocker · Waiting on Decision'}
+                </span>
+                <span style="font-size: 11px; color: var(--zk-muted);">${esc.createdAt}</span>
               </div>
-              <div class="esc-decision-form">
-                <textarea id="escDecisionText" class="esc-decision-textarea" placeholder="Type your directive to unblock this agent (e.g. Rebase onto latest staging, run dart format on test file, and push)..."></textarea>
-                <div class="esc-decision-actions">
-                  <span style="font-size: 11px; color: var(--zk-muted);">Sets decision & audits event</span>
-                  <button class="btn-resume-agent" onclick="submitEscalationAnswer('${esc.id}')">
+
+              <!-- QUESTION AT THE TOP -->
+              <div class="esc-single-question">${esc.body}</div>
+
+              <!-- TARGET TICKET & METADATA UNDER THE QUESTION -->
+              <div class="esc-single-target-row">
+                <div class="esc-target-chip">
+                  <span>Target:</span>
+                  <strong style="color: var(--zk-text);">${esc.bug.title}</strong>
+                </div>
+                <span>·</span>
+                <span style="color: var(--zk-muted);">Type: <strong>${esc.type}</strong></span>
+                <span>·</span>
+                <a href="${esc.bug.url}" target="_blank" class="esc-target-link">
+                  <span>View on GitHub</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- ATTACHED DECISION SECTION (INTEGRATED AT BOTTOM OF THE SAME CARD) -->
+            ${!isAnswered ? `
+              <div class="esc-single-bottom">
+                <div class="esc-bottom-label">
+                  <span>Your Decision (Single Resolution)</span>
+                  <span style="font-weight: normal; color: var(--zk-muted); text-transform: none;">Resumes claim timer</span>
+                </div>
+                <textarea id="escDecisionText" class="esc-single-textarea" placeholder="Type your directive to unblock this agent (e.g. Rebase onto latest staging, run dart format on test file, and push)..."></textarea>
+                <div class="esc-bottom-actions">
+                  <span style="font-size: 11px; color: var(--zk-muted);">Audited & locked upon submit</span>
+                  <button class="btn-submit-decision" onclick="submitEscalationAnswer('${esc.id}')">
                     <span>Submit Decision & Resume Agent</span>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                   </button>
                 </div>
               </div>
-            </div>
-          `;
-        } else {
-          html += `
-            <div class="esc-decision-section">
-              <div class="esc-decision-title">
-                <span>Owner Decision (Locked)</span>
-                <span style="font-size: 11px; color: #34d399; text-transform: none; font-weight: 600;">✓ Agent Claim Resumed</span>
-              </div>
-              <div class="esc-answered-card">
-                <div class="esc-answered-label">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
-                  <span>Your Submitted Directive:</span>
+            ` : `
+              <div class="esc-single-bottom resolved-bg">
+                <div class="esc-bottom-label" style="color: #34d399;">
+                  <span>✓ Owner Decision (Locked)</span>
+                  <span style="text-transform: none; font-weight: 600;">Agent claim resumed</span>
                 </div>
-                <div class="esc-answered-text">${esc.answer}</div>
-                <div class="esc-answered-meta">
+                <div class="esc-resolved-decision-text">"${esc.answer}"</div>
+                <div class="esc-resolved-meta">
                   <span>Answered ${esc.answeredAt}</span>
                   <span>·</span>
-                  <span>Wait time credited back to agent delivery deadline</span>
+                  <span>Wait time credited back to delivery deadline</span>
                 </div>
               </div>
-            </div>
-          `;
-        }
+            `}
+
+          </div>
+        `;
 
         body.innerHTML = html;
         body.scrollTop = 0;
