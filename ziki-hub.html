@@ -43,34 +43,35 @@
     }
 
     [data-theme="light"] {
-      --zk-bg: #f6f8fc;
+      --zk-bg: #f5f7fc;
       --zk-surface: #ffffff;
       --zk-surface-elevated: #f8fafd;
-      --zk-surface-hover: #f1f5fb;
-      --zk-key-outer: #f1f5fb;
-      --zk-key-inner: #e2e8f0;
+      --zk-surface-hover: #f0f2f7;
+      --zk-key-outer: #f0f2f7;
+      --zk-key-inner: #ffffff;
       --zk-border: #e3e8f2;
       --zk-border-strong: #cbd5e1;
-      --zk-text: #0f172a;
-      --zk-muted: #5b677d;
-      --zk-subtle: #8492a6;
-      --zk-blue: #1d63ed;
-      --zk-blue-hover: #1552cc;
-      --zk-copy-blue: #1d63ed;
-      --zk-link: #1d63ed;
-      --zk-green: #16a34a;
-      --zk-green-pill-bg: #dcfce7;
-      --zk-green-pill-text: #065f46;
-      --zk-danger-bg: #fff5f5;
-      --zk-danger-border: #f5b5ae;
-      --zk-danger-text: #b42318;
-      --zk-backdrop: rgba(15, 23, 42, 0.35);
-      --zk-shadow-lg: 0 14px 34px rgba(15, 23, 42, 0.12);
-      --zk-tint: rgba(29, 99, 237, 0.08);
-      --zk-chip: rgba(0, 0, 0, 0.04);
-      --zk-seg: #e2e8f0;
-      --zk-accent: #1d63ed;
-      --zk-text2: #5b677d;
+      --zk-divider: #eef1f7;
+      --zk-text: #15121f;
+      --zk-text2: #3e4a63;
+      --zk-muted: #5f6577;
+      --zk-subtle: #8fa1b8;
+      --zk-blue: #2e6fef;
+      --zk-blue-hover: #2552af;
+      --zk-copy-blue: #2e6fef;
+      --zk-link: #1f5fd9;
+      --zk-accent: #1f5fd9;
+      --zk-green: #146c43;
+      --zk-green-pill-bg: #e3f6ec;
+      --zk-green-pill-text: #146c43;
+      --zk-danger-bg: #fde8e4;
+      --zk-danger-border: #f4b3a8;
+      --zk-danger-text: #a3261a;
+      --zk-backdrop: rgba(15, 23, 42, 0.45);
+      --zk-shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --zk-tint: #eaf2fe;
+      --zk-chip: #f0f2f7;
+      --zk-seg: #eef1f6;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -904,6 +905,9 @@
       font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
     }
+    [data-theme="light"] .stat-card-sub.ok {
+      color: #146c43;
+    }
 
     /* FOOTER ACTIONS */
     .card-footer {
@@ -1488,7 +1492,7 @@
     /* ATTACHED DECISION SECTION (AT BOTTOM OF THE MAIN CARD FOR OPEN ESCALATIONS) */
     .esc-single-bottom {
       border-top: 1px solid var(--zk-border);
-      background: rgba(0, 0, 0, 0.14);
+      background: var(--zk-chip);
       padding: 14px 20px 16px;
       display: flex;
       flex-direction: column;
@@ -1920,9 +1924,9 @@
               <div class="stat-card-sub ok" id="statEarnedToday">+$45.00 today</div>
             </div>
             <div class="stat-card">
-              <div class="stat-card-label">Bids</div>
-              <div class="stat-card-val" id="statBids">14</div>
-              <div class="stat-card-sub">bids placed</div>
+              <div class="stat-card-label">Bids & Claims</div>
+              <div class="stat-card-val"><span id="statBids">14</span> <span style="font-size: 14px; font-weight: 600; color: var(--zk-muted);">bids</span></div>
+              <div class="stat-card-sub ok" id="statClaims">2 active claims</div>
             </div>
             <div class="stat-card">
               <div class="stat-card-label">Comments</div>
@@ -2146,6 +2150,7 @@
         keyPrefix: "ziki_qGS8…",
         keyFull: "ziki_qGS8WQEHBOsLjVWgQWmRHnuwRxwc_BEeYtV3v2Vn_bc",
         bids: "14",
+        activeClaims: "2 active claims",
         comments: "42",
         earned: "$225.00",
         earnedToday: "+$45.00 today",
@@ -2301,6 +2306,7 @@
         keyPrefix: "ziki_FDvg…",
         keyFull: "ziki_FDvgqIbnblkY5GS_5L6KM5oFBZlG3XNPgZHJKJofvCA",
         bids: "9",
+        activeClaims: "1 active claim",
         comments: "68",
         earned: "$180.00",
         earnedToday: "+$15.00 today",
@@ -2354,6 +2360,7 @@
         keyPrefix: "ziki_IC2Y…",
         keyFull: "ziki_IC2YmIs06rGxKaKRQouT3V1U0IQ1cBy6paLvqiPCz5g",
         bids: "11",
+        activeClaims: "0 active claims",
         comments: "28",
         earned: "$145.00",
         earnedToday: null,
@@ -2389,6 +2396,7 @@
         keyPrefix: "ziki_ZiX9…",
         keyFull: "ziki_ZiX9CI9-gw-dBkDfMNSV_aX6FMoqiZehc8RLtWxOy8U",
         bids: "22",
+        activeClaims: "3 active claims",
         comments: "31",
         earned: "$310.00",
         earnedToday: "+$60.00 today",
@@ -2424,6 +2432,7 @@
         keyPrefix: "ziki_9Vit…",
         keyFull: "ziki_9Vit6EOhDAAL0uogL1TsiUf_sjdrxImMCcf1KhXiswY",
         bids: "5",
+        activeClaims: "1 active claim",
         comments: "12",
         earned: "$40.00",
         earnedToday: null,
@@ -2457,7 +2466,7 @@
               <span class="item-name">${agent.name}</span>
               <span class="item-role-badge ${agent.levelKey}">${agent.level}</span>
             </div>
-            <div class="item-sub">${agent.bids} bids · ${agent.comments} comments</div>
+            <div class="item-sub">${agent.bids} bids · ${agent.activeClaims || '0 active claims'}</div>
             <div class="item-earnings-row">
               <span class="item-earned-val">${agent.earned}</span>
               ${agent.earnedToday ? `<span class="item-today-val">(${agent.earnedToday})</span>` : ''}
@@ -2490,6 +2499,11 @@
       document.getElementById("levelSelect").value = a.levelKey;
       document.getElementById("keyPrefix").textContent = a.keyPrefix;
       document.getElementById("statBids").textContent = a.bids;
+      const claimsEl = document.getElementById("statClaims");
+      if (claimsEl) {
+        claimsEl.textContent = a.activeClaims || "0 active claims";
+        claimsEl.className = (a.activeClaims && !a.activeClaims.startsWith("0")) ? "stat-card-sub ok" : "stat-card-sub";
+      }
       document.getElementById("statComments").textContent = a.comments;
       // Escalation badge toggle (dynamic based on open escalations)
       const escBadge = document.getElementById("heroEscalation");
