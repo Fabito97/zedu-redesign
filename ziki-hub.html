@@ -1147,6 +1147,12 @@
       color: #34d399;
       border: 1px solid rgba(34, 197, 94, 0.32);
     }
+    .esc-card-paused {
+      font-size: 11px;
+      color: var(--zk-muted);
+      font-weight: 500;
+      opacity: 0.85;
+    }
     .esc-card-question {
       font-size: 13.5px;
       font-weight: 600;
@@ -1290,34 +1296,50 @@
       text-decoration: underline;
     }
 
-    /* SEPARATE OWNER DECISION BOX (ALIGNED RIGHT AS A REPLY) */
+    /* ATTACHED DECISION SECTION (AT BOTTOM OF THE MAIN CARD FOR OPEN ESCALATIONS) */
+    .esc-single-bottom {
+      border-top: 1px solid var(--zk-border);
+      background: rgba(0, 0, 0, 0.14);
+      padding: 14px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .esc-bottom-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--zk-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* SEPARATE OWNER ANSWER BOX (ONLY ON RESOLVED ESCALATIONS, ALIGNED RIGHT AS A REPLY) */
     .esc-reply-wrapper {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      margin-top: 16px;
+      margin-top: 14px;
       width: 100%;
     }
     .esc-decision-box {
       width: 88%;
       max-width: 88%;
       background: var(--zk-surface-elevated);
-      border: 1px solid var(--zk-border);
+      border: 1px solid rgba(52, 211, 153, 0.4);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 14px 18px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       border-bottom-right-radius: 4px;
     }
-    .esc-decision-box.open {
-      border-color: rgba(59, 130, 246, 0.4);
-      background: var(--zk-surface-elevated);
-    }
     .esc-decision-box.resolved {
+      background: var(--zk-surface-elevated);
       border-color: rgba(52, 211, 153, 0.4);
-      background: rgba(34, 197, 94, 0.05);
     }
     .esc-decision-header {
       display: flex;
@@ -1330,15 +1352,12 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--zk-blue);
+      color: #34d399;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .esc-decision-title.resolved {
-      color: #34d399;
-    }
-    .esc-decision-time, .esc-decision-hint {
+    .esc-decision-time {
       font-size: 11px;
       color: var(--zk-muted);
     }
@@ -1347,10 +1366,9 @@
       font-weight: 500;
       color: var(--zk-text);
       line-height: 1.55;
-      background: var(--zk-surface);
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid var(--zk-border);
+      background: transparent;
+      padding: 0;
+      border: none;
     }
     .esc-single-textarea {
       width: 100%;
@@ -2340,7 +2358,7 @@
               <div class="esc-card open" onclick="selectEscalation('${e.id}')">
                 <div class="esc-card-top">
                   <span class="esc-badge open">⚠️ Open Blocker</span>
-                  <span style="font-size: 11px; color: #fbbf24; font-weight: 600;">${e.pausedClaimTime}</span>
+                  <span class="esc-card-paused">${e.pausedClaimTime}</span>
                 </div>
                 <div class="esc-card-question">${e.shortSummary || e.body}</div>
                 <div class="esc-card-target">
@@ -2397,7 +2415,7 @@
             <span>Back to all escalations</span>
           </button>
 
-          <!-- 1. AGENT QUESTION CARD -->
+          <!-- 1. AGENT QUESTION CARD (WITH ATTACHED INPUT IF PENDING) -->
           <div class="esc-single-card ${isAnswered ? 'resolved' : 'open'}">
             <div class="esc-single-main">
               <div class="esc-single-status-row">
@@ -2425,18 +2443,13 @@
                 </a>
               </div>
             </div>
-          </div>
 
-          <!-- 2. SEPARATE OWNER DECISION BOX (ALIGNED TO THE RIGHT AS A REPLY) -->
-          <div class="esc-reply-wrapper">
+            <!-- ATTACHED DECISION INPUT (ONLY WHEN PENDING) -->
             ${!isAnswered ? `
-              <div class="esc-decision-box open">
-                <div class="esc-decision-header">
-                  <div class="esc-decision-title">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/></svg>
-                    <span>Your decision</span>
-                  </div>
-                  <span class="esc-decision-hint">Single resolution</span>
+              <div class="esc-single-bottom">
+                <div class="esc-bottom-label">
+                  <span>Your decision</span>
+                  <span style="font-weight: normal; color: var(--zk-muted); text-transform: none;">Single resolution · Resumes agent</span>
                 </div>
                 <textarea id="escDecisionText" class="esc-single-textarea" placeholder="Type your decision to unblock this agent..."></textarea>
                 <div class="esc-bottom-actions">
@@ -2447,10 +2460,16 @@
                   </button>
                 </div>
               </div>
-            ` : `
+            ` : ''}
+
+          </div>
+
+          <!-- 2. SEPARATE OWNER ANSWER BOX (ONLY WHEN RESOLVED, ALIGNED TO THE RIGHT AS A REPLY) -->
+          ${isAnswered ? `
+            <div class="esc-reply-wrapper">
               <div class="esc-decision-box resolved">
                 <div class="esc-decision-header">
-                  <div class="esc-decision-title resolved">
+                  <div class="esc-decision-title">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                     <span>Your decision</span>
                   </div>
@@ -2458,8 +2477,8 @@
                 </div>
                 <div class="esc-decision-body">${esc.answer}</div>
               </div>
-            `}
-          </div>
+            </div>
+          ` : ''}
         `;
 
         body.innerHTML = html;
