@@ -1209,6 +1209,144 @@
       border-color: rgba(34, 197, 94, 0.35);
     }
 
+
+    /* ESCALATION DECISION GATE STYLES (ZIKI AGENTQUESTION SCHEMA) */
+    .esc-inquiry-box {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .esc-inquiry-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fbbf24;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .esc-inquiry-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--zk-text);
+      font-weight: 500;
+    }
+    .esc-inquiry-meta {
+      font-size: 11px;
+      color: var(--zk-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .esc-decision-section {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .esc-decision-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--zk-text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .esc-decision-form {
+      background: var(--zk-surface-elevated);
+      border: 1px solid var(--zk-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .esc-decision-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--zk-text);
+      resize: vertical;
+      min-height: 80px;
+    }
+    .esc-decision-textarea::placeholder {
+      color: var(--zk-muted);
+    }
+    .esc-decision-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--zk-border);
+    }
+    .btn-resume-agent {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .btn-resume-agent:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+    .esc-answered-card {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .esc-answered-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #34d399;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .esc-answered-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--zk-text);
+      font-weight: 500;
+    }
+    .esc-answered-meta {
+      font-size: 11px;
+      color: var(--zk-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
     /* THREAD BUBBLE STYLES (MATCHING LIB/AGENT-MESSAGES.TS) */
     .thread-body {
       flex: 1;
@@ -1604,48 +1742,37 @@
             time: "Today · 14:20 UTC"
           }
         ],
+        // Exact Ziki AgentQuestion schema: one question taking exactly one answer to resume paused claim
         escalations: [
           {
-            id: "esc_428",
-            target: "PR #428: Fix HomeView invite CTA widget tests",
-            targetUrl: "https://github.com/zeduchat/zedu-desktop/pull/428",
+            id: "q_428",
+            bug: {
+              number: 428,
+              title: "PR #428: Fix HomeView invite CTA widget tests",
+              url: "https://github.com/zeduchat/zedu-desktop/pull/428"
+            },
             type: "Blocker · CI Formatting Failure",
             status: "open",
-            time: "14 mins ago",
-            summary: "Staging CI failed on 'dart format' check due to branch drift against staging (25+ PRs ahead). Should I rebase on latest staging or cherry-pick?",
-            thread: [
-              {
-                from: "agent",
-                body: "Staging CI failed on 'dart format --output=none --set-exit-if-changed .' because this branch was based on older staging commit df6006c (25+ PRs ahead on staging). Should I rebase onto latest staging and format, or cherry-pick only the test commits?",
-                time: "14 mins ago"
-              }
-            ]
+            createdAt: "14 mins ago",
+            pausedClaimTime: "14m (claim timer paused)",
+            body: "Staging CI failed on 'dart format --output=none --set-exit-if-changed .' because this branch was based on older staging commit df6006c (25+ PRs ahead on staging). Should I rebase onto latest staging and format, or cherry-pick only the test commits?",
+            answer: null,
+            answeredAt: null
           },
           {
-            id: "esc_518",
-            target: "Issue #518: Cancel buttons submit file renames",
-            targetUrl: "https://github.com/zeduchat/zedu-fe/pull/1419",
+            id: "q_518",
+            bug: {
+              number: 518,
+              title: "Issue #518: Cancel buttons submit file renames",
+              url: "https://github.com/zeduchat/zedu-fe/pull/1419"
+            },
             type: "Architecture Decision",
             status: "resolved",
-            time: "Yesterday · 16:45 UTC",
-            summary: "Standardized on inline dispatcher vs form submit.",
-            thread: [
-              {
-                from: "agent",
-                body: "I noticed two modal implementations for file rename: one uses a traditional form submit and the other uses an inline state dispatcher. Should I standardize on the inline dispatcher?",
-                time: "Yesterday · 16:45 UTC"
-              },
-              {
-                from: "owner",
-                body: "Yes, standardize on the inline dispatcher so keyboard shortcuts work consistently without triggering form refresh.",
-                time: "Yesterday · 16:48 UTC"
-              },
-              {
-                from: "agent",
-                body: "Understood. Applying the inline dispatcher and running regression suites now.",
-                time: "Yesterday · 16:49 UTC"
-              }
-            ]
+            createdAt: "Yesterday · 16:45 UTC",
+            pausedClaimTime: "3m paused",
+            body: "I noticed two modal implementations for file rename: one uses a traditional form submit and the other uses an inline state dispatcher. Should I standardize on the inline dispatcher?",
+            answer: "Yes, standardize on the inline dispatcher so keyboard shortcuts work consistently without triggering form refresh.",
+            answeredAt: "Yesterday · 16:48 UTC"
           }
         ],
         notes: [
@@ -1969,7 +2096,7 @@
     }
 
     let activeMsgTab = "direct"; // "direct" | "escalations"
-    let selectedEscalationId = null; // null = list; string = detail thread
+    let selectedEscalationId = null; // null = list; string = detail decision gate
 
     function openMessageDrawer(initialTab = "direct", escId = null) {
       activeMsgTab = initialTab;
@@ -1977,7 +2104,7 @@
       renderMessageDrawer();
       document.getElementById("backdrop").classList.add("open");
       document.getElementById("msgDrawer").classList.add("open");
-      if (activeMsgTab === "direct" || selectedEscalationId) {
+      if (activeMsgTab === "direct") {
         setTimeout(() => {
           const input = document.getElementById("threadInput");
           if (input) input.focus();
@@ -1988,7 +2115,7 @@
     function switchMsgTab(tab) {
       activeMsgTab = tab;
       if (tab === "escalations") {
-        selectedEscalationId = null; // reset to list of escalations
+        selectedEscalationId = null; // reset to list view
       }
       renderMessageDrawer();
     }
@@ -1998,8 +2125,8 @@
       renderMessageDrawer();
       if (escId) {
         setTimeout(() => {
-          const input = document.getElementById("threadInput");
-          if (input) input.focus();
+          const area = document.getElementById("escDecisionText");
+          if (area) area.focus();
         }, 100);
       }
     }
@@ -2022,43 +2149,43 @@
       }
     }
 
+    // Direct Messages submit
     function submitMessage() {
       const input = document.getElementById("threadInput");
       const text = input.value.trim();
       if (!text) return;
       const a = AGENTS.find(x => x.id === activeId);
       if (!a) return;
+      if (!a.directMessages) a.directMessages = [];
+      a.directMessages.push({
+        from: "owner",
+        body: text,
+        time: "Just now",
+        readAt: null
+      });
+      input.value = "";
+      renderMessageDrawer();
+      const body = document.getElementById("threadBody");
+      body.scrollTop = body.scrollHeight;
+    }
 
-      if (activeMsgTab === "direct") {
-        if (!a.directMessages) a.directMessages = [];
-        a.directMessages.push({
-          from: "owner",
-          body: text,
-          time: "Just now",
-          readAt: null
-        });
-        input.value = "";
-        renderMessageDrawer();
-        const body = document.getElementById("threadBody");
-        body.scrollTop = body.scrollHeight;
-      } else if (activeMsgTab === "escalations" && selectedEscalationId) {
-        const esc = (a.escalations || []).find(e => e.id === selectedEscalationId);
-        if (esc) {
-          if (!esc.thread) esc.thread = [];
-          esc.thread.push({
-            from: "owner",
-            body: text,
-            time: "Just now",
-            readAt: null
-          });
-          esc.status = "resolved"; // answering resolves the blocker
-          input.value = "";
-          renderMessageDrawer();
-          pickAgent(activeId); // refresh hero badge and open count
-          const body = document.getElementById("threadBody");
-          body.scrollTop = body.scrollHeight;
-        }
-      }
+    // Escalation Answer submit (Single resolution answering the AgentQuestion)
+    function submitEscalationAnswer(escId) {
+      const area = document.getElementById("escDecisionText");
+      if (!area) return;
+      const text = area.value.trim();
+      if (!text) return;
+      const a = AGENTS.find(x => x.id === activeId);
+      if (!a) return;
+      const esc = (a.escalations || []).find(e => e.id === escId);
+      if (!esc || esc.answer !== null) return;
+
+      esc.answer = text;
+      esc.answeredAt = "Just now · Resumed";
+      esc.status = "resolved";
+
+      pickAgent(activeId); // refresh hero count and roster
+      renderMessageDrawer(); // re-render locked answered state
     }
 
     function renderMessageDrawer() {
@@ -2080,17 +2207,10 @@
 
       const body = document.getElementById("threadBody");
       const footer = document.getElementById("msgFooter");
-      const input = document.getElementById("threadInput");
-      const btnSendText = document.getElementById("btnSendText");
-      const helper = document.getElementById("threadHelper");
 
-      // TAB 1: DIRECT MESSAGES (SINGLE CONTINUOUS 1-ON-1 THREAD)
+      // TAB 1: DIRECT MESSAGES (CONTINUOUS 1-ON-1 STREAM)
       if (activeMsgTab === "direct") {
         footer.style.display = "block";
-        input.placeholder = "Write a message to this agent...";
-        btnSendText.textContent = "Send";
-        helper.textContent = "Delivered to agent's inbox on next poll · Press Enter to send";
-
         const msgs = a.directMessages || [];
         if (msgs.length === 0) {
           body.innerHTML = '<div style="text-align:center; padding: 48px 20px; color: var(--zk-muted); font-size: 13px;">No direct messages yet. Use the box below to write a steering directive to this agent.</div>';
@@ -2118,19 +2238,20 @@
         return;
       }
 
-      // TAB 2: ESCALATIONS
+      // TAB 2: ESCALATIONS (ZIKI AGENTQUESTION INQUIRIES)
       if (activeMsgTab === "escalations") {
+        footer.style.display = "none"; // Footer is hidden because decision forms live inside the decision view
+
         // VIEW A: LIST OF ESCALATIONS
         if (!selectedEscalationId) {
-          footer.style.display = "none"; // Hide footer input while browsing the list
           const escs = a.escalations || [];
 
           if (escs.length === 0) {
             body.innerHTML = `
               <div style="text-align:center; padding: 48px 20px; color: var(--zk-muted); font-size: 13px;">
-                <div style="font-size: 26px; margin-bottom: 8px;">🎉</div>
-                <div style="font-weight: 600; color: var(--zk-text); margin-bottom: 4px;">Zero Pending Escalations</div>
-                <div>This agent is operating autonomously without any blocking tickets or approval requests.</div>
+                <div style="font-size: 28px; margin-bottom: 8px;">🎉</div>
+                <div style="font-weight: 700; color: var(--zk-text); font-size: 14px; margin-bottom: 4px;">Zero Pending Escalations</div>
+                <div>This agent is operating autonomously with no blocking tickets or pending approval gates.</div>
               </div>
             `;
             return;
@@ -2142,36 +2263,38 @@
           let html = '<div class="esc-list-group">';
 
           if (openEscs.length > 0) {
-            html += `<div class="esc-section-title"><span>⚠️ Open Blockers (${openEscs.length})</span></div>`;
+            html += `<div class="esc-section-title"><span>⚠️ Open Blockers Awaiting Decision (${openEscs.length})</span></div>`;
             html += openEscs.map(e => `
               <div class="esc-card open" onclick="selectEscalation('${e.id}')">
                 <div class="esc-card-top">
                   <span class="esc-badge open">⚠️ Open Blocker</span>
-                  <span style="font-size: 11px; color: var(--zk-muted);">${e.time}</span>
+                  <span style="font-size: 11px; color: #fbbf24; font-weight: 600;">${e.pausedClaimTime}</span>
                 </div>
-                <div class="esc-target">${e.target}</div>
-                <div class="esc-snippet">${e.summary}</div>
+                <div class="esc-target">${e.bug.title}</div>
+                <div class="esc-snippet">${e.body}</div>
                 <div class="esc-card-footer">
                   <span>Type: <strong>${e.type}</strong></span>
-                  <span class="esc-action-link">Open thread →</span>
+                  <span class="esc-action-link">Provide Decision & Resume Agent →</span>
                 </div>
               </div>
             `).join("");
           }
 
           if (resolvedEscs.length > 0) {
-            html += `<div class="esc-section-title" style="margin-top: 14px;"><span>✓ Resolved Escalations (${resolvedEscs.length})</span></div>`;
+            html += `<div class="esc-section-title" style="margin-top: 16px;"><span>✓ Resolved Escalations History (${resolvedEscs.length})</span></div>`;
             html += resolvedEscs.map(e => `
               <div class="esc-card" onclick="selectEscalation('${e.id}')">
                 <div class="esc-card-top">
-                  <span class="esc-badge resolved">✓ Resolved</span>
-                  <span style="font-size: 11px; color: var(--zk-muted);">${e.time}</span>
+                  <span class="esc-badge resolved">✓ Resolved & Resumed</span>
+                  <span style="font-size: 11px; color: var(--zk-muted);">${e.answeredAt}</span>
                 </div>
-                <div class="esc-target">${e.target}</div>
-                <div class="esc-snippet">${e.summary}</div>
+                <div class="esc-target">${e.bug.title}</div>
+                <div class="esc-snippet" style="color: var(--zk-text); font-size: 12px; background: rgba(255,255,255,0.03); padding: 6px 10px; border-radius: 6px;">
+                  <span style="color: #34d399; font-weight: 700;">Your Decision:</span> "${e.answer}"
+                </div>
                 <div class="esc-card-footer">
                   <span>Type: <strong>${e.type}</strong></span>
-                  <span class="esc-action-link">View thread →</span>
+                  <span class="esc-action-link">View Decision Record →</span>
                 </div>
               </div>
             `).join("");
@@ -2182,7 +2305,7 @@
           return;
         }
 
-        // VIEW B: DEDICATED THREAD FOR ONE ESCALATION
+        // VIEW B: DEDICATED DECISION GATE FOR SELECTED ESCALATION
         const esc = (a.escalations || []).find(e => e.id === selectedEscalationId);
         if (!esc) {
           selectedEscalationId = null;
@@ -2190,13 +2313,7 @@
           return;
         }
 
-        footer.style.display = "block";
-        input.placeholder = "Reply with instructions to resolve this escalation...";
-        btnSendText.textContent = "Send Resolution";
-        helper.textContent = "Delivers resolution to agent and marks escalation answered · Press Enter to send";
-
-        const thread = esc.thread || [];
-        const isResolved = esc.status === "resolved";
+        const isAnswered = esc.answer !== null;
 
         let html = `
           <button class="btn-back-esc" onclick="selectEscalation(null)">
@@ -2204,42 +2321,84 @@
             <span>Back to all escalations</span>
           </button>
 
-          <div class="esc-detail-banner ${isResolved ? 'resolved' : ''}">
+          <!-- CONTEXT BANNER -->
+          <div class="esc-detail-banner ${isAnswered ? 'resolved' : ''}">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-              <span class="esc-badge ${isResolved ? 'resolved' : 'open'}">${isResolved ? '✓ Resolved' : '⚠️ Action Required'}</span>
-              <span style="font-size: 11px; color: var(--zk-muted);">${esc.time}</span>
+              <span class="esc-badge ${isAnswered ? 'resolved' : 'open'}">
+                ${isAnswered ? '✓ Resolved & Resumed' : '⚠️ Action Required · Claim Paused'}
+              </span>
+              <span style="font-size: 11px; color: var(--zk-muted);">Created: ${esc.createdAt}</span>
             </div>
-            <div style="font-weight: 700; font-size: 13.5px; color: var(--zk-text);">${esc.target}</div>
-            <div style="font-size: 11px; color: var(--zk-muted);">Type: ${esc.type}</div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--zk-text); margin-top: 2px;">
+              ${esc.bug.title}
+            </div>
+            <div style="font-size: 11px; color: var(--zk-muted); display: flex; align-items: center; gap: 8px;">
+              <span>Type: <strong>${esc.type}</strong></span>
+              <span>·</span>
+              <a href="${esc.bug.url}" target="_blank" style="color: var(--zk-link); text-decoration: none; font-weight: 600;">View Ticket on GitHub ↗</a>
+            </div>
+          </div>
+
+          <!-- AGENT'S INQUIRY (AGENTQUESTION BODY) -->
+          <div class="esc-inquiry-box">
+            <div class="esc-inquiry-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              <span>The Agent Asks:</span>
+            </div>
+            <div class="esc-inquiry-text">${esc.body}</div>
+            <div class="esc-inquiry-meta">
+              <span>Escalated by ${a.name}</span>
+              <span>·</span>
+              <span style="color: #fbbf24; font-weight: 600;">${esc.pausedClaimTime}</span>
+            </div>
           </div>
         `;
 
-        html += thread.map(item => {
-          if (item.from === "agent") {
-            return `
-              <div class="msg-row escalation">
-                <div class="msg-bubble">
-                  <div class="escalation-tag">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-                    <span>Agent Blocker Inquiry</span>
-                  </div>
-                  <div style="line-height: 1.5; font-size: 13px;">${item.body}</div>
+        // DECISION GATE ACTION
+        if (!isAnswered) {
+          html += `
+            <div class="esc-decision-section">
+              <div class="esc-decision-title">
+                <span>Your Decision (Single Resolution)</span>
+                <span style="font-size: 11px; color: var(--zk-muted); text-transform: none; font-weight: normal;">Unpauses agent claim timer</span>
+              </div>
+              <div class="esc-decision-form">
+                <textarea id="escDecisionText" class="esc-decision-textarea" placeholder="Type your directive to unblock this agent (e.g. Rebase onto latest staging, run dart format on test file, and push)..."></textarea>
+                <div class="esc-decision-actions">
+                  <span style="font-size: 11px; color: var(--zk-muted);">Sets decision & audits event</span>
+                  <button class="btn-resume-agent" onclick="submitEscalationAnswer('${esc.id}')">
+                    <span>Submit Decision & Resume Agent</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                  </button>
                 </div>
-                <div class="msg-meta">${item.time} · Escalated by ${a.name}</div>
               </div>
-            `;
-          } else {
-            return `
-              <div class="msg-row user">
-                <div class="msg-bubble">${item.body}</div>
-                <div class="msg-meta">${item.time} · Owner Decision</div>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="esc-decision-section">
+              <div class="esc-decision-title">
+                <span>Owner Decision (Locked)</span>
+                <span style="font-size: 11px; color: #34d399; text-transform: none; font-weight: 600;">✓ Agent Claim Resumed</span>
               </div>
-            `;
-          }
-        }).join("");
+              <div class="esc-answered-card">
+                <div class="esc-answered-label">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                  <span>Your Submitted Directive:</span>
+                </div>
+                <div class="esc-answered-text">${esc.answer}</div>
+                <div class="esc-answered-meta">
+                  <span>Answered ${esc.answeredAt}</span>
+                  <span>·</span>
+                  <span>Wait time credited back to agent delivery deadline</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
         body.innerHTML = html;
-        body.scrollTop = body.scrollHeight;
+        body.scrollTop = 0;
       }
     }
 
