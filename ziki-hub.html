@@ -235,10 +235,23 @@
       height: 56px;
       background: var(--zk-surface);
       border-bottom: 1px solid var(--zk-border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .zk-navbar-inner {
+      max-width: 1152px;
+      margin: 0 auto;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 max(24px, calc((100vw - 1040px) / 2));
+      padding: 0 24px;
+    }
+    @media (max-width: 640px) {
+      .zk-navbar-inner {
+        padding: 0 16px;
+      }
     }
     .zk-nav-left {
       display: flex;
@@ -372,56 +385,82 @@
       background: var(--zk-chip);
     }
 
-    /* MAIN CONTAINER */
+    /* MAIN CONTAINER (EXACT PAGE_CONTAINER_CLASS max-w-6xl = 1152px) */
     .zk-main {
-      max-width: 1040px;
+      max-width: 1152px;
       margin: 0 auto;
       padding: 32px 24px 64px;
+    }
+    @media (max-width: 640px) {
+      .zk-main {
+        padding: 24px 16px 48px;
+      }
     }
 
     .page-header-row {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
+    .page-header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
     .page-title {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 28px;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 30px;
       font-weight: 800;
+      letter-spacing: -0.025em;
       color: var(--zk-text);
+      line-height: 1.2;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: var(--zk-muted);
+      line-height: 1.5;
     }
     .create-agent-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
       background: var(--zk-blue);
       color: #ffffff;
-      font-size: 13.5px;
-      font-weight: 600;
-      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 22px;
       border-radius: 999px;
       border: none;
       text-decoration: none;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+      transition: background 0.15s ease, transform 0.1s ease;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .create-agent-btn:hover {
+      background: var(--zk-blue-hover);
+      transform: translateY(-1px);
     }
 
-    /* SUMMARY METER */
+    /* SUMMARY METER (MATCHING ACTIVE AGENTS LIMIT FROM MANAGE-AGENTS-LIST.TSX) */
+    .summary-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+      max-width: 480px;
+      margin-bottom: 28px;
+    }
     .summary-card {
       background: var(--zk-surface);
       border: 1px solid var(--zk-border);
-      border-radius: 16px;
-      padding: 18px 24px;
-      margin-bottom: 24px;
+      border-radius: 20px;
+      padding: 16px 20px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 36px;
-      flex-wrap: wrap;
-    }
-    .summary-left {
-      flex-shrink: 0;
+      flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     .summary-title {
       font-size: 11px;
@@ -431,19 +470,29 @@
       color: var(--zk-muted);
     }
     .summary-val {
-      font-size: 22px;
+      font-size: 26px;
       font-weight: 800;
       color: var(--zk-text);
-      margin-top: 2px;
+      margin-top: 4px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      line-height: 1.2;
+    }
+    .summary-total {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--zk-muted);
     }
     .summary-sub {
       font-size: 12px;
       color: var(--zk-muted);
+      margin-top: 2px;
     }
     .summary-meter-wrap {
-      margin-top: 8px;
-      width: 140px;
-      height: 7px;
+      margin-top: 14px;
+      width: 100%;
+      height: 8px;
       border-radius: 999px;
       background: var(--zk-seg);
       overflow: hidden;
@@ -451,16 +500,8 @@
     .summary-meter-fill {
       height: 100%;
       border-radius: 999px;
-      background: #10b981;
+      background: var(--zk-blue);
       transition: width 0.3s ease;
-    }
-    .summary-hint {
-      font-size: 13.5px;
-      color: var(--zk-muted);
-      line-height: 1.6;
-      max-width: 500px;
-      padding-left: 20px;
-      border-left: 1px solid var(--zk-border);
     }
 
     /* TWO-COLUMN HUB LAYOUT */
@@ -1688,122 +1729,126 @@
 
   <!-- EXACT ZIKI APP HEADER (components/app-header.tsx) -->
   <header class="zk-navbar">
-    <div class="zk-nav-left">
-      <a href="#" aria-label="Ziki" class="zk-mark-link" title="Ziki">
-        <svg viewBox="0 0 100 100" fill="none" class="zk-mark-svg" aria-hidden="true">
-          <path d="M22 22H78L22 78H78M30 50H70" stroke="currentColor" stroke-width="11" stroke-linejoin="miter" stroke-miterlimit="10"/>
-        </svg>
-      </a>
-      <div class="zk-divider"></div>
-      <button type="button" class="zk-ws-btn" title="Switch workspace">
-        <span class="zk-ws-icon">Z</span>
-        <span>zedu</span>
-        <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: var(--zk-muted); margin-left: -2px;">
-          <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
-        </svg>
-      </button>
-      <nav class="zk-top-nav">
-        <a href="#" class="zk-top-link active">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /></svg>
-          <span>Your App</span>
+    <div class="zk-navbar-inner">
+      <div class="zk-nav-left">
+        <a href="#" aria-label="Ziki" class="zk-mark-link" title="Ziki">
+          <svg viewBox="0 0 100 100" fill="none" class="zk-mark-svg" aria-hidden="true">
+            <path d="M22 22H78L22 78H78M30 50H70" stroke="currentColor" stroke-width="11" stroke-linejoin="miter" stroke-miterlimit="10"/>
+          </svg>
         </a>
-        <a href="#" class="zk-top-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></svg>
-          <span>Marketing</span>
-        </a>
-        <a href="#" class="zk-top-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>
-          <span>Security</span>
-        </a>
-      </nav>
-    </div>
-    <div class="zk-nav-right">
-      <div class="zk-account-menu-wrap" id="accountMenuWrap">
-        <button type="button" class="zk-user-btn" id="accountBtn" onclick="toggleAccountMenu(event)" aria-haspopup="menu" aria-expanded="false" title="Account menu">
-          <div class="zk-user-avatar">FM</div>
-          <span>Fabian</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="zk-chevron" style="color: var(--zk-muted);"><path d="m6 9 6 6 6-6" /></svg>
+        <div class="zk-divider"></div>
+        <button type="button" class="zk-ws-btn" title="Switch workspace">
+          <span class="zk-ws-icon">Z</span>
+          <span>zedu</span>
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" style="color: var(--zk-muted); margin-left: -2px;">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
+          </svg>
         </button>
-
-        <!-- EXACT ZIKI ACCOUNT POP-OVER DIALOG (components/app-header.tsx) -->
-        <div id="accountMenuDialog" class="zk-account-dialog" role="menu" style="display: none;">
-          <div class="zk-account-summary">
-            <div class="zk-user-avatar lg">FM</div>
-            <div class="zk-account-summary-text">
-              <div class="zk-account-summary-name">Fabian</div>
-              <div class="zk-account-summary-role">Owner</div>
-            </div>
-          </div>
-
-          <a href="#profile" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Profile settings'); return false;">
-            <span>Profile</span>
+        <nav class="zk-top-nav">
+          <a href="#" class="zk-top-link active">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" /></svg>
+            <span>Your App</span>
           </a>
-
-          <!-- ZIKI 3-WAY THEME SELECTOR (components/theme-toggle.tsx) -->
-          <div class="zk-theme-selector-box" role="group" aria-label="Theme preference">
-            <div class="zk-theme-label">Theme</div>
-            <div class="zk-theme-segmented">
-              <button type="button" class="zk-theme-seg-btn" id="themeBtnSystem" onclick="setAppTheme('system')">System</button>
-              <button type="button" class="zk-theme-seg-btn" id="themeBtnLight" onclick="setAppTheme('light')">Light</button>
-              <button type="button" class="zk-theme-seg-btn" id="themeBtnDark" onclick="setAppTheme('dark')">Dark</button>
-            </div>
-          </div>
-
-          <div class="zk-menu-divider"></div>
-
-          <a href="#activity" class="zk-menu-item" onclick="closeAccountMenu(); openDrawer(); return false;">
-            <span>Activity</span>
+          <a href="#" class="zk-top-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" /></svg>
+            <span>Marketing</span>
           </a>
-          <a href="#manage-agents" class="zk-menu-item active" onclick="closeAccountMenu(); return false;">
-            <span>Manage agents</span>
+          <a href="#" class="zk-top-link">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>
+            <span>Security</span>
           </a>
-          <a href="#org-settings" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Organization settings'); return false;">
-            <span>Organization settings</span>
-          </a>
-          <a href="#settings" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Settings'); return false;">
-            <span>Settings</span>
-          </a>
-          <a href="#docs" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Documentation'); return false;">
-            <span>Documentation</span>
-          </a>
-
-          <div class="zk-menu-divider"></div>
-
-          <button type="button" class="zk-menu-item zk-signout-btn" onclick="closeAccountMenu(); alert('Signed out');">
-            <span>Sign out</span>
-          </button>
-        </div>
+        </nav>
       </div>
-      <button type="button" class="zk-inbox-btn" aria-label="Inbox" title="Inbox">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="20" height="16" x="2" y="4" rx="2" />
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-        </svg>
-      </button>
+      <div class="zk-nav-right">
+        <div class="zk-account-menu-wrap" id="accountMenuWrap">
+          <button type="button" class="zk-user-btn" id="accountBtn" onclick="toggleAccountMenu(event)" aria-haspopup="menu" aria-expanded="false" title="Account menu">
+            <div class="zk-user-avatar">FM</div>
+            <span>Fabian</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="zk-chevron" style="color: var(--zk-muted);"><path d="m6 9 6 6 6-6" /></svg>
+          </button>
+
+          <!-- EXACT ZIKI ACCOUNT POP-OVER DIALOG (components/app-header.tsx) -->
+          <div id="accountMenuDialog" class="zk-account-dialog" role="menu" style="display: none;">
+            <div class="zk-account-summary">
+              <div class="zk-user-avatar lg">FM</div>
+              <div class="zk-account-summary-text">
+                <div class="zk-account-summary-name">Fabian</div>
+                <div class="zk-account-summary-role">Owner</div>
+              </div>
+            </div>
+
+            <a href="#profile" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Profile settings'); return false;">
+              <span>Profile</span>
+            </a>
+
+            <!-- ZIKI 3-WAY THEME SELECTOR (components/theme-toggle.tsx) -->
+            <div class="zk-theme-selector-box" role="group" aria-label="Theme preference">
+              <div class="zk-theme-label">Theme</div>
+              <div class="zk-theme-segmented">
+                <button type="button" class="zk-theme-seg-btn" id="themeBtnSystem" onclick="setAppTheme('system')">System</button>
+                <button type="button" class="zk-theme-seg-btn" id="themeBtnLight" onclick="setAppTheme('light')">Light</button>
+                <button type="button" class="zk-theme-seg-btn" id="themeBtnDark" onclick="setAppTheme('dark')">Dark</button>
+              </div>
+            </div>
+
+            <div class="zk-menu-divider"></div>
+
+            <a href="#activity" class="zk-menu-item" onclick="closeAccountMenu(); openDrawer(); return false;">
+              <span>Activity</span>
+            </a>
+            <a href="#manage-agents" class="zk-menu-item active" onclick="closeAccountMenu(); return false;">
+              <span>Manage agents</span>
+            </a>
+            <a href="#org-settings" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Organization settings'); return false;">
+              <span>Organization settings</span>
+            </a>
+            <a href="#settings" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Settings'); return false;">
+              <span>Settings</span>
+            </a>
+            <a href="#docs" class="zk-menu-item" onclick="closeAccountMenu(); alert('Navigates to Documentation'); return false;">
+              <span>Documentation</span>
+            </a>
+
+            <div class="zk-menu-divider"></div>
+
+            <button type="button" class="zk-menu-item zk-signout-btn" onclick="closeAccountMenu(); alert('Signed out');">
+              <span>Sign out</span>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="zk-inbox-btn" aria-label="Inbox" title="Inbox">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN -->
+  <!-- MAIN (EXACT max-w-6xl = 1152px) -->
   <main class="zk-main">
 
     <!-- PAGE HEADER -->
     <div class="page-header-row">
-      <h1 class="page-title">My agents</h1>
-      <a href="#create" class="create-agent-btn">+ Create agent</a>
+      <div class="page-header-text">
+        <h1 class="page-title">My agents</h1>
+        <p class="page-sub">Each agent has its own key. Copy sends that key and this site to that agent only.</p>
+      </div>
+      <div class="page-header-actions">
+        <a href="#create" class="create-agent-btn">Create agent</a>
+      </div>
     </div>
 
     <!-- SUMMARY METER (MATCHING ACTIVE AGENTS LIMIT FROM MANAGE-AGENTS-LIST.TSX) -->
-    <div class="summary-card">
-      <div class="summary-left">
-        <div class="summary-title">Active agents</div>
-        <div class="summary-val">5 <span style="font-size: 15px; color: var(--zk-muted); font-weight: 600;">/ 5</span></div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-title">ACTIVE AGENTS</div>
+        <div class="summary-val">5 <span class="summary-total">/ 5</span></div>
         <div class="summary-sub">limit 5</div>
         <div class="summary-meter-wrap" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="5" aria-label="Active agents capacity">
           <div class="summary-meter-fill" style="width: 100%;"></div>
         </div>
-      </div>
-      <div class="summary-hint">
-        Each agent has its own key. Copy sends that key and this site to that agent only.
       </div>
     </div>
 
